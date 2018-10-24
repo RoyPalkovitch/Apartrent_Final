@@ -1,0 +1,25 @@
+﻿<div>
+    <select ng-disabled="errorMessageDisplay" ng-model="$parent.searchCountryID" required id="countrySelect">
+        <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+    </select>
+
+    Check in: <input ng-disabled="errorMessageDisplay" ng-model="$parent.searchAvailableFromDate" id="CheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" />
+    Check Out: <input ng-disabled="errorMessageDisplay" id="CheckOut" min="{{searchAvailableFromDate  | date:'yyyy-MM-dd'}}" type="date" placeholder="MM\DD\YYYY" ng-model="$parent.searchAvailableToDate" />
+
+    Guests: <input ng-disabled="errorMessageDisplay" type="range" min="1" max="20" step="1" ng-model="$parent.searchGuests" />{{searchGuests}}
+    <input type="button" ng-click="searchApartment()" value="Search" ng-disabled="searchButtonDisabled || errorMessageDisplay" ng-hide="errorMessageDisplay" />
+    <span id="errorMessage" ng-show="errorMessageDisplay"><a ng-bind="errorMessage"></a></span>
+    <button id="errorMessagebtn" ng-show="errorMessageDisplay" type="button" ng-click="errorMessageDisplay=false">OK</button>
+
+</div>
+<br /><br />
+<div id="apartmentCell" ng-repeat="apartment in searchResult">
+
+    <div><p>{{apartment.address}}</p></div>
+    <div><p>{{apartment.apartmentType}}</p></div>
+    <div><p>{{apartment.fromDate}}</p></div>
+    <div><p>{{apartment.toDate}}</p></div>
+    <div><p>{{apartment.pricePerDay}}</p></div>
+    <div><p>{{apartment.renterUserName}}</p></div>
+    <!-- need to add rating,image,number of beds, title of apartment will do after login and signup -->
+</div>

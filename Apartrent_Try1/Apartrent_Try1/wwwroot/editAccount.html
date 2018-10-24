@@ -1,0 +1,59 @@
+﻿<div ng-switch="userDetails.role">
+    <div ng-switch-when="0">
+        <div class="userSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a id="selected ">Edit account</a>
+            <a>My Reviews</a>
+            <a>History of purchses</a>
+        </div>
+        <div class="userProfileContent">
+            <br /><h1>Edit your Account </h1>
+            First Name: <input type="text" ng-model="$parent.editFirstName"  placeholder="{{userDetails.firstName}}" /><br />
+            Last Name: <input type="text" ng-model="$parent.editLastName" placeholder="{{userDetails.lastName}}" /><br />
+            Gender:<select ng-model="$parent.editGender">
+                <option value="true">Male</option>
+                <option value="false">Female</option>
+            </select><br />
+            E-Mail: <input type="email" ng-model="$parent.editEmail" placeholder="{{userDetails.email}}" /><br />
+            Phone number: <input type="tel" ng-model="$parent.editPhoneNumber" placeholder="{{userDetails.phoneNumber}}" /><br />
+            Address: <input type="text" ng-model="$parent.editAddress" placeholder="{{userDetails.address}}" /><br />
+            Country: <select ng-model="$parent.editCountryID" required id="countrySelect">
+                <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+            </select><br />
+             <a ng-href="#!yourProfile/{{userDetails.userName}}.html"><span ng-click="editAccount()">Save</span></a>
+
+        </div>
+    </div>
+    <div ng-switch-when="1">
+
+        <div class="renterSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a id="selectedSomthing">Edit account</a>
+            <a>Edit apartment</a> <!--will add div that shows all apartments of current user the chosen one will be edited-->
+            <a>My Reviews</a>
+            <a>Reviews on my apartments</a>
+            <a>History of purchses</a>
+        </div>
+        <div class="renterProfileContent">
+            <br /><h1>Edit your Account </h1>
+            First Name: <input type="text" ng-model="$parent.editFirstName" placeholder="{{userDetails.firstName}}" /><br />
+            Last Name: <input type="text" ng-model="$parent.editLastName" placeholder="{{userDetails.lastName}}" /><br />
+            Gender:<select ng-model="$parent.editGender">
+                <option value="true">Male</option>
+                <option value="false">Female</option>
+            </select><br />
+            E-Mail: <input type="email" ng-model="$parent.editEmail" placeholder="{{userDetails.email}}" /><br />
+            Phone number: <input type="tel" ng-model="$parent.editPhoneNumber" placeholder="{{userDetails.phoneNumber}}" /><br />
+            Address: <input type="text" ng-model="$parent.editAddress" placeholder="{{userDetails.address}}" /><br />
+            Country: <select ng-model="$parent.editCountryID" required id="countrySelect">
+                <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+            </select><br />
+            <a ng-href="#!yourProfile/{{userDetails.userName}}.html"><span ng-click="editAccount()">Save</span></a>
+
+        </div>
+    </div>
+</div>
+
+ 

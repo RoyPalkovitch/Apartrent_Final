@@ -1,0 +1,24 @@
+﻿<div ng-switch="userDetails.role">
+    <div ng-switch-when="0">
+        <div class="userSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a>My Reviews</a>
+            <a>History of purchses</a>
+        </div>
+
+    </div>
+    <div ng-switch-when="1">
+
+        <div class="renterSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a> <!--will add div that shows all apartments of current user the chosen one will be edited-->
+            <a>My Reviews</a>
+            <a>Reviews on my apartments</a>
+            <a>History of purchses</a>
+        </div>
+    </div>
+</div>

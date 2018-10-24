@@ -1,0 +1,38 @@
+﻿.renterSideBar {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 155px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 5000; /* Stay on top */
+    top: 10%; /* Stay at the top */
+    left: 0;
+    background-color: #333; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+    .renterSideBar a {
+        padding: 6px 8px 6px 16px;
+        text-decoration: none;
+        font-size: 15px;
+        color: white;
+        display: block;
+    }
+
+        .renterSideBar a:hover {
+            color: #f1f1f1;
+        }
+
+.renterProfileContent {
+    margin-left: 165px; /* Same as the width of the sidebar */
+    padding: 0px 10px;
+}
+
+@media screen and (max-height: 450px) {
+    .renterSideBar {
+        padding-top: 15px;
+    }
+
+        .renterSideBar a {
+            font-size: 18px;
+        }
+}
