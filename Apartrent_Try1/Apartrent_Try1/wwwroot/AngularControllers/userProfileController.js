@@ -78,7 +78,17 @@ userProfileController.controller("userProfileController", function ($scope, $roo
         });
     };
 
-
+    $scope.deleteUser = function () {
+        $http.delete("api/users?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
+            if (response.data) {
+                $scope.userDetails.userName = '';
+                $scope.userDetails.password = '';
+                userProfile.resetData();
+                location.href = "/index.html";
+            }
+        });
+         
+    };
 
 
     $scope.addApartment = function () {

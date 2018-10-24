@@ -504,10 +504,8 @@
                         return;
                     }
                     apartmentsDataForLocationService.setApartmentsData(response.data);//save apartments data of current location and send event to apartmentResult controller to featch the data too
-                    //$rootScope.$emit("searchResult", []);
                     $scope.searchButtonDisabled = false;
                     $rootScope.searchHide = true;
-                    //location.href = "#!searchResult/" + countries[searchCountryID - 1].countryName + ".html";
                 });
             };
 

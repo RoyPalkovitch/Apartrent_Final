@@ -15,7 +15,6 @@ namespace Apartrent_Try1
         public string CountryName { get; set; }
         public int CategoryID { get; set; }
         public string ApartmentType { get; set; }
-        public int? ReviewID { get; set; }
         
         public string Address { get; set; }
         public double PricePerDay { get; set; }

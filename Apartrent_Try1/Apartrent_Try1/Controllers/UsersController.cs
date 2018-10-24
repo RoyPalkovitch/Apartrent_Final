@@ -33,7 +33,7 @@ namespace Apartrent_Try1.Controllers
 
         
         [HttpDelete]
-        public bool DeleteUser([FromBody]Users users)
+        public bool DeleteUser([FromQuery]Users users)
         {
             return DB.UsersDB.DeleteUser(users);
         }

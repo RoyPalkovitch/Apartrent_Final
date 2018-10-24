@@ -190,7 +190,7 @@ namespace Apartrent_Try1
                         if (userDetails.Role == 1)
                         {
 
-                            cmd.CommandText = "SELECT ApartmentID,Apartment.FeaturesID AS FeaturesID,NumberOfBedRooms,QueenSizeBed,DoubleBed,SingleBed,SofaBed,Apartment.CountryID AS CountryID,CountryName,Apartment.CategoryID AS CategoryID,ApartmentType,Apartment.ReviewID AS ReviewID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Description] FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.FeaturesID = ApartmentFeatures.FeaturesID INNER JOIN Countries ON Apartment.CountryID = Countries.CountryID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID WHERE RenterUserName=@RenterUserName";
+                            cmd.CommandText = "SELECT ApartmentID,Apartment.FeaturesID AS FeaturesID,NumberOfBedRooms,QueenSizeBed,DoubleBed,SingleBed,SofaBed,Apartment.CountryID AS CountryID,CountryName,Apartment.CategoryID AS CategoryID,ApartmentType,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Description] FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.FeaturesID = ApartmentFeatures.FeaturesID INNER JOIN Countries ON Apartment.CountryID = Countries.CountryID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID WHERE RenterUserName=@RenterUserName";
                             cmd.Add("@RenterUserName", userName);
                             using (SqlDataReader dr = cmd.ExecuteReader())
                             {
@@ -202,7 +202,6 @@ namespace Apartrent_Try1
                                     Apartment apartment = new Apartment()
                                     {
                                         ApartmentID = dr.GetInt32(0),
-                                        ReviewID = dr.IsDBNull(11) ? -1 : dr.GetInt32(11),
                                         FeaturesID = dr.GetInt32(1),
                                         NumberOfBedrooms = dr.GetInt32(2),
                                         QueenSizeBed = dr.GetInt32(3),
@@ -213,11 +212,11 @@ namespace Apartrent_Try1
                                         CountryName = dr.GetString(8),
                                         CategoryID = dr.GetInt32(9),
                                         ApartmentType = dr.GetString(10),
-                                        Address = dr.GetString(12),
-                                        PricePerDay = dr.GetDouble(13),
-                                        FromDate =new DateTime(dr.GetInt64(14)),
-                                        ToDate =new DateTime(dr.GetInt64(15)),
-                                        Description = dr.GetString(16)
+                                        Address = dr.GetString(11),
+                                        PricePerDay = dr.GetDouble(12),
+                                        FromDate =new DateTime(dr.GetInt64(13)),
+                                        ToDate =new DateTime(dr.GetInt64(14)),
+                                        Description = dr.GetString(15)
                                     };
                                     temp.Add(apartment);
                                 }
@@ -296,7 +295,7 @@ namespace Apartrent_Try1
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Apartment.FeaturesID AS FeaturesID,NumberOfBedRooms,QueenSizeBed,DoubleBed,SingleBed,SofaBed,Apartment.CategoryID AS CategoryID,ApartmentType,Apartment.ReviewID AS ReviewID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,Apartment.[Description] FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.FeaturesID=ApartmentFeatures.FeaturesID INNER JOIN ApartmentCategories ON Apartment.CategoryID=ApartmentCategories.CategoryID WHERE CountryID=@CountryID AND NumberOfGuests >= @NumberOfGuests AND AvailableFromDate<= @AvailableFromDate AND AvailableToDate >= @AvailableToDate", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Apartment.FeaturesID AS FeaturesID,NumberOfBedRooms,QueenSizeBed,DoubleBed,SingleBed,SofaBed,Apartment.CategoryID AS CategoryID,ApartmentType,[Address],PricePerDay,AvailableFromDate,AvailableToDate,Apartment.[Description] FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.FeaturesID=ApartmentFeatures.FeaturesID INNER JOIN ApartmentCategories ON Apartment.CategoryID=ApartmentCategories.CategoryID WHERE CountryID=@CountryID AND NumberOfGuests >= @NumberOfGuests AND AvailableFromDate<= @AvailableFromDate AND AvailableToDate >= @AvailableToDate", conn))
                     {
                         List<Apartment> apartments = new List<Apartment>();
                         cmd.Add("@CountryID", countryID);
@@ -319,17 +318,13 @@ namespace Apartrent_Try1
                                     SofaBed = reader.GetInt32(7),
                                     CategoryID = reader.GetInt32(8),
                                     ApartmentType = reader.GetString(9),
-                                    ReviewID = reader.IsDBNull(10) ? -1 : reader.GetInt32(10),
-                                    Address = reader.GetString(11),
-                                    PricePerDay = reader.GetDouble(12),
-                                    FromDate = new DateTime(reader.GetInt64(13)),
-                                    ToDate =new DateTime(reader.GetInt64(14)),
-                                    Description = reader.GetString(15),
+                                    Address = reader.GetString(10),
+                                    PricePerDay = reader.GetDouble(11),
+                                    FromDate = new DateTime(reader.GetInt64(12)),
+                                    ToDate =new DateTime(reader.GetInt64(13)),
+                                    Description = reader.GetString(14),
                                 };
-                                if (apartment.ReviewID != -1)
-                                {
-                                    //need to add query to get specific rating Reviews and order by them when rating will work
-                                }
+                                
                                 apartments.Add(apartment);
                             }
                             return apartments;
@@ -474,7 +469,7 @@ namespace Apartrent_Try1
                 {
                     conn.Open();
                     Apartment apartment = new Apartment();
-                    using (SqlCommand cmd = new SqlCommand("SELECT RenterUserName,FeaturesID,CountryID,CategoryID,ReviewID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,Description FROM Apartment WHERE ApartmentID=@ApartmentID", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT RenterUserName,FeaturesID,CountryID,CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,Description FROM Apartment WHERE ApartmentID=@ApartmentID", conn))
                     {
                         cmd.Add("@ApartmentID", apartment);
                         using (SqlDataReader reader = cmd.ExecuteReader())
@@ -485,12 +480,11 @@ namespace Apartrent_Try1
                                 apartment.FeaturesID = reader.GetInt32(1);
                                 apartment.CountryID = reader.GetInt32(2);//can be localy
                                 apartment.CategoryID = reader.GetInt32(3);//can be locally
-                                apartment.ReviewID = reader.GetInt32(4);//will need to add reviews description
-                                apartment.Address = reader.GetString(5);
-                                apartment.PricePerDay = reader.GetFloat(6);
-                                apartment.FromDate =new DateTime(reader.GetInt64(7));
-                                apartment.ToDate =new DateTime(reader.GetInt64(8));
-                                apartment.Description = reader.GetString(9);
+                                apartment.Address = reader.GetString(4);
+                                apartment.PricePerDay = reader.GetFloat(5);
+                                apartment.FromDate =new DateTime(reader.GetInt64(6));
+                                apartment.ToDate =new DateTime(reader.GetInt64(7));
+                                apartment.Description = reader.GetString(8);
                             }
 
                         }
