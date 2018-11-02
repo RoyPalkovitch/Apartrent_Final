@@ -4,19 +4,18 @@ var userProfileController = angular.module('userProfileController', []);
 
 
 
-userProfileController.controller("userProfileController", function ($scope, $rootScope, $http, userProfile, countriesService, categoriesFactory) {
+userProfileController.controller("userProfileController", function ($scope, $rootScope, $http, userProfile, countriesService, categoriesFactory, $routeParams) {
     $scope.userDetails = userProfile.data;
-    $scope.categories = categoriesFactory.data;
+    //$scope.categories = categoriesFactory.data;
     $rootScope.viewProfile = false;
-
 
     $scope.$on("getUserData", function () {//event catch for user who just login to save his data
         $scope.userDetails = userProfile.data;
     });
 
-    $scope.$on("categoriesFactory", function () {
-        $scope.categories = categoriesFactory.data;
-    });
+   // $scope.$on("categoriesFactory", function () {
+    //    $scope.categories = categoriesFactory.data;
+    //});
 
 
     $scope.editAccount = function () {
@@ -50,6 +49,7 @@ userProfileController.controller("userProfileController", function ($scope, $roo
 
         $http.post("api/renter", { userName: userProfile.data.userName, password: userProfile.data.password }).then(function (response) {
             if (response.data) {//if user is validate renter then addApartmnet is being called if it return true then all good if not renter status delete
+                $scope.categories = categoriesFactory.data;
                 if ($scope.addApartment()) {
                     $rootScope.role = 1;
                     return;
@@ -70,8 +70,10 @@ userProfileController.controller("userProfileController", function ($scope, $roo
 
     $scope.deleteRenterStatus = function () {//delete request to make user quit being a renter
         $http.delete("api/renter", { userName: userProfile.userName, password: userProfile.password }).then(function (response) {
-            if (response) {
-                return;
+            if (response.data) {
+                $rootScope.role = 0;
+                userProfile.data.role = 0;
+                $scope.userDetails.role = 0;
             } else {
                 return;
             }
@@ -90,14 +92,13 @@ userProfileController.controller("userProfileController", function ($scope, $roo
          
     };
 
-
     $scope.addApartment = function () {
         $scope.newApartment = {// add new apartment object
             categoryID: $scope.categoryID,
             countryID: $scope.countryID,
             address: $scope.address,
-            FromDate: $scope.availableFromDate.toDateString(),
-            ToDate: $scope.availableToDate.toDateString(),
+            fromDate: $scope.availableFromDate.toDateString(),
+            toDate: $scope.availableToDate.toDateString(),
             pricePerDay: $scope.pricePerDay,
             description: $scope.description,
             numberOfGuests: $scope.numberOfGuests,
@@ -120,7 +121,9 @@ userProfileController.controller("userProfileController", function ($scope, $roo
         };
         $http.post("api/apartment?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password, $scope.newApartment).then(function (response) {
             if (response) {
-                userProfile.data.renterApartments.push(response.data); //send it to db
+                $scope.newApartment.apartmentID = response.data;
+                userProfile.data.renterApartments.push($scope.newApartment); //send it to db
+                $scope.userDetails = userProfile.getData();
                 return true;
             } else {
                 alert();

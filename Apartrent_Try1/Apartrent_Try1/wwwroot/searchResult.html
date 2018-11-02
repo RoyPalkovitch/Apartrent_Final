@@ -14,12 +14,13 @@
 </div>
 <br /><br />
 <div id="apartmentCell" ng-repeat="apartment in searchResult">
-
-    <div><p>{{apartment.address}}</p></div>
-    <div><p>{{apartment.apartmentType}}</p></div>
-    <div><p>{{apartment.fromDate}}</p></div>
-    <div><p>{{apartment.toDate}}</p></div>
-    <div><p>{{apartment.pricePerDay}}</p></div>
-    <div><p>{{apartment.renterUserName}}</p></div>
-    <!-- need to add rating,image,number of beds, title of apartment will do after login and signup -->
+    <a ng-click="getApartment(apartment.apartmentID)" ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}/viewApartment.html">
+        <div><p>{{apartment.address}}</p></div>
+        <div><p>{{apartment.apartmentType}}</p></div>
+        <div><p>{{apartment.fromDate}}</p></div>
+        <div><p>{{apartment.toDate}}</p></div>
+        <div><p>{{apartment.pricePerDay}}</p></div>
+        <div><p>{{apartment.renterUserName}}</p></div>
+    </a>
+    <!-- need to add rating,image -->
 </div>

@@ -4,8 +4,8 @@
             <br />
             <a>save spot for image<img /></a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a>My Reviews</a>
-            <a>History of purchses</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <a ng-href="#!index.html">Error Go Back</a>
     </div>
@@ -14,13 +14,13 @@
             <br />
             <a>save spot for image<img /></a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a>My apartments</a> <!--will add div that shows all apartments of current user the chosen one will be edited-->
-            <a>My Reviews</a>
-            <a>Reviews on my apartments</a>
-            <a>History of purchses</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/apartmentReviews.html">Reviews on my apartments</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <div>
-            <div class="renterProfileContent" ng-repeat="apartment in userDetails.renterApartments">
+            <div class="renterProfileContent" ng-repeat="apartment in userDetails.renterApartments track by $index">
                 <div>
                     <div>
                         <p>{{countries[apartment.countryID-1].countryName}}</p>
@@ -29,9 +29,10 @@
                         <p>{{apartment.fromDate}}</p>
                         <p>{{apartment.toDate}}</p>
                         <p>{{apartment.pricePerDay}}</p>
+                        <a ng-click="getIndex($index)" ng-href="#!yourProfile/{{userDetails.userName}}/editApartment.html">Edit Apartment</a>
                     </div>
                     <button onclick="alert()">Edit Apartment</button>
-                    <button>Delete Apartment</button>
+                    <button ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
                 </div>
                    
             </div>

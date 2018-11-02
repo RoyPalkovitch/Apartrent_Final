@@ -7,6 +7,7 @@
     <script src="angular-route.min.js"></script>
     <script src="AngularControllers/apartrentResultController.js"></script>
     <script src="AngularControllers/userProfileController.js"></script>
+    <script src="AngularControllers/apartmentController.js"></script>
     <style>
         @import url('navbar.css');
         @import url('userdashboard.css');
@@ -160,7 +161,7 @@
                         <br />
                         <br />
                         Guests: <input ng-disabled="errorMessageDisplay" value="" type="range" min="1" max="20" step="1" ng-model="searchGuests" /><p>{{searchGuests}}</p>
-                        <a ng-href="#!searchResult/{{countries[searchCountryID-1].countryName}}.html" ng-click="searchApartment()" ng-disabled="searchButtonDisabled || errorMessageDisplay" ng-hide="errorMessageDisplay">Send</a>
+                        <a ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}.html" ng-click="searchApartment()" ng-disabled="searchButtonDisabled || errorMessageDisplay" ng-hide="errorMessageDisplay">Send</a>
                         <span id="errorMessage" ng-show="errorMessageDisplay"><a ng-bind="errorMessage"></a></span>
                         <button id="errorMessagebtn" ng-show="errorMessageDisplay" type="button" ng-click="errorMessageDisplay=false">OK</button>
                     </div>
@@ -171,7 +172,7 @@
 
     </div>
     <script>
-        var apartmentApp = angular.module('apartrentApp', ['ngRoute', 'ResultController','userProfileController']);
+        var apartmentApp = angular.module('apartrentApp', ['ngRoute', 'apartrentResultController', 'userProfileController','apartmentController']);
         apartmentApp.config(function ($routeProvider) {
             var getPath = function (path) {// gettin the path change to add {{}} on ng-href
                 return '/i' + (path.indexOf('/') === 0 ? path : '/' + path);
@@ -199,11 +200,17 @@
             //this works
             config
                 .when("/searchResult/:id.html", { templateUrl: "searchResult.html", controller: "apartrentResultController" })
-                .when("/yourProfile/:id.html", { templateUrl: "yourProfile.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/editAccount.html", { templateUrl: "editAccount.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/becomeRenter.html", { templateUrl: "becomeRenter.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/addApartment.html", { templateUrl: "addApartment.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/userApartments.html", { templateUrl: "userApartments.html", controller:"userProfileController" })
+                .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
+                .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
+                .when("/yourProfile/:id/editAccount.html", { templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController" })
+                .when("/yourProfile/:id/becomeRenter.html", { templateUrl: "UserDashBoard/becomeRenter.html", controller: "userProfileController" })
+                .when("/yourProfile/:id/myOrders.html", { templateUrl: "UserDashBoard/myOrders.html", controller: "userProfileController" })
+                .when("/yourProfile/:id/myReviews.html", { templateUrl: "UserDashBoard/myReviews.html", controller: "userProfileController" })
+                .when("/yourProfile/:id/addApartment.html", { templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController" })
+                .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
+                .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
+                .when("/yourProfile/:id/apartmentReviews.html", { templateUrl: "RenterDashBoard/apartmentReviews.html", controller: "apartmentController" })
+                
         });
 
         apartmentApp.run(function ($rootScope, $location, $route) {
@@ -267,6 +274,24 @@
             return apartmentsData;
             
         }); // save the data gained from the server on the apartments client searched
+        apartmentApp.factory("currentApartment", function ($rootScope) {
+            var apartmentsData = {};
+
+            apartmentsData.data = '';
+            apartmentsData.setData = function (data) {
+                this.data = data;
+                this.getData();
+            };
+
+            apartmentsData.getData = function () {
+                $rootScope.$broadcast('getCurrentApartment');
+            };
+
+            apartmentsData.resetData = function () {
+                apartmentsData = {};
+            };
+            return apartmentsData;
+        });
         apartmentApp.factory("countriesService", function () {
             var formData;
 
@@ -290,6 +315,7 @@
             var userProfile = {};
 
             userProfile.data = '';
+            
             userProfile.setData = function (data) {
                 this.data = data;
                 $rootScope.role = data.role
@@ -500,12 +526,12 @@
 
                         $scope.errorMessageDisplay = true;
                         $scope.searchButtonDisabled = false;
-
                         return;
                     }
                     apartmentsDataForLocationService.setApartmentsData(response.data);//save apartments data of current location and send event to apartmentResult controller to featch the data too
                     $scope.searchButtonDisabled = false;
                     $rootScope.searchHide = true;
+
                 });
             };
 

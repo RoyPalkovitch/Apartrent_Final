@@ -9,7 +9,9 @@ namespace Apartrent_Try1
     {
         public int ApartmentID { get; set; }
         public string RenterUserName { get; set; }
-        public int FeaturesID { get; set; }
+
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
 
         public int CountryID { get; set; }
         public string CountryName { get; set; }
@@ -34,7 +36,6 @@ namespace Apartrent_Try1
         public bool LivingRoom { get; set; }
         public string BedRoomDescription { get; set; }
         public string LivingRoomDescription { get; set; }
-        public int NumberOfBedrooms { get; set; }
         public int QueenSizeBed { get; set; }
         public int DoubleBed { get; set; }
         public int SingleBed { get; set; }

@@ -26,6 +26,12 @@ namespace Apartrent_Try1.Controllers
             return categories = DB.ApartmentDB.GetCategories();
         }
 
+        [HttpGet("GetApartment")]
+        public Apartment GetApartment([FromQuery]int apartmentID)
+        {
+            return DB.ApartmentDB.GetApartment(apartmentID);
+        }
+
         [HttpPost]
         public int AddApartment([FromQuery]string userName, [FromQuery]string password, [FromBody]Apartment apartment)
         {
@@ -40,7 +46,7 @@ namespace Apartrent_Try1.Controllers
         }
 
         [HttpPut]
-        public bool EditApartment([FromBody]Apartment apartment, [FromQuery]bool editFeature, [FromQuery]string userName, [FromQuery]string password)
+        public bool EditApartment([FromQuery]string userName, [FromQuery]string password, [FromQuery]bool editFeature, [FromBody]Apartment apartment)
         {
             return DB.ApartmentDB.EditApartment(apartment, editFeature, userName, password);
         }

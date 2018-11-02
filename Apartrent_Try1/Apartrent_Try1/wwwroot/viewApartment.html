@@ -1,0 +1,71 @@
+﻿
+
+<div>
+
+    <p>
+        <img /> save spot for imgs
+    </p>
+
+    <br />
+    <p>{{currentApartmentData.address}}</p>
+
+    <p>
+        {{currentApartmentData.pricePerDay}}
+        need to caculate price per all staying and for each guest
+    </p>
+
+
+    <p>
+        {{currentApartmentData.fromDate}}
+        {{currentApartmentData.toDate}}
+    </p>
+
+    <p>{{currentApartmentData.countryName}}</p>
+    <p>{{currentApartmentData.currentApartmentDataType}}</p>
+    <p>{{currentApartmentData.description}}</p>
+
+    <p>
+        {{currentApartmentData.firstName}}
+        {{currentApartmentData.lastName}}
+    </p>
+
+
+    <p>
+        <h3>Apartment Features:</h3>
+    <p>{{currentApartmentData.numberOfGuests}}</p>
+
+    <p>{{currentApartmentData.shower}}</p>
+    <p>{{currentApartmentData.wifi}}</p>
+    <p>{{currentApartmentData.tv}}</p>
+    <p>{{currentApartmentData.cables}}</p>
+    <p>{{currentApartmentData.satellite}}</p>
+    <p>{{currentApartmentData.pets}}</p>
+    <p>{{currentApartmentData.bath}}</p>
+    <p>{{currentApartmentData.livingRoom}}</p>
+    <p>{{currentApartmentData.livingRoomDescription}}</p>
+
+    <p>{{currentApartmentData.numberOfBedRooms}}</p>
+
+    <p>{{currentApartmentData.bedRoomDescription}}</p>
+    <p>{{currentApartmentData.queenSizeBed}}</p>
+    <p>{{currentApartmentData.doubleBed}}</p>
+    <p>{{currentApartmentData.singleBed}}</p>
+    <p>{{currentApartmentData.sofaBed}}</p>
+    <p>{{currentApartmentData.bedsDescription}}</p>
+</div>
+
+    <p>
+        <div ng-if="userProfile.role == 0 ||userProfile.role == 1 ">
+            <h3>place a review(for your notice reviews will be post only if you have purches a stay in this currentApartmentData. you can review the renter before staying and then write your full review :D)</h3>
+            <textarea ng-model=".newReview" placeholder="Type your review here"></textarea>
+            <input type="range" min="1" max="5" ng-model=".newReview" />
+            <button>send</button>
+        </div>
+    </p>
+
+    <h3>Reviews:</h3>
+    <div ng-repeat="review in currentApartmentData.reviews">
+        {{review.userName}}
+        {{review.description}}
+        {{review.rating}}
+    </div>
