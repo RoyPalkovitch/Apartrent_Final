@@ -240,11 +240,6 @@ namespace Apartrent_Try1
             }
         }
 
-
-
-
-
-
         public static class RenterDB
         {
 
@@ -296,8 +291,6 @@ namespace Apartrent_Try1
 
         }
 
-
-
         public static class ApartmentDB
         {
             public static List<Apartment> GetApartmentsForLocation(int countryID, int numberOfGuests, DateTime fromDate, DateTime toDate) // view Outside Of Page (After the search before choosing the apartment)
@@ -333,7 +326,9 @@ namespace Apartrent_Try1
                                     ToDate = new DateTime(reader.GetInt64(12)),
                                     Description = reader.GetString(13),
                                 };
-
+                                apartment.PriceForStaying = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays * apartment.PricePerDay : apartment.PricePerDay;
+                                apartment.TotalNumberOfDays = (toDate - fromDate).TotalDays > 0 ? (toDate-fromDate).TotalDays : 1 ;
+                                apartment.PricePerGuest = apartment.PriceForStaying / apartment.TotalNumberOfDays / numberOfGuests; 
                                 apartments.Add(apartment);
                             }
                             return apartments;
@@ -481,6 +476,7 @@ namespace Apartrent_Try1
                         {
                             if (reader.Read())
                             {
+                                apartment.ApartmentID = apartmentID;
                                 apartment.RenterUserName = reader.GetString(0);
                                 apartment.CountryID = reader.GetInt32(1);//can be localy
                                 apartment.CategoryID = reader.GetInt32(2);
@@ -512,7 +508,34 @@ namespace Apartrent_Try1
                             }
 
                         }
+                        cmd.CommandText = "SELECT Rating,Description,UserName,ReviewID FROM Reviews WHERE ApartmentID = @ApartmentID";
+                        try {
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            List<Reviews> temp = new List<Reviews>();
+                            while (reader.Read())
+                            {
+                                Reviews reviews = new Reviews()
+                                {
+                                    Rating = reader.GetInt16(0),
+                                    Description = reader.GetString(1),
+                                    UserName = reader.GetString(2),
+                                    ReviewID = reader.GetInt32(3)
+                                };
+                                temp.Add(reviews);
+
+                            }
+                            apartment.Reviews = temp;
+                        }
+                        }
+                        catch
+                        {
+
+                           apartment.Reviews = null;
+                        }
                         return apartment;
+
+
                     }
                 }
             }
@@ -548,8 +571,6 @@ namespace Apartrent_Try1
 
         }
 
-
-
         public static class CountriesDB
         {
             public static List<Countries> GetCountries()
@@ -576,6 +597,32 @@ namespace Apartrent_Try1
                     }
                 }
             }
+        }
+
+        public static class ReviewsDB
+        {
+           // SELECT ReviewID, Rating, [Description], UserName FROM Reviews WHERE ApartmentID = 1
+
+            public static int NewReview(Reviews reviews,string password)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password, conn)){
+                        return -1;
+                    }
+                    using(SqlCommand cmd = new SqlCommand("INSERT INTO Reviews(Rating,UserName,[Description],ApartmentID)output INSERTED.ReviewID VALUES(@Rating,@UserName,@Description,@ApartmentID)", conn))
+                    {
+                        cmd.Add("@Rating", reviews.Rating);
+                        cmd.Add("@UserName", reviews.UserName);
+                        cmd.Add("@Description", reviews.Description);
+                        cmd.Add("@ApartmentID", reviews.ApartmentID);
+                        return reviews.ReviewID = (int)cmd.ExecuteScalar();
+                            
+                    };
+                }
+            }
+
         }
 
     }

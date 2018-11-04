@@ -17,7 +17,7 @@ namespace Apartrent_Try1
         public string CountryName { get; set; }
         public int CategoryID { get; set; }
         public string ApartmentType { get; set; }
-        
+
         public string Address { get; set; }
         public double PricePerDay { get; set; }
         public DateTime FromDate { get; set; }
@@ -41,5 +41,13 @@ namespace Apartrent_Try1
         public int SingleBed { get; set; }
         public int SofaBed { get; set; }
         public string BedsDescription { get; set; }
+
+        public List<Reviews> Reviews { get; set; }
+
+        public double PriceForStaying { get; set; }
+
+        public double TotalNumberOfDays { get; set; }
+
+        public double PricePerGuest {get;set;}
     }
 }

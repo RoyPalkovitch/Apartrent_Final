@@ -75,7 +75,7 @@
                             <button ng-click="login()">Send</button>
                             <button ng-click="handelNavBarLogin()">exit</button>
                             <span id="errorLogin" ng-show="errorLoginDisplay">error somthing went wrong</span>
-                            <div />
+                            
                         </div>
                     </li>
                     <li id="liLoginRegisterBar" class="dropli">
@@ -318,7 +318,10 @@
             
             userProfile.setData = function (data) {
                 this.data = data;
-                $rootScope.role = data.role
+                if (data != null || data != '')
+                    $rootScope.role = data.role
+                else
+                    $rootScope.role = -1;
                 this.getData();
             };
 
@@ -327,7 +330,8 @@
             };
 
             userProfile.resetData = function () {
-                userProfile = {};
+                this.setData('');
+                
             };
             return userProfile;
     
@@ -355,7 +359,7 @@
 
         var date = new Date();//fetchin date object for today date
 
-        apartmentApp.controller("navBarController", function ($scope, $http, $rootScope, countriesService, userProfile) {
+        apartmentApp.controller("navBarController", function ($scope, $http, $rootScope, countriesService, userProfile,$location) {
             $rootScope.role = -1; //change the view of navBar
             $scope.countries = [];
 
@@ -528,6 +532,7 @@
                         $scope.searchButtonDisabled = false;
                         return;
                     }
+   
                     apartmentsDataForLocationService.setApartmentsData(response.data);//save apartments data of current location and send event to apartmentResult controller to featch the data too
                     $scope.searchButtonDisabled = false;
                     $rootScope.searchHide = true;

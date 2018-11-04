@@ -13,14 +13,19 @@
 
 </div>
 <br /><br />
-<div id="apartmentCell" ng-repeat="apartment in searchResult">
-    <a ng-click="getApartment(apartment.apartmentID)" ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}/viewApartment.html">
-        <div><p>{{apartment.address}}</p></div>
-        <div><p>{{apartment.apartmentType}}</p></div>
-        <div><p>{{apartment.fromDate}}</p></div>
-        <div><p>{{apartment.toDate}}</p></div>
-        <div><p>{{apartment.pricePerDay}}</p></div>
-        <div><p>{{apartment.renterUserName}}</p></div>
+<div id="apartmentCell" ng-repeat="apartment in searchResult track by $index">
+    asdasdsd
+    <a ng-click="getApartment(apartment.apartmentID,$index)" ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}/viewApartment.html">
+        <div><p>Address:{{apartment.address}}</p></div>
+        <div><p>Apartment Type:{{apartment.apartmentType}}</p></div>
+        <div><p>From Date:{{apartment.fromDate}}</p></div>
+        <div><p>To Date:{{apartment.toDate}}</p></div>
+        <div><p>Days:{{apartment.totalNumberOfDays}}</p></div>
+        <div><p>Renter:{{apartment.renterUserName}}</p></div>
+        <div><p>Price for all days:{{apartment.priceForStaying}}</p></div>
+        <div><p>Price Per Day:{{apartment.pricePerDay}}</p></div>
+        <div><p>Price per guest{{apartment.pricePerGuest}}</p></div>
+
     </a>
     <!-- need to add rating,image -->
 </div>

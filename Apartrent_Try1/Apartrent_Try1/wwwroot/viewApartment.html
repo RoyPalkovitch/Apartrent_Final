@@ -11,8 +11,10 @@
 
     <p>
         {{currentApartmentData.pricePerDay}}
-        need to caculate price per all staying and for each guest
     </p>
+        <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
+        <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
+        <div><p>Price per guest{{currentApartmentData.pricePerGuest}}</p></div>
 
 
     <p>
@@ -55,11 +57,11 @@
 </div>
 
     <p>
-        <div ng-if="userProfile.role == 0 ||userProfile.role == 1 ">
+        <div ng-if="userDetails ">
             <h3>place a review(for your notice reviews will be post only if you have purches a stay in this currentApartmentData. you can review the renter before staying and then write your full review :D)</h3>
-            <textarea ng-model=".newReview" placeholder="Type your review here"></textarea>
-            <input type="range" min="1" max="5" ng-model=".newReview" />
-            <button>send</button>
+            <textarea ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
+            <input type="range" min="1" max="5" ng-model="$parent.reviewRating" />
+            <button ng-click="newReview()">send</button>
         </div>
     </p>
 
