@@ -213,14 +213,14 @@
                 
         });
 
-        apartmentApp.run(function ($rootScope, $location, $route) {
+        apartmentApp.run(function ($rootScope, $location, $route, apartmentsDataForLocationService, currentApartment) {
             //$rootScope.$on('$locationChangeSuccess', function () { // caching location change
 
             //    if ($location.path() == $rootScope.oldLocation)
             //      $rootScope.oldLocation = $location.path();//need to add token here
             //});
 
-            $rootScope.$watch(function () { return $location.path(); }, function (newLocation, oldLocation, userProfile) { // watch if user change url
+            $rootScope.$watch(function () { return $location.path(); }, function (newLocation) { // watch if user change url
                 if ($rootScope.oldLocation != newLocation) {
                     var caseParam = newLocation.split("/");
                     if (caseParam[1] == "i")
@@ -236,6 +236,9 @@
                             $rootScope.searchHide = true;
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
+                            apartmentsDataForLocationService.getApartmentsData();
+                            if (caseParam[4] == "viewApartment.html")
+                                currentApartment.getData();
                             break;
                         case "yourProfile":
                             $rootScope.searchHide = true;

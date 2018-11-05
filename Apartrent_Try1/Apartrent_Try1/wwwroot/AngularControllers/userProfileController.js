@@ -13,9 +13,6 @@ userProfileController.controller("userProfileController", function ($scope, $roo
         $scope.userDetails = userProfile.data;
     });
 
-   // $scope.$on("categoriesFactory", function () {
-    //    $scope.categories = categoriesFactory.data;
-    //});
 
 
     $scope.editAccount = function () {
@@ -89,7 +86,7 @@ userProfileController.controller("userProfileController", function ($scope, $roo
                 location.href = "/index.html";
             }
         });
-         
+
     };
 
     $scope.addApartment = function () {
@@ -131,4 +128,50 @@ userProfileController.controller("userProfileController", function ($scope, $roo
             }
         });
     };
+
+    $scope.getUserReviews = function () {
+        $scope.user = {
+            userName: $scope.userDetails.userName,
+            password: $scope.userDetails.password
+        };
+        $http.get("api/reviews/UserReviews?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
+            if (response.data) {
+                userProfile.data.reviews = response.data;
+                userProfile.getData();
+            }
+        });
+    };
+
+    $scope.deleteReview = function (review, index) {
+        review.userName = $scope.userDetails.userName;
+        $http.post("api/reviews/Delete?password=" + $scope.userDetails.password, review).then(function (response) {
+            if (response.data) {
+                userProfile.data.reviews.splice(index, 1);
+                userProfile.getData();
+            }
+        });
+    };
+
+    $scope.editReview = function (review, index) {
+        $scope.editedReview = {
+            userName: $scope.userDetails.userName,
+            apartmentID: review.apartmentID,
+            reviewID: review.reviewID,
+            description: $scope.editDescription ? $scope.editDescription : review.description,
+            rating: $scope.editRating ? $scope.editRating : review.rating
+        };
+        $scope.currentReview = -1;
+        $http.put("api/reviews?password=" + $scope.userDetails.password, $scope.editedReview).then(function (response) {
+            if (response.data) {
+                userProfile.data.reviews[index] = $scope.editedReview;
+                userProfile.getData();
+            }
+
+        });
+    };
+
+    $scope.editReviewHandler = function (index) {
+        $scope.currentReview = index;
+    };
+
 });

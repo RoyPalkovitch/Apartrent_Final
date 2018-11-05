@@ -522,6 +522,7 @@ namespace Apartrent_Try1
                                     UserName = reader.GetString(2),
                                     ReviewID = reader.GetInt32(3)
                                 };
+                                reviews.ApartmentID = apartmentID;
                                 temp.Add(reviews);
 
                             }
@@ -620,6 +621,72 @@ namespace Apartrent_Try1
                         return reviews.ReviewID = (int)cmd.ExecuteScalar();
                             
                     };
+                }
+            }
+
+            public static bool DeleteReview(Reviews reviews,string password)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password, conn))
+                        return false;
+                    using(SqlCommand cmd = new SqlCommand("DELETE FROM Reviews WHERE ReviewID=@ReviewID AND UserName=@UserName AND ApartmentID=@ApartmentID",conn))
+                    {
+                        cmd.Add("@ReviewID", reviews.ReviewID);
+                        cmd.Add("@ApartmentID", reviews.ApartmentID);
+                        cmd.Add("@UserName", reviews.UserName);
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
+                }
+            }
+
+            public static bool EditReview(Reviews reviews,string password)
+            {
+                using (SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password,conn))
+                        return false;
+                    using(SqlCommand cmd = new SqlCommand("UPDATE Reviews SET Rating=@Rating,[Description]=@Description WHERE ReviewID=@ReviewID AND UserName=@UserName AND ApartmentID=@ApartmentID", conn))
+                    {
+                        cmd.Add("@Rating", reviews.Rating);
+                        cmd.Add("@Description", reviews.Description);
+                        cmd.Add("@ReviewID", reviews.ReviewID);
+                        cmd.Add("@ApartmentID", reviews.ApartmentID);
+                        cmd.Add("@UserName", reviews.UserName);
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
+                }
+            }
+
+            public static List<Reviews> GetUserReviews(string userName,string password)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!UsersDB.ValidateUser(userName, password, conn))
+                        return null;
+                    using(SqlCommand cmd = new SqlCommand("SELECT ReviewID,ApartmentID,Rating,[Description] FROM Reviews WHERE UserName=@UserName",conn))
+                    {
+                        List<Reviews> reviews = new List<Reviews>();
+                        cmd.Add("@UserName", userName);
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Reviews review = new Reviews()
+                                {
+                                    ReviewID = reader.GetInt32(0),
+                                    ApartmentID = reader.GetInt32(1),
+                                    Rating = reader.GetInt16(2),
+                                    Description = reader.GetString(3)
+                                };
+                                reviews.Add(review);
+                            }
+                            return reviews;
+                        }
+                    }
                 }
             }
 

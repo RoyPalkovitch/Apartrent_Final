@@ -25,7 +25,7 @@ apartrentResultController.controller("apartrentResultController", function ($sco
 
     $scope.$on("getCurrentApartment", function () {
         $scope.currentApartmentData = currentApartment.data;
-
+        userProfile.getData();
     });
 
     $scope.newReview = function () {
@@ -38,8 +38,47 @@ apartrentResultController.controller("apartrentResultController", function ($sco
         $http.post("api/reviews?password=" + $scope.userDetails.password, $scope.review).then(function (response) {
             if (response.data) {
                 $scope.review.reviewID = response.data;
-                $scope.currentApartmentData.reviews.Push($scope.review);
+                currentApartment.data.reviews.push($scope.review);
+                currentApartment.getData();
             }
         });
     };
+
+    $scope.deleteReview = function (review, index) {
+        $scope.delReview = {
+            userName: $scope.userDetails.userName,
+            apartmentID: review.apartmentID,
+            reviewID: review.reviewID
+        };
+        $http.post("api/reviews/Delete?password=" + $scope.userDetails.password,$scope.delReview).then(function (response) {
+            if (response.data) {
+                currentApartment.data.reviews.splice(index, 1);
+                currentApartment.getData();
+            }
+        });
+
+    };
+
+    $scope.editReview = function (review, index) {
+        $scope.editedReview = {
+            userName: $scope.userDetails.userName,
+            apartmentID: review.apartmentID,
+            reviewID: review.reviewID,
+            description: $scope.editDescription ? $scope.editDescription : review.description,
+            rating: $scope.editRating ? $scope.editRating : review.rating
+        };
+        $scope.currentReview = -1;
+        $http.put("api/reviews?password=" + $scope.userDetails.password, $scope.editedReview).then(function (response) {
+            if (response.data) {
+                currentApartment.data.reviews[index] = $scope.editedReview;
+                currentApartment.getData();
+            }
+
+        });
+    };
+
+    $scope.editReviewHandler = function (index) {
+        $scope.currentReview = index;
+    };
+
 });

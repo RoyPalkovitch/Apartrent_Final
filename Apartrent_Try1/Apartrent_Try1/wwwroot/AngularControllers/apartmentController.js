@@ -20,7 +20,7 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
     $scope.deleteApartment = function (apartmentIndex, apartmentID) {
         $http.delete("api/apartment?apartmentId=" + apartmentID + "&userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
             if (response.data) {
-                $scope.userDetails.renterApartments.splice(apartmentIndex, apartmentIndex);
+                $scope.userDetails.renterApartments.splice(apartmentIndex, 1);
                 userProfile.setData($scope.userDetails);
             }
         });

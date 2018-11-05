@@ -5,7 +5,7 @@
             <a>save spot for image<img /></a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
 
     </div>
@@ -15,7 +15,7 @@
             <a>save spot for image<img /></a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a> 
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/apartmentReviews.html">Reviews on my apartments</a>
             <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
 
