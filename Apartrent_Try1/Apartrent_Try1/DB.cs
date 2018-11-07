@@ -191,7 +191,6 @@ namespace Apartrent_Try1
                         {
 
                             cmd.CommandText = "SELECT Apartment.ApartmentID AS ApartmentID,CountryID,Apartment.CategoryID as CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Description],NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets,NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription,ApartmentType FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.ApartmentID = ApartmentFeatures.ApartmentID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID WHERE Apartment.RenterUserName = @UserName";
-                            //cmd.Add("@RenterUserName", userName);
                             using (SqlDataReader dr = cmd.ExecuteReader())
                             {
                                 List<Apartment> temp = new List<Apartment>();
@@ -203,7 +202,7 @@ namespace Apartrent_Try1
                                         CountryID = dr.GetInt32(1),//can be localy
                                         CategoryID = dr.GetInt32(2),
                                         Address = dr.GetString(3),
-                                       PricePerDay = dr.GetDouble(4),
+                                        PricePerDay = dr.GetDouble(4),
                                         FromDate = new DateTime(dr.GetInt64(5)),
                                         ToDate = new DateTime(dr.GetInt64(6)),
                                         Description = dr.GetString(7),
@@ -225,12 +224,14 @@ namespace Apartrent_Try1
                                         SofaBed = dr.GetInt32(23),
                                         BedsDescription = dr.GetString(24),
                                         ApartmentType = dr.GetString(25)
+
                                     };
                                     temp.Add(apartment);
                                 }
                                 userDetails.RenterApartments = temp;
-                                return userDetails;
+                        
                             }
+                            return userDetails;
                         }
 
                     }
@@ -602,7 +603,6 @@ namespace Apartrent_Try1
 
         public static class ReviewsDB
         {
-           // SELECT ReviewID, Rating, [Description], UserName FROM Reviews WHERE ApartmentID = 1
 
             public static int NewReview(Reviews reviews,string password)
             {
@@ -614,12 +614,17 @@ namespace Apartrent_Try1
                     }
                     using(SqlCommand cmd = new SqlCommand("INSERT INTO Reviews(Rating,UserName,[Description],ApartmentID)output INSERTED.ReviewID VALUES(@Rating,@UserName,@Description,@ApartmentID)", conn))
                     {
+                        try { 
                         cmd.Add("@Rating", reviews.Rating);
                         cmd.Add("@UserName", reviews.UserName);
                         cmd.Add("@Description", reviews.Description);
                         cmd.Add("@ApartmentID", reviews.ApartmentID);
                         return reviews.ReviewID = (int)cmd.ExecuteScalar();
-                            
+                        }
+                        catch
+                        {
+                            return -1;
+                        }
                     };
                 }
             }
@@ -689,6 +694,9 @@ namespace Apartrent_Try1
                     }
                 }
             }
+
+             
+            
 
         }
 

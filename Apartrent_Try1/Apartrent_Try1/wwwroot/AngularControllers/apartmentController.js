@@ -1,11 +1,12 @@
 ﻿
-
 var apartmentController = angular.module('apartmentController', []);
 
-apartmentController.controller('apartmentController', function ($scope, $rootScope, $http, userProfile, countriesService, categoriesFactory, $routeParams) {
+apartmentController.controller('apartmentController', function ($scope, $rootScope, $http, userProfile, currentApartment, categoriesFactory, countriesService) {
 
     $scope.userDetails = userProfile.data;
     $scope.categories = categoriesFactory.data;
+    $scope.apartmentData = currentApartment.data;
+
     $rootScope.viewProfile = false;
 
     $scope.$on("getUserData", function () {//event catch for user who just login to save his data
@@ -16,6 +17,13 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
         $scope.categories = categoriesFactory.data;
     });
 
+    $scope.$on("getCurrentApartment", function () {
+        $scope.apartmentData = currentApartment.data;
+    });
+
+    $scope.$on("getCountries", function () {
+        $scope.countries = countriesService.data;
+    });
 
     $scope.deleteApartment = function (apartmentIndex, apartmentID) {
         $http.delete("api/apartment?apartmentId=" + apartmentID + "&userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
@@ -107,5 +115,9 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
                     return;
                 }
             });
+    };
+
+    $scope.getApartment = function (apartment) {
+       currentApartment.setData(apartment);
     };
 });

@@ -36,11 +36,12 @@ apartrentResultController.controller("apartrentResultController", function ($sco
             apartmentID: $scope.currentApartmentData.apartmentID
         };
         $http.post("api/reviews?password=" + $scope.userDetails.password, $scope.review).then(function (response) {
-            if (response.data) {
+            if (response.data && response.data > 0) {
                 $scope.review.reviewID = response.data;
                 currentApartment.data.reviews.push($scope.review);
                 currentApartment.getData();
             }
+        
         });
     };
 

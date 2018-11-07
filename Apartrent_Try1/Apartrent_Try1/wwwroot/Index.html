@@ -12,6 +12,7 @@
         @import url('navbar.css');
         @import url('userdashboard.css');
         @import url('renterdashboard.css');
+        @import url('orderbar.css');
 
         * {
             padding: 0;
@@ -209,7 +210,7 @@
                 .when("/yourProfile/:id/addApartment.html", { templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/apartmentReviews.html", { templateUrl: "RenterDashBoard/apartmentReviews.html", controller: "apartmentController" })
+                .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
                 
         });
 
@@ -296,23 +297,25 @@
             return apartmentsData;
         });
         apartmentApp.factory("countriesService", function () {
-            var formData;
+            var countriesData = {};
 
-            return {
-                getData: function () {
-                    //You could also return specific attribute of the form data instead
-                    //of the entire data
-                    return formData;
-                },
-                setData: function (newFormData) {
-                    //You could also set specific attribute of the form data instead
-                    formData = newFormData;
-                },
-                resetData: function () {
-                    //To be called when the data stored needs to be discarded
-                    formData;
-                }
+             countriesData.data = '';
+
+            countriesData.setData = function (data) {
+                this.data = data;
+                this.getData();
             };
+
+            countriesData.getData = function () {
+                $rootScope.$broadcast('getCountries');
+            };
+
+            countriesData.resetData = function () {
+                countriesData.data = '';
+            }
+            return countriesData;
+
+
         });// save the countries data
         apartmentApp.factory("userProfile", function ($rootScope) {
             var userProfile = {};
@@ -374,7 +377,7 @@
 
             $scope.user;
 
-            $rootScope.$on("getCountries", function () {
+            $scope.$on("getCountries", function () {
                 $scope.getCountries();//get countries after they gained from server
             });
 
@@ -382,10 +385,9 @@
                 $scope.user = userProfile.data;
             });
 
-            $scope.getCountries = function () {
-                $scope.countries = countriesService.getData();//get countries after they gained from server
-                countriesService.resetData();
-            };
+            $scope.$on("getCountries", function () {
+                $scope.countries = countriesService.data;
+            });
 
             $scope.handelNavBarLogin = function () {//close and open login div making sure register is not open too
                 if ($scope.showLogin) {

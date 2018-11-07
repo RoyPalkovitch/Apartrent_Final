@@ -1,6 +1,4 @@
-﻿
-
-<div>
+﻿<div>
 
     <p>
         <img /> save spot for imgs
@@ -9,21 +7,10 @@
     <br />
     <p>{{currentApartmentData.address}}</p>
 
-    <p>
-        {{currentApartmentData.pricePerDay}}
-    </p>
-    <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
-    <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
-    <div><p>Price per guest{{currentApartmentData.pricePerGuest}}</p></div>
 
-
-    <p>
-        {{currentApartmentData.fromDate}}
-        {{currentApartmentData.toDate}}
-    </p>
 
     <p>{{currentApartmentData.countryName}}</p>
-    <p>{{currentApartmentData.currentApartmentDataType}}</p>
+    <p>{{currentApartmentData.apartmentType}}</p>
     <p>{{currentApartmentData.description}}</p>
 
     <p>
@@ -89,4 +76,20 @@
         </div>
     </div>
     <br />
+</div>
+
+<div class="orderBar">
+    <p>
+        {{currentApartmentData.pricePerDay}}
+    </p>
+    <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
+    <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
+    <div><p>Price per guest{{currentApartmentData.pricePerGuest}}</p></div>
+
+
+    <p>
+        {{currentApartmentData.fromDate}}
+        {{currentApartmentData.toDate}}
+    </p>
+    <button>Order Now</button>
 </div>

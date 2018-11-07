@@ -1,0 +1,85 @@
+﻿<div ng-switch="userDetails.role">
+    <div ng-switch-when="0">
+        <div class="userSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+        </div>
+
+    </div>
+    <div ng-switch-when="1">
+
+        <div class="renterSideBar">
+            <br />
+            <a>save spot for image<img /></a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+        </div>
+        <div class="renterProfileContent">
+
+
+            <div>
+
+                <p>
+                    <img /> save spot for imgs
+                </p>
+
+                <br />
+                <p>{{$parent.apartmentData.address}}</p>
+
+                <p>
+                    {{$parent.apartmentData.pricePerDay}}
+                </p>
+
+                <p>{{$parent.countries[apartmentData.countryID-1].countryName}}</p>
+                <p>{{$parent.apartmentData.apartmentType}}</p>
+                <p>{{$parent.apartmentData.description}}</p>
+
+                <h3>Apartment Features:</h3><input type="checkbox" ng-model="selectFeat" />
+                <div ng-show="selectFeat">
+                    
+                    <p>{{$parent.apartmentData.numberOfGuests}}</p>
+
+                    <p>{{$parent.apartmentData.shower}}</p>
+                    <p>{{$parent.apartmentData.wifi}}</p>
+                    <p>{{$parent.apartmentData.tv}}</p>
+                    <p>{{$parent.apartmentData.cables}}</p>
+                    <p>{{$parent.apartmentData.satellite}}</p>
+                    <p>{{$parent.apartmentData.pets}}</p>
+                    <p>{{$parent.apartmentData.bath}}</p>
+                    <p>{{$parent.apartmentData.livingRoom}}</p>
+                    <p>{{$parent.apartmentData.livingRoomDescription}}</p>
+
+                    <p>{{$parent.apartmentData.numberOfBedRooms}}</p>
+
+                    <p>{{$parent.apartmentData.bedRoomDescription}}</p>
+                    <p>{{$parent.apartmentData.queenSizeBed}}</p>
+                    <p>{{$parent.apartmentData.doubleBed}}</p>
+                    <p>{{$parent.apartmentData.singleBed}}</p>
+                    <p>{{$parent.apartmentData.sofaBed}}</p>
+                    <p>{{$parent.apartmentData.bedsDescription}}</p>
+                </div>
+            </div>
+            <br />
+
+            Show Reviews:<input type="checkbox" ng-model="selectRev">
+            <div  ng-repeat="review in $parent.apartmentData.reviews track by $index" ng-show="selectRev">
+                <div>
+                    check
+                    {{review.userName}}
+                    {{review.description}}
+                    {{review.rating}}
+                </div>
+                <br />
+            </div>
+            <br />
+            Apartment Orders:
+
+
+        </div>
+    </div>
+</div>

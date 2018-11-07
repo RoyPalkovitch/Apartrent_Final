@@ -4,7 +4,7 @@ var userProfileController = angular.module('userProfileController', []);
 
 
 
-userProfileController.controller("userProfileController", function ($scope, $rootScope, $http, userProfile, countriesService, categoriesFactory, $routeParams) {
+userProfileController.controller("userProfileController", function ($scope, $rootScope, $http, userProfile, categoriesFactory, $routeParams) {
     $scope.userDetails = userProfile.data;
     //$scope.categories = categoriesFactory.data;
     $rootScope.viewProfile = false;
