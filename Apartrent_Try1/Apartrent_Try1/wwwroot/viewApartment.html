@@ -78,7 +78,7 @@
     <br />
 </div>
 
-<div class="orderBar">
+<div class="orderBar" ng-if="userDetails">
     <p>
         {{currentApartmentData.pricePerDay}}
     </p>
@@ -91,5 +91,6 @@
         {{currentApartmentData.fromDate}}
         {{currentApartmentData.toDate}}
     </p>
-    <button>Order Now</button>
+    <button ng-click="newOrder()">Order Now</button>
 </div>
+<div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>

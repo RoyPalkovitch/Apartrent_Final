@@ -174,4 +174,13 @@ userProfileController.controller("userProfileController", function ($scope, $roo
         $scope.currentReview = index;
     };
 
+    $scope.getUserOrders = function () {
+        $http.get("api/orders/UserOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
+            if (response.data) {
+                userProfile.data.orders = response.data;
+                userProfile.getData();
+            }
+        });
+    };
+
 });

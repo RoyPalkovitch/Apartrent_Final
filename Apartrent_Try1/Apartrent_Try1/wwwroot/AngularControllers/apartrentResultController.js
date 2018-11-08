@@ -14,11 +14,13 @@ apartrentResultController.controller("apartrentResultController", function ($sco
     $scope.getApartment = function (apartmentID,index) {
         $http.get('api/apartment/GetApartment?apartmentID=' + apartmentID).then(function (response) {
             if (response.data) {
+                response.data.fromDate = $scope.searchResult[index].fromDate;
+                response.data.toDate = $scope.searchResult[index].toDate;
                 response.data.priceForStaying = $scope.searchResult[index].priceForStaying;
                 response.data.pricePerDay = $scope.searchResult[index].pricePerDay;
                 response.data.pricePerGuest = $scope.searchResult[index].pricePerGuest;
                 currentApartment.setData(response.data);
-                
+                $scope.currentApartmentData = response.data;
             }
         });
     };
@@ -42,6 +44,21 @@ apartrentResultController.controller("apartrentResultController", function ($sco
                 currentApartment.getData();
             }
         
+        });
+    };
+    $scope.newOrder = function () {
+        $scope.order = {
+            apartmentID: $scope.currentApartmentData.apartmentID,
+            userName: $scope.userDetails.userName,
+            renterUserName: $scope.currentApartmentData.renterUserName,
+            fromDate: $scope.currentApartmentData.fromDate,
+            toDate: $scope.currentApartmentData.toDate
+        };
+
+        $http.post("api/orders?password=" + $scope.userDetails.password, $scope.order).then(function (response) {
+            if (response.data) {
+                $scope.successPurches = true;
+            }
         });
     };
 
