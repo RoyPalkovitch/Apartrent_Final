@@ -18,6 +18,13 @@ namespace Apartrent_Try1.Controllers
             return DB.OrdersDB.GetUserOrders(userName,password);
         }
 
+        [HttpGet("PendingOrders")]
+        public List<Orders> GetPendingOrders([FromQuery]string userName,[FromQuery]string password)
+        {
+            return DB.OrdersDB.GetPendingOrders(userName, password);
+        }
+
+        
 
         [HttpPost]
         public bool NewOrder([FromQuery] string password,[FromBody]Orders order)

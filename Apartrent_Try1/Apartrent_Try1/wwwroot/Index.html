@@ -211,6 +211,7 @@
                 .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
+                .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller:"apartmentController" })
                 
         });
 
@@ -537,7 +538,6 @@
                         $scope.searchButtonDisabled = false;
                         return;
                     }
-   
                     apartmentsDataForLocationService.setApartmentsData(response.data);//save apartments data of current location and send event to apartmentResult controller to featch the data too
                     $scope.searchButtonDisabled = false;
                     $rootScope.searchHide = true;

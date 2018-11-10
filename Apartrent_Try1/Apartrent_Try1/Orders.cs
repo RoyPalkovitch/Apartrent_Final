@@ -15,7 +15,7 @@ namespace Apartrent_Try1
         public DateTime OrderDate { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
-        public bool Approved { get; set; }
+        public bool? Approved { get; set; }
 
 
     }

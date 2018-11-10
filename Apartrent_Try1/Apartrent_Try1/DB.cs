@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -323,8 +324,8 @@ namespace Apartrent_Try1
                                     ApartmentType = reader.GetString(8),
                                     Address = reader.GetString(9),
                                     PricePerDay = reader.GetDouble(10),
-                                    FromDate = fromDate,
-                                    ToDate = toDate,
+                                    FromDate = fromDate.Date,
+                                    ToDate = toDate.Date,
                                     Description = reader.GetString(13),
                                 };
                                 apartment.PriceForStaying = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays * apartment.PricePerDay : apartment.PricePerDay;
@@ -728,14 +729,14 @@ namespace Apartrent_Try1
                 }
             }
 
-            public static List<Orders> GetUserOrders(string userName,string password)
+            public static List<Orders> GetUserOrders(string userName, string password)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
                     if (!DB.UsersDB.ValidateUser(userName, password, conn))
                         return null;
-                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Price,OrderDate,FromDate,ToDate FROM Orders WHERE UserName=@UserName",conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Price,OrderDate,FromDate,ToDate,Approved FROM Orders WHERE UserName=@UserName", conn))
                     {
                         cmd.Add("@UserName", userName);
                         List<Orders> orders = new List<Orders>();
@@ -751,6 +752,7 @@ namespace Apartrent_Try1
                                     OrderDate = new DateTime(reader.GetInt64(3)),
                                     FromDate = new DateTime(reader.GetInt64(4)),
                                     ToDate = new DateTime(reader.GetInt64(5)),
+                                    Approved = reader.IsDBNull(6) ? null : (bool?)reader.GetBoolean(6)
 
                                 };
 
@@ -759,6 +761,68 @@ namespace Apartrent_Try1
                             return orders;
                         }
                     }
+                }
+            }
+
+            public static List<Orders> GetPendingOrders(string userName, string password)
+            {
+                using (SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateRenter(userName, password, conn))
+                        return null;
+                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,UserName,Price,OrderDate,FromDate,ToDate FROM Orders WHERE RenterUserName=@RenterUserName AND Approved IS NULL", conn))
+                    {
+                        cmd.Add("@RenterUserName", userName);
+                        List<Orders> orders = new List<Orders>();
+                        using (SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Orders order = new Orders()
+                                {
+                                    ApartmentID = reader.GetInt32(0),
+                                    UserName = reader.GetString(1),
+                                    Price = reader.GetDouble(2),
+                                    OrderDate = new DateTime(reader.GetInt64(3)),
+                                    FromDate = new DateTime(reader.GetInt64(4)),
+                                    ToDate = new DateTime(reader.GetInt64(5))
+                                };
+
+                                orders.Add(order);
+                            }
+                            return orders;
+                        }
+                    }
+                }
+            }
+
+            public static bool UpdateOrderStatus(string password, Orders orders)
+            {
+                using (SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateRenter(orders.RenterUserName, password, conn))
+                        return false;
+
+                    using (SqlCommand cmd = new SqlCommand())
+                    {
+                        cmd.Add("@Approved", orders.Approved);
+                        cmd.Add("@OrderID", orders.OrderID);
+                        cmd.Add("@ApartmentID", orders.ApartmentID);
+                        cmd.Connection = conn;
+                        if ((bool)orders.Approved)
+                        {
+                            cmd.CommandText = "UPDATE Orders SET Approved = @Approved WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID DELETE FROM Orders WHERE ApartmentID = @ApartmentID AND(Approved = 0 OR Approved IS NULL) AND NOT(FromDate >= (SELECT Orders.ToDate WHERE Orders.OrderID = @OrderID) OR ToDate <= (SELECT Orders.FromDate WHERE Orders.OrderID = @OrderID))";
+                        }
+                        else if (!(bool)orders.Approved)
+                        {
+                            cmd.CommandText = "UPDATE Orders SET Approved = @Approved WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID";
+                        }
+
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
+
                 }
             }
 

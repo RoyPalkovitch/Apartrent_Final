@@ -8,20 +8,7 @@
             <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <div>
-            <div class="userProfileContent" ng-repeat="orders in userDetails.orders track by $index">
-                <a>
-                    {{orders.renterUserName}}<br />
-                    {{orders.fromDate}}<br />
-                    {{orders.toDate}}<br />
-                    {{orders.orderDate}}<br />
-                    {{orders.price}}<br />
-                    <span ng-switch="orders.approved">
-                        <span ng-switch-when="null">Pending</span>
-                        <span ng-switch-when="true">Approved!</span>
-                        <span ng-switch-when="false">Declined</span>
-                    </span>
-                </a>
-            </div>
+            <a ng-href="/index.html">ERROR GO BACK </a>
         </div>
     </div>
     <div ng-switch-when="1">
@@ -37,17 +24,17 @@
         </div>
 
         <div>
-            <div class="renterProfileContent" ng-repeat="orders in userDetails.orders track by $index">
+            <div class="renterProfileContent" ng-repeat="orders in userDetails.pendingOrders track by $index">
                 <a>
-                    {{orders.renterUserName}}
-                    {{orders.fromDate}}
-                    {{orders.toDate}}
-                    {{orders.orderDate}}
-                    {{orders.price}}
-                    <span ng-if="orders.approved = null">Pending</span>
-                    <span ng-if="orders.approved = true">Approved!</span>
-                    <span ng-if="orders.approved = false">Declined</span>
+                    {{orders.userName}}<br />
+                    {{orders.fromDate}}<br />
+                    {{orders.toDate}}<br />
+                    {{orders.orderDate}}<br />
+                    {{orders.price}}<br />
+
                 </a>
+                <button>Approve</button>
+                <button>Decline</button>
             </div>
         </div>
     </div>

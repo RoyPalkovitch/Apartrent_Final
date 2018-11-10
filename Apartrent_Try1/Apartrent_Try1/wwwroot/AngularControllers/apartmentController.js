@@ -120,4 +120,20 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
     $scope.getApartment = function (apartment) {
        currentApartment.setData(apartment);
     };
+
+    $scope.getPendingOrders = function () {
+        $http.get("api/orders/PendingOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
+            if (response.data) {
+                $scope.userDetails.pendingOrders = response.data;
+            }
+        });
+    };
+
+    $scope.changeOrderStatus = function (index,orderStatus) {
+        $http.put("api/orders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password + "&orderID=" + index + "&status=" + orderStatus).then(function (response) {
+            if (response.data) {
+                $scope.userDetails.pendingOrders.splice(index, 1);
+            }
+        });
+    };
 });
