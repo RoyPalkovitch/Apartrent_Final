@@ -715,7 +715,7 @@ namespace Apartrent_Try1
                         return false;
 
                     double totalDays = (order.ToDate - order.FromDate).TotalDays > 0 ? (order.ToDate - order.FromDate).TotalDays : 1;
-                    using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS(SELECT Orders.OrderID FROM Orders WHERE Orders.FromDate<=@FromDate AND Orders.ToDate>=@ToDate AND Orders.UserName = @UserName AND Orders.ApartmentID = @ApartmentID) INSERT INTO Orders(ApartmentID,RenterUserName,UserName,Price,OrderDate,FromDate,ToDate)VALUES(@ApartmentID,@RenterUserName,@UserName,(SELECT Apartment.PricePerDay * @TotalDays FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID),@OrderDate,@FromDate,@ToDate )", conn))
+                    using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS(  WHERE Orders.FromDate( BETWEEN @FromDate AND @ToDate) OR Orders.ToDate (BETWEEN @FromDate AND @ToDate) AND Orders.UserName = @UserName AND Orders.ApartmentID = @ApartmentID)) INSERT INTO Orders(ApartmentID,RenterUserName,UserName,Price,OrderDate,FromDate,ToDate)VALUES(@ApartmentID,@RenterUserName,@UserName,(SELECT Apartment.PricePerDay * @TotalDays FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID),@OrderDate,@FromDate,@ToDate )", conn))
                     {
                         cmd.Add("@UserName", order.UserName);
                         cmd.Add("@RenterUserName", order.RenterUserName);
@@ -736,7 +736,7 @@ namespace Apartrent_Try1
                     conn.Open();
                     if (!DB.UsersDB.ValidateUser(userName, password, conn))
                         return null;
-                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Price,OrderDate,FromDate,ToDate,Approved FROM Orders WHERE UserName=@UserName", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Price,OrderDate,FromDate,ToDate,Approved,OrderID FROM Orders WHERE UserName=@UserName", conn))
                     {
                         cmd.Add("@UserName", userName);
                         List<Orders> orders = new List<Orders>();
@@ -752,7 +752,8 @@ namespace Apartrent_Try1
                                     OrderDate = new DateTime(reader.GetInt64(3)),
                                     FromDate = new DateTime(reader.GetInt64(4)),
                                     ToDate = new DateTime(reader.GetInt64(5)),
-                                    Approved = reader.IsDBNull(6) ? null : (bool?)reader.GetBoolean(6)
+                                    Approved = reader.IsDBNull(6) ? null : (bool?)reader.GetBoolean(6),
+                                    OrderID = reader.GetInt32(7)
 
                                 };
 
@@ -771,7 +772,7 @@ namespace Apartrent_Try1
                     conn.Open();
                     if (!DB.UsersDB.ValidateRenter(userName, password, conn))
                         return null;
-                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,UserName,Price,OrderDate,FromDate,ToDate FROM Orders WHERE RenterUserName=@RenterUserName AND Approved IS NULL", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,UserName,Price,OrderDate,FromDate,ToDate,OrderID FROM Orders WHERE RenterUserName=@RenterUserName AND Approved IS NULL", conn))
                     {
                         cmd.Add("@RenterUserName", userName);
                         List<Orders> orders = new List<Orders>();
@@ -786,9 +787,44 @@ namespace Apartrent_Try1
                                     Price = reader.GetDouble(2),
                                     OrderDate = new DateTime(reader.GetInt64(3)),
                                     FromDate = new DateTime(reader.GetInt64(4)),
-                                    ToDate = new DateTime(reader.GetInt64(5))
+                                    ToDate = new DateTime(reader.GetInt64(5)),
+                                    OrderID = reader.GetInt32(6)
                                 };
 
+                                orders.Add(order);
+                            }
+                            return orders;
+                        }
+                    }
+                }
+            }
+
+            public static List<Orders> GetApartmentOrders(string userName,string password,int apartmentID)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    if (!DB.UsersDB.ValidateRenter(userName, password, conn))
+                        return null;
+                    using(SqlCommand cmd = new SqlCommand("SELECT OrderID,Price,FromDate,ToDate,OrderDate,Approved,UserName FROM Orders WHERE ApartmentID = @ApartmentID AND Approved = 1", conn))
+                    {
+                        cmd.Add("@ApartmentID", apartmentID);
+                        using(SqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            List<Orders> orders = new List<Orders>();
+                            while (reader.Read())
+                            {
+                                Orders order = new Orders()
+                                {
+                                    ApartmentID = apartmentID,
+                                    OrderID = reader.GetInt32(0),
+                                    Price = reader.GetDouble(1),
+                                    FromDate = new DateTime(reader.GetInt64(2)),
+                                    ToDate = new DateTime(reader.GetInt64(3)),
+                                    OrderDate = new DateTime(reader.GetInt64(4)),
+                                    Approved = reader.GetBoolean(5),
+                                    UserName = reader.GetString(6)
+                                };
                                 orders.Add(order);
                             }
                             return orders;
@@ -813,14 +849,18 @@ namespace Apartrent_Try1
                         cmd.Connection = conn;
                         if ((bool)orders.Approved)
                         {
-                            cmd.CommandText = "UPDATE Orders SET Approved = @Approved WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID DELETE FROM Orders WHERE ApartmentID = @ApartmentID AND(Approved = 0 OR Approved IS NULL) AND NOT(FromDate >= (SELECT Orders.ToDate WHERE Orders.OrderID = @OrderID) OR ToDate <= (SELECT Orders.FromDate WHERE Orders.OrderID = @OrderID))";
+                            cmd.CommandText = "UPDATE Orders SET Approved = 1 WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID UPDATE Orders SET Approved = 0 WHERE Orders.OrderID = (SELECT Orders.OrderID FROM Orders JOIN (SELECT Orders.FromDate,Orders.ToDate,OrderID,ApartmentID FROM Orders WHERE Orders.OrderID = @OrderID) AS Step1 ON Step1.ApartmentID = Orders.ApartmentID WHERE (Orders.Approved IS NULL OR Orders.Approved = 0) AND Orders.FromDate BETWEEN Step1.FromDate AND Step1.ToDate OR Orders.ToDate BETWEEN Step1.FromDate AND Step1.ToDate AND NOT Orders.OrderID = Step1.OrderID)";
+                            return cmd.ExecuteNonQuery() > 0;
+
                         }
                         else if (!(bool)orders.Approved)
                         {
                             cmd.CommandText = "UPDATE Orders SET Approved = @Approved WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID";
-                        }
+                            return cmd.ExecuteNonQuery() == 1;
 
-                        return cmd.ExecuteNonQuery() == 1;
+                        }
+                        return false;
+
                     }
 
                 }

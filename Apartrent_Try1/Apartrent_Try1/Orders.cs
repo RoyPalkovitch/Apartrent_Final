@@ -17,6 +17,5 @@ namespace Apartrent_Try1
         public DateTime ToDate { get; set; }
         public bool? Approved { get; set; }
 
-
     }
 }

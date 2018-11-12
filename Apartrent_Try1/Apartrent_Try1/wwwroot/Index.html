@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>ApartRent</title>
+    <base href="/Index.html" />
     <script src="angular.min.js"></script>
     <script src="angular-route.min.js"></script>
     <script src="AngularControllers/apartrentResultController.js"></script>
@@ -174,32 +175,49 @@
     </div>
     <script>
         var apartmentApp = angular.module('apartrentApp', ['ngRoute', 'apartrentResultController', 'userProfileController','apartmentController']);
-        apartmentApp.config(function ($routeProvider) {
-            var getPath = function (path) {// gettin the path change to add {{}} on ng-href
-                return '/i' + (path.indexOf('/') === 0 ? path : '/' + path);
-            };
-            var config = {
-                when: function (path, route) {
-                    if (route.overriderRoot) {
-                        $routeProvider.when(path, route);
-                    } else {
-                        var redirect = angular.copy(route);
-                        delete redirect.templateUrl;
-                        delete redirect.controller;
-                        redirect.redirectTo = getPath(path);
-                        $routeProvider
-                            .when(path, redirect)
-                            .when(getPath(path), route);
-                    }
-                    return this;
-                },
-                otherwise: function (config) {
-                    $routeProvider.otherwise(config);
-                    return this;
-                }
-            };
-            //this works
-            config
+        ////apartmentApp.config(function ($routeProvider) {
+        //    var getPath = function (path) {// gettin the path change to add {{}} on ng-href
+        //        return '/i' + (path.indexOf('/') === 0 ? path : '/' + path);
+        //    };
+        //    var config = {
+        //        when: function (path, route) {
+        //            if (route.overriderRoot) {
+        //                $routeProvider.when(path, route);
+        //            } else {
+        //                var redirect = angular.copy(route);
+        //                delete redirect.templateUrl;
+        //                delete redirect.controller;
+        //                redirect.redirectTo = getPath(path);
+        //                $routeProvider
+        //                    .when(path, redirect)
+        //                    .when(getPath(path), route);
+        //            }
+        //            return this;
+        //        },
+        //        otherwise: function (config) {
+        //            $routeProvider.otherwise(config);
+        //            return this;
+        //        }
+        //    };
+        //    //this works
+        //    config
+        //        .when("/searchResult/:id.html", { templateUrl: "searchResult.html", controller: "apartrentResultController" })
+        //        .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
+        //        .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
+        //        .when("/yourProfile/:id/editAccount.html", { templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController" })
+        //        .when("/yourProfile/:id/becomeRenter.html", { templateUrl: "UserDashBoard/becomeRenter.html", controller: "userProfileController" })
+        //        .when("/yourProfile/:id/myOrders.html", { templateUrl: "UserDashBoard/myOrders.html", controller: "userProfileController" })
+        //        .when("/yourProfile/:id/myReviews.html", { templateUrl: "UserDashBoard/myReviews.html", controller: "userProfileController" })
+        //        .when("/yourProfile/:id/addApartment.html", { templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController" })
+        //        .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
+        //        .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
+        //        .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
+        //        .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller:"apartmentController" })
+                
+        //});
+
+        apartmentApp.config(function ($routeProvider, $locationProvider) {
+            $routeProvider
                 .when("/searchResult/:id.html", { templateUrl: "searchResult.html", controller: "apartrentResultController" })
                 .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
                 .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
@@ -211,9 +229,10 @@
                 .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller:"apartmentController" })
-                
+                .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller: "apartmentController" })
+            $locationProvider.html5Mode(true);
         });
+
 
         apartmentApp.run(function ($rootScope, $location, $route, apartmentsDataForLocationService, currentApartment) {
             //$rootScope.$on('$locationChangeSuccess', function () { // caching location change

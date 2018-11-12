@@ -1,11 +1,11 @@
 ﻿
 var apartmentController = angular.module('apartmentController', []);
 
-apartmentController.controller('apartmentController', function ($scope, $rootScope, $http, userProfile, currentApartment, categoriesFactory, countriesService) {
+apartmentController.controller('apartmentController', function ($scope, $rootScope, $http, userProfile, categoriesFactory, countriesService, currentApartment) {
 
     $scope.userDetails = userProfile.data;
     $scope.categories = categoriesFactory.data;
-    $scope.apartmentData = currentApartment.data;
+    $scope.apartmentData = '';
 
     $rootScope.viewProfile = false;
 
@@ -18,7 +18,9 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
     });
 
     $scope.$on("getCurrentApartment", function () {
-        $scope.apartmentData = currentApartment.data;
+        $scope.currentApartmentData = currentApartment.data;
+        //  userProfile.getData();
+        $scope.getApartmentOrders($scope.currentApartmentData.apartmentID); 
     });
 
     $scope.$on("getCountries", function () {
@@ -118,7 +120,20 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
     };
 
     $scope.getApartment = function (apartment) {
-       currentApartment.setData(apartment);
+        $http.get("api/apartment/GetApartment?apartmentID=" + apartment.apartmentID).then(function (response) {
+            if (response.data) {
+                currentApartment.setData(response.data);
+
+            }
+        });
+    };
+
+    $scope.getApartmentOrders = function (apartmentID) {
+        $http.get("api/orders/ApartmentOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password + "&apartmentID=" + apartmentID).then(function (response) {
+            if (response.data) {
+                $scope.currentApartmentData.orders = response.data;
+            }
+        });
     };
 
     $scope.getPendingOrders = function () {
@@ -129,10 +144,12 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
         });
     };
 
-    $scope.changeOrderStatus = function (index,orderStatus) {
-        $http.put("api/orders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password + "&orderID=" + index + "&status=" + orderStatus).then(function (response) {
+    $scope.changeOrderStatus = function (index, order, tempApprove) {
+        order.approved = tempApprove;
+        order.renterUserName = $scope.userDetails.userName;
+        $http.put("api/orders?password=" + $scope.userDetails.password, order).then(function (response) {
             if (response.data) {
-                $scope.userDetails.pendingOrders.splice(index, 1);
+                $scope.getPendingOrders();
             }
         });
     };
