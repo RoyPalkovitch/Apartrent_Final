@@ -2,10 +2,10 @@
     <div ng-switch-when="1">
         <div class="userSideBar">
             <br />
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
-            <a ng-click="getUserReviews()"  ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-click="getUserReviews()"  ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <div class="renterProfileContent">
             Select Apartment Category:<select ng-model="$parent.categoryID">
@@ -52,16 +52,16 @@
                 Sofa Bed: <input min="0" placeholder="0" ng-model="$parent.sofaBed" type="number" />
                 Beds Description: <textarea ng-model="$parent.bedsDescription"></textarea>
             </div>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html" ng-click="addApartment()">Send</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/userApartments.html" ng-click="addApartment()">Send</a>
         </div>
     </div>
     <div ng-switch-when="0">
         <div class="userSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-click="getUserReviews()"  ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-click="getUserReviews()"  ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <div class="userProfileContent">
             Select Apartment Category:<select ng-model="$parent.categoryID">
@@ -106,7 +106,7 @@
                 Sofa Bed: <input ng-model="$parent.sofaBed" type="number" />
                 Beds Description: <textarea ng-model="$parent.bedsDescription"></textarea>
             </div>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/becomeRenter.html">Send</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/becomeRenter.html">Send</a>
         </div>
     </div>
 </div>

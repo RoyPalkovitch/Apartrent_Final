@@ -14,8 +14,7 @@
 </div>
 <br /><br />
 <div id="apartmentCell" ng-repeat="apartment in searchResult track by $index">
-    asdasdsd
-    <a ng-click="getApartment(apartment.apartmentID,$index)" ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}/viewApartment.html">
+    <a ng-click="getApartment(apartment.apartmentID,$index)" ng-href="searchResult/{{countries[apartment.countryID].countryName}}/viewApartment.html">
         <div><p>Address:{{apartment.address}}</p></div>
         <div><p>Apartment Type:{{apartment.apartmentType}}</p></div>
         <div><p>From Date:{{apartment.fromDate}}</p></div>

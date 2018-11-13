@@ -4,7 +4,13 @@ var userProfileController = angular.module('userProfileController', []);
 
 
 
-userProfileController.controller("userProfileController", function ($scope, $rootScope, $http, userProfile, categoriesFactory, $routeParams) {
+userProfileController.controller("userProfileController", function ($scope, $route, $rootScope, $http, userProfile, categoriesFactory, countriesService) {
+
+    var profile = this;
+    profile.reloadData = function () {
+        $route.reload();
+    };
+
     $scope.userDetails = userProfile.data;
     //$scope.categories = categoriesFactory.data;
     $rootScope.viewProfile = false;
@@ -13,7 +19,12 @@ userProfileController.controller("userProfileController", function ($scope, $roo
         $scope.userDetails = userProfile.data;
     });
 
+    $scope.countries = countriesService.data;
 
+
+    $scope.$on("getCountries", function () {
+        $scope.countries = countriesService.data;
+    });
 
     $scope.editAccount = function () {
         $scope.userEditedDetails = { // edited user object... 

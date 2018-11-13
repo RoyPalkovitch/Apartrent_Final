@@ -3,9 +3,9 @@
         <div class="userSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-click="getUserReviews()"  ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-click="getUserReviews()"  ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
 
     </div>
@@ -14,10 +14,10 @@
         <div class="renterSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
-            <a ng-click="getUserReviews()"  ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-click="getUserReviews()"  ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
 
         <div class="renterProfileContent">
@@ -64,7 +64,7 @@
                 Sofa Bed: <input min="0" placeholder="{{$parent.userDetails.currentApartment.sofaBed}}" ng-model="$parent.editSofaBed" type="number" />
                 Beds Description: <textarea placeholder="{{$parent.userDetails.currentApartment.bedsDescription}}" ng-model="$parent.editBedsDescription"></textarea>
             </div>
-            <a ng-click="editApartment()" ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">Save</a>
+            <a ng-click="editApartment()" ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">Save</a>
         </div>
     </div>
 </div>

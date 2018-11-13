@@ -3,25 +3,25 @@
         <div class="userSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-click="getUserReviews()" ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
-        <a ng-href="#!index.html">Error Go Back</a>
+        <a ng-href="index.html">Error Go Back</a>
     </div>
     <div ng-switch-when="1">
         <div class="renterSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
-            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
-            <a ng-click="getPendingOrders()" ng-href="#!yourProfile/{{userDetails.userName}}/userApartments/pendingOrders.html">Pending Requests</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-click="getUserReviews()" ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-click="getPendingOrders()" ng-href="yourProfile/{{userDetails.userName}}/userApartments/pendingOrders.html">Pending Requests</a>
         </div>
         <div>
             <div class="renterProfileContent" ng-repeat="apartment in userDetails.renterApartments track by $index"> <!--מחקתי 2 דיבים-->
-                    <a ng-click="getApartment(apartment)" ng-href="#!yourProfile/{{userDetails.userName}}/viewUserApartment.html">
+                    <a ng-click="getApartment(apartment)" ng-href="yourProfile/{{userDetails.userName}}/viewUserApartment.html">
                         <p>{{countries[apartment.countryID-1].countryName}}</p>
                         <p>{{apartment.address}}</p>
                         <p>{{apartment.apartmentType}}</p>
@@ -29,7 +29,7 @@
                         <p>{{apartment.toDate}}</p>
                         <p>{{apartment.pricePerDay}}</p>
                     </a><br />
-                    <a ng-click="getIndex($index)" ng-href="#!yourProfile/{{userDetails.userName}}/editApartment.html">Edit Apartment</a>
+                    <a ng-click="getIndex($index)" ng-href="yourProfile/{{userDetails.userName}}/editApartment.html">Edit Apartment</a>
                     <button ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
 
             </div>

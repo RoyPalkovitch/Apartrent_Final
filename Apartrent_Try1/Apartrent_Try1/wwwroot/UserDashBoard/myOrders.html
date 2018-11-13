@@ -3,9 +3,9 @@
         <div class="userSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-click="getUserReviews()" ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
         </div>
         <div>
             <div class="userProfileContent" ng-repeat="orders in userDetails.orders track by $index">
@@ -29,10 +29,10 @@
         <div class="renterSideBar">
             <br />
             <a>save spot for image<img /></a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
-            <a ng-click="getUserReviews()" ng-href="#!yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
-            <a ng-href="#!yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/editAccount.html">Edit account</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">My apartments</a>
+            <a ng-click="getUserReviews()" ng-href="yourProfile/{{userDetails.userName}}/myReviews.html">My Reviews</a>
+            <a ng-href="yourProfile/{{userDetails.userName}}/myOrders.html">History of purchses</a>
 
         </div>
 

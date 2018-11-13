@@ -1,14 +1,26 @@
 ﻿
 var apartrentResultController = angular.module('apartrentResultController', []);
 
-apartrentResultController.controller("apartrentResultController", function ($scope, $rootScope, $http, userProfile,currentApartment ,apartmentsDataForLocationService) {
+apartrentResultController.controller("apartrentResultController", function ($scope, $http, $route, searchResult ,userProfile, currentApartment, countriesService,apartmentsDataForLocationService) {
 
-    $scope.$on("getApartmentsData", function () { // the event is catch here and set the data to the controller from apartmentsDataForLocationService
-        $scope.searchResult = apartmentsDataForLocationService.data;
-    });
+    var apartmentResult = this;
+    apartmentResult.reloadData = function () {
+        $route.reload();
+    };
+    $scope.searchResult = searchResult;
+
+    //$scope.$on("getApartmentsData", function () { // the event is catch here and set the data to the controller from apartmentsDataForLocationService
+    //    $scope.searchResult = apartmentsDataForLocationService.data;
+    //});
 
     $scope.$on("getUserData", function () {
         $scope.userDetails = userProfile.data;
+    });
+    $scope.countries = countriesService.data;
+
+
+    $scope.$on("getCountries", function () {
+        $scope.countries = countriesService.data;
     });
 
     $scope.getApartment = function (apartmentID,index) {

@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <title>ApartRent</title>
-    <base href="/Index.html" />
+    <base href="/" />
     <script src="angular.min.js"></script>
     <script src="angular-route.min.js"></script>
     <script src="AngularControllers/apartrentResultController.js"></script>
@@ -77,7 +77,7 @@
                             <button ng-click="login()">Send</button>
                             <button ng-click="handelNavBarLogin()">exit</button>
                             <span id="errorLogin" ng-show="errorLoginDisplay">error somthing went wrong</span>
-                            
+
                         </div>
                     </li>
                     <li id="liLoginRegisterBar" class="dropli">
@@ -107,18 +107,18 @@
                     </li>
                 </ul>
                 <ul ng-switch-when="0" class="ulLoginRegisterBar">
-                    <li id="liLoginRegisterBar" >
-                        <a href="#!yourProfile/{{user.userName}}.html" style="font-size:15px;">
+                    <li id="liLoginRegisterBar">
+                        <a ng-href="yourProfile/{{user.userName}}.html" style="font-size:15px;">
                             <span ng-click="showYourProfile()">
-                            Name:{{user.firstName}}
-                            {{user.lastName}}
-                            <br />User Name:{{user.userName}}
+                                Name:{{user.firstName}}
+                                {{user.lastName}}
+                                <br />User Name:{{user.userName}}
                             </span>
                         </a>
                     </li>
 
                     <li id="liLoginRegisterBar">
-                        <a href="#!yourProfile/{{user.userName}}/addApartment.html">
+                        <a ng-href="yourProfile/{{user.userName}}/addApartment.html">
                             Join us Now and<br /> become a renter
                         </a>
                     </li>
@@ -128,14 +128,14 @@
                 </ul>
                 <ul ng-switch-when="1" class="ulLoginRegisterBar">
                     <li id="liLoginRegisterBar">
-                        <a ng-href="#!yourProfile/{{user.userName}}.html" style="font-size:15px;">
+                        <a ng-href="yourProfile/{{user.userName}}.html" style="font-size:15px;">
                             <span ng-click="showYourProfile()">
                                 Name:{{user.firstName}}
                                 {{user.lastName}}
                                 <br />User Name:{{user.userName}}
                             </span>
                         </a>
-                        <a ng-href="#!yourProfile/{{user.userName}}/addApartment.html">
+                        <a ng-href="yourProfile/{{user.userName}}/addApartment.html">
                             Add Apartment
                         </a>
                     </li>
@@ -145,32 +145,9 @@
                 </ul>
             </div>
         </div>
+        <div ng-view></div>
 
-        <div id="searchAndResultDiv" ng-hide="searchAndResultDiv">
-            <div ng-controller="apartrentSearchController">
 
-                <div id="searchApartment" ng-hide="searchHide">
-                    <div id="searchWindow">
-                        <h3>Where would you like to travel?</h3>
-                        <select ng-disabled="errorMessageDisplay" ng-model="searchCountryID" required id="countrySelect">
-                            <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
-                        </select>
-                        <br />
-                        <br />
-                        Check in: <input ng-disabled="errorMessageDisplay" ng-model="searchAvailableFromDate" id="CheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" />
-                        <br /><br />
-                        Check Out: <input ng-disabled="errorMessageDisplay" id="CheckOut" min="{{searchAvailableFromDate  | date:'yyyy-MM-dd'}}" type="date" ng-model="searchAvailableToDate" />
-                        <br />
-                        <br />
-                        Guests: <input ng-disabled="errorMessageDisplay" value="" type="range" min="1" max="20" step="1" ng-model="searchGuests" /><p>{{searchGuests}}</p>
-                        <a ng-href="#!searchResult/{{countries[searchCountryID - 1].countryName}}.html" ng-click="searchApartment()" ng-disabled="searchButtonDisabled || errorMessageDisplay" ng-hide="errorMessageDisplay">Send</a>
-                        <span id="errorMessage" ng-show="errorMessageDisplay"><a ng-bind="errorMessage"></a></span>
-                        <button id="errorMessagebtn" ng-show="errorMessageDisplay" type="button" ng-click="errorMessageDisplay=false">OK</button>
-                    </div>
-                </div>
-                <div ng-view></div>
-            </div>
-        </div>
 
     </div>
     <script>
@@ -213,12 +190,21 @@
         //        .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
         //        .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
         //        .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller:"apartmentController" })
-                
+
         //});
 
         apartmentApp.config(function ($routeProvider, $locationProvider) {
+
             $routeProvider
-                .when("/searchResult/:id.html", { templateUrl: "searchResult.html", controller: "apartrentResultController" })
+                .when("/Index.html", { templateUrl: "home.html"})
+                .when("", { templateUrl: "home.html" })
+                .when("/", { templateUrl: "home.html" })
+                .when("/index.html", { templateUrl: "home.html"})
+                .when("/home.html", { templateUrl: "home.html" })
+                .when("/searchResult/:id.html", {
+                    templateUrl: "searchResult.html", controller: "apartrentResultController"
+                    }
+                })
                 .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
                 .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
                 .when("/yourProfile/:id/editAccount.html", { templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController" })
@@ -230,25 +216,32 @@
                 .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
                 .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller: "apartmentController" })
-            $locationProvider.html5Mode(true);
+
+
+            $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            });
+
+
+            //$locationProvider.hashPrefix('');
         });
 
 
-        apartmentApp.run(function ($rootScope, $location, $route, apartmentsDataForLocationService, currentApartment) {
+        apartmentApp.run(function ($rootScope, $location, $route, apartmentsDataForLocationService, countriesService,currentApartment) {
             //$rootScope.$on('$locationChangeSuccess', function () { // caching location change
 
-            //    if ($location.path() == $rootScope.oldLocation)
+            //    if ($location.path() === $rootScope.oldLocation)
             //      $rootScope.oldLocation = $location.path();//need to add token here
             //});
 
             $rootScope.$watch(function () { return $location.path(); }, function (newLocation) { // watch if user change url
                 if ($rootScope.oldLocation != newLocation) {
                     var caseParam = newLocation.split("/");
-                    if (caseParam[1] == "i")
-                        caseParam[1] = caseParam[2];
+
                     switch (caseParam[1]) { //change old location data and show the div that you supposed to see
                         case "":
-                            $rootScope.searchHide = false;  
+                            $rootScope.searchHide = false;
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
 
@@ -258,7 +251,8 @@
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
                             apartmentsDataForLocationService.getApartmentsData();
-                            if (caseParam[4] == "viewApartment.html")
+                            countriesService.getData();
+                            if (caseParam[3] == "viewApartment.html")
                                 currentApartment.getData();
                             break;
                         case "yourProfile":
@@ -272,7 +266,7 @@
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
                             break;
-                   
+
                     }
                 }
             });
@@ -296,7 +290,7 @@
                 apartmentsData = {};
             };
             return apartmentsData;
-            
+
         }); // save the data gained from the server on the apartments client searched
         apartmentApp.factory("currentApartment", function ($rootScope) {
             var apartmentsData = {};
@@ -316,7 +310,9 @@
             };
             return apartmentsData;
         });
-        apartmentApp.factory("countriesService", function () {
+
+
+        apartmentApp.factory("countriesService", function ($rootScope) {
             var countriesData = {};
 
              countriesData.data = '';
@@ -341,7 +337,7 @@
             var userProfile = {};
 
             userProfile.data = '';
-            
+
             userProfile.setData = function (data) {
                 this.data = data;
                 if (data != null || data != '')
@@ -357,10 +353,10 @@
 
             userProfile.resetData = function () {
                 this.setData('');
-                
+
             };
             return userProfile;
-    
+
         });//will save the profile of the client
 
         apartmentApp.factory("categoriesFactory", function ($rootScope) {
@@ -385,7 +381,12 @@
 
         var date = new Date();//fetchin date object for today date
 
-        apartmentApp.controller("navBarController", function ($scope, $http, $rootScope, countriesService, userProfile,$location) {
+        apartmentApp.controller("navBarController", function ($scope, $http, $rootScope, countriesService, userProfile, $route, $location) {
+
+            var navBar = this;
+            navBar.reloadData = function () {
+                $route.reload();
+            }
             $rootScope.role = -1; //change the view of navBar
             $scope.countries = [];
 
@@ -397,9 +398,6 @@
 
             $scope.user;
 
-            $scope.$on("getCountries", function () {
-                $scope.getCountries();//get countries after they gained from server
-            });
 
             $scope.$on("getUserData", function () {
                 $scope.user = userProfile.data;
@@ -443,7 +441,7 @@
                         $scope.user = userProfile.data;//save data in user global variable
                         $scope.errorLoginDisplay = false;
                         $rootScope.role = response.data.role; // change role to change navBar status
-                        userProfile.data.password = $scope.loginPassword;// all the userProfile will be in token for now i need to save the password like this 
+                        userProfile.data.password = $scope.loginPassword;// all the userProfile will be in token for now i need to save the password like this
                         $scope.handelNavBarLogin();//close login
                         $scope.loginUserName = "";
                         $scope.loginPassword = "";
@@ -460,7 +458,7 @@
                     userProfile.resetData();//remove user data
                 $rootScope.role = -1;
                 if (location.href.includes("yourProfile")) {//if user is in his profile he will redirect from there to index
-                    window.location.href = "/index.html";
+                    window.location.href = "/Index.html";
                 }
 
             };
@@ -501,17 +499,17 @@
             };
             $scope.showYourProfile = function () {
                 //$rootScope.$emit("getYourUserProfile", []); // catching event every time you go to your profile to pass the data before loadin profile controller
-                  
+
                 $rootScope.viewProfile = false;
                 $rootScope.searchHide = true;
-                 
+
             };
         });
 
 
 
 
-        apartmentApp.controller('apartrentSearchController', function ($scope, $rootScope, $http, $window, apartmentsDataForLocationService, countriesService, categoriesFactory) {
+        apartmentApp.controller('apartrentSearchController', function ($scope, $rootScope, $http, $route, apartmentsDataForLocationService, countriesService, categoriesFactory) {
             $scope.fromDate = new Date(date);//today date for search
             $scope.searchAndResultDiv = false;//show all the div
             $scope.errorMessage = '';//when somthing get wrong
@@ -523,17 +521,25 @@
 
             $scope.searchParams = [];//the parameters of the  search
 
-            countriesService.resetData();//reset all saved countries
+
 
             apartmentsDataForLocationService.resetData();//reset all saved apartments for search pattern
            // $scope.apartmentsDataForLocation = apartmentsDataForLocationService;//save the location service in local variable
 
+
+            var apartmentSearch = this;
+            apartmentSearch.reloadData = function () {
+                $route.reload();
+            };
+
             $scope.getCountries = function () {// get requrst to featch all the countries
                 $http.get('api/countries').then(function (response) {
-                    $scope.countries = response.data;
-                    countriesService.setData($scope.countries);
-                    $rootScope.$emit("getCountries", []);//when the countries are retrived from the server and event is sending and passing the data of countries
-                                                         //to apartmentResult Controller
+                    if (response.data) {
+                       $scope.countries = response.data;
+                       countriesService.setData($scope.countries);
+
+                    }
+
                 });
             };
 
@@ -547,6 +553,7 @@
 
             $scope.getCountries();
             $scope.getCategories();
+
             $scope.searchApartment = function () {
                 $http.get('api/apartment/ApartmentLocation?countryID=' + $scope.searchCountryID + '&numberOfGuests=' + $scope.searchGuests + '&fromDate=' + $scope.searchAvailableFromDate.toDateString() + '&toDate=' + $scope.searchAvailableToDate.toDateString()).then(function (response) {
                     $scope.searchButtonDisabled = true;
@@ -566,9 +573,9 @@
 
         });
 
-       
 
-       
+
+
     </script>
 </body>
 </html>

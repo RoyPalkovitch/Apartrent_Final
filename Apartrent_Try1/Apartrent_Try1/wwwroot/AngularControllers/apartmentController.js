@@ -1,13 +1,20 @@
 ﻿
 var apartmentController = angular.module('apartmentController', []);
 
-apartmentController.controller('apartmentController', function ($scope, $rootScope, $http, userProfile, categoriesFactory, countriesService, currentApartment) {
+apartmentController.controller('apartmentController', function ($scope, $rootScope, $route, $http, userProfile, categoriesFactory, countriesService, currentApartment) {
+
+    var apartment = this;
+    apartment.reloadData = function () {
+        $route.reload();
+    };
 
     $scope.userDetails = userProfile.data;
     $scope.categories = categoriesFactory.data;
     $scope.apartmentData = '';
-
+    $scope.countries = countriesService.data;
     $rootScope.viewProfile = false;
+
+
 
     $scope.$on("getUserData", function () {//event catch for user who just login to save his data
         $scope.userDetails = userProfile.data;
