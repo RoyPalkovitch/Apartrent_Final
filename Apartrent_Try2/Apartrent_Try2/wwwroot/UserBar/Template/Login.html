@@ -1,0 +1,7 @@
+﻿<div ng-if="!window.localStorage.getItem('userProfile')">
+    User Name:<input class="loginInput" type="text" ng-model="$parent.loginUserName" />
+    <br />
+    Password:<input class="loginInput" type="password" ng-model="$parent.loginPassword" /><br />
+    <button ng-click="login()">Send</button>
+    <span id="errorLogin" ng-show="errorLoginDisplay">error somthing went wrong</span>
+</div>

@@ -1,0 +1,21 @@
+﻿<div>
+
+    User Name:<input type="text" ng-model="$parent.newUserName" />
+    <br />
+    Password:<input type="password" ng-model="$parent.newPassword" /><br />
+    Gender:<select ng-model="$parent.newGender">
+        <option value="true">Male</option>
+        <option value="false">Female</option>
+    </select>
+    <br />
+    Address:<input type="text" ng-model="$parent.newAddress" /><br />
+    Phone Number:<input type="tel" ng-model="$parent.newPhoneNumber" /><br />
+    Email:<input type="email" ng-model="$parent.newEmail" /><br />
+    First Name:<input type="text" ng-model="$parent.newFirstName" /><br />
+    Last Name:<input type="text" ng-model="$parent.newLastName" /><br />
+    Country: <select ng-model="$parent.newCountryID" required id="countrySelect">
+        <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+    </select>
+    <br />
+    <button ng-click="signUp()">Register</button>
+</div>

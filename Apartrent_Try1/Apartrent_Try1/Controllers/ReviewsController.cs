@@ -34,6 +34,8 @@ namespace Apartrent_Try1.Controllers
         {
             return DB.ReviewsDB.GetUserReviews(userName,password);
         }
+
+ 
         
     }
 }

@@ -1,46 +1,52 @@
 ﻿
 var apartrentResultController = angular.module('apartrentResultController', []);
 
-apartrentResultController.controller("apartrentResultController", function ($scope, $http, $route, searchResult ,userProfile, currentApartment, countriesService,apartmentsDataForLocationService) {
+apartrentResultController.controller("apartrentResultController", function ($scope, $http, $location, $route, searchResultBackend, userProfile, currentApartment, countriesService) {
 
     var apartmentResult = this;
     apartmentResult.reloadData = function () {
         $route.reload();
     };
-    $scope.searchResult = searchResult;
 
     //$scope.$on("getApartmentsData", function () { // the event is catch here and set the data to the controller from apartmentsDataForLocationService
     //    $scope.searchResult = apartmentsDataForLocationService.data;
     //});
 
+    if ($location.path().split('/').length <= 3) {
+        $scope.searchResult = searchResultBackend;
+    }
+    if ($location.path().split('/').length > 3) {
+
+        $scope.currentApartmentData = searchResultBackend;
+        userProfile.getData();
+    }
     $scope.$on("getUserData", function () {
         $scope.userDetails = userProfile.data;
     });
+
+
     $scope.countries = countriesService.data;
 
 
     $scope.$on("getCountries", function () {
         $scope.countries = countriesService.data;
-    });
+    }); 
 
-    $scope.getApartment = function (apartmentID,index) {
-        $http.get('api/apartment/GetApartment?apartmentID=' + apartmentID).then(function (response) {
-            if (response.data) {
-                response.data.fromDate = $scope.searchResult[index].fromDate;
-                response.data.toDate = $scope.searchResult[index].toDate;
-                response.data.priceForStaying = $scope.searchResult[index].priceForStaying;
-                response.data.pricePerDay = $scope.searchResult[index].pricePerDay;
-                response.data.pricePerGuest = $scope.searchResult[index].pricePerGuest;
-                currentApartment.setData(response.data);
-                $scope.currentApartmentData = response.data;
-            }
-        });
+    $scope.getApartment = function (apartmentID, index) {
+        $scope.apartmentDat = {
+            apartmentID: apartmentID,
+            fromDate: $scope.searchResult[index].fromDate,
+            toDate: $scope.searchResult[index].toDate,
+            priceForStaying: $scope.searchResult[index].priceForStaying,
+            pricePerDay: $scope.searchResult[index].pricePerDay,
+            pricePerGuest: $scope.searchResult[index].pricePerGuest
+
+        };
+        currentApartment.setData($scope.apartmentDat);
+       
     };
 
-    $scope.$on("getCurrentApartment", function () {
-        $scope.currentApartmentData = currentApartment.data;
-        userProfile.getData();
-    });
+
 
     $scope.newReview = function () {
         $scope.review = {

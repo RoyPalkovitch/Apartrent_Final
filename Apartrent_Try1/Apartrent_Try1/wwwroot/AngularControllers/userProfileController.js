@@ -4,7 +4,7 @@ var userProfileController = angular.module('userProfileController', []);
 
 
 
-userProfileController.controller("userProfileController", function ($scope, $route, $rootScope, $http, userProfile, categoriesFactory, countriesService) {
+userProfileController.controller("userProfileController", function ($scope, $route, $rootScope, backendData ,$http, userProfile, categoriesFactory, countriesService) {
 
     var profile = this;
     profile.reloadData = function () {
@@ -145,12 +145,7 @@ userProfileController.controller("userProfileController", function ($scope, $rou
             userName: $scope.userDetails.userName,
             password: $scope.userDetails.password
         };
-        $http.get("api/reviews/UserReviews?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
-            if (response.data) {
-                userProfile.data.reviews = response.data;
-                userProfile.getData();
-            }
-        });
+       
     };
 
     $scope.deleteReview = function (review, index) {
@@ -186,12 +181,7 @@ userProfileController.controller("userProfileController", function ($scope, $rou
     };
 
     $scope.getUserOrders = function () {
-        $http.get("api/orders/UserOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
-            if (response.data) {
-                userProfile.data.orders = response.data;
-                userProfile.getData();
-            }
-        });
+        
     };
 
     

@@ -1,0 +1,14 @@
+﻿<div ng-repeat="orders in userDetails.orders track by $index">
+    <a>
+        {{orders.renterUserName}}<br />
+        {{orders.fromDate}}<br />
+        {{orders.toDate}}<br />
+        {{orders.orderDate}}<br />
+        {{orders.price}}<br />
+        <span ng-switch="orders.approved">
+            <span ng-switch-when="null">Pending</span>
+            <span ng-switch-when="true">Approved!</span>
+            <span ng-switch-when="false">Declined</span>
+        </span>
+    </a>
+</div>

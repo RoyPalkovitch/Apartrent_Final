@@ -3,12 +3,15 @@
 <head>
     <meta charset="utf-8" />
     <title>ApartRent</title>
-    <base href="/" />
-    <script src="angular.min.js"></script>
-    <script src="angular-route.min.js"></script>
+    <base href="inde    " />
+    <!-- <script src="angular.min.js"></script>-->
+    <!-- <script src="angular-route.min.js"></script>-->
+    <script src="Angularjs.js"></script>
+    <script src="angular-route.js"></script>
     <script src="AngularControllers/apartrentResultController.js"></script>
     <script src="AngularControllers/userProfileController.js"></script>
     <script src="AngularControllers/apartmentController.js"></script>
+    <script src="AngularControllers/loginController.js"></script>
     <style>
         @import url('navbar.css');
         @import url('userdashboard.css');
@@ -64,10 +67,10 @@
 </head>
 <body>
     <div ng-app="apartrentApp">
-
         <div ng-controller="navBarController">
             <div ng-switch="role">
-                <ul ng-switch-when="-1" class="ulLoginRegisterBar">
+
+                <ul ng-switch-when="undefined" class="ulLoginRegisterBar">
                     <li id="liLoginRegisterBar" class="dropli">
                         <a ng-click="handelNavBarLogin() " class="dropbtn">Login</a>
                         <div class="Logindropdown-content" ng-show="showLogin">
@@ -149,91 +152,138 @@
 
 
 
-    </div>
+    </div>  
     <script>
-        var apartmentApp = angular.module('apartrentApp', ['ngRoute', 'apartrentResultController', 'userProfileController','apartmentController']);
-        ////apartmentApp.config(function ($routeProvider) {
-        //    var getPath = function (path) {// gettin the path change to add {{}} on ng-href
-        //        return '/i' + (path.indexOf('/') === 0 ? path : '/' + path);
-        //    };
-        //    var config = {
-        //        when: function (path, route) {
-        //            if (route.overriderRoot) {
-        //                $routeProvider.when(path, route);
-        //            } else {
-        //                var redirect = angular.copy(route);
-        //                delete redirect.templateUrl;
-        //                delete redirect.controller;
-        //                redirect.redirectTo = getPath(path);
-        //                $routeProvider
-        //                    .when(path, redirect)
-        //                    .when(getPath(path), route);
-        //            }
-        //            return this;
-        //        },
-        //        otherwise: function (config) {
-        //            $routeProvider.otherwise(config);
-        //            return this;
-        //        }
-        //    };
-        //    //this works
-        //    config
-        //        .when("/searchResult/:id.html", { templateUrl: "searchResult.html", controller: "apartrentResultController" })
-        //        .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
-        //        .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
-        //        .when("/yourProfile/:id/editAccount.html", { templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController" })
-        //        .when("/yourProfile/:id/becomeRenter.html", { templateUrl: "UserDashBoard/becomeRenter.html", controller: "userProfileController" })
-        //        .when("/yourProfile/:id/myOrders.html", { templateUrl: "UserDashBoard/myOrders.html", controller: "userProfileController" })
-        //        .when("/yourProfile/:id/myReviews.html", { templateUrl: "UserDashBoard/myReviews.html", controller: "userProfileController" })
-        //        .when("/yourProfile/:id/addApartment.html", { templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController" })
-        //        .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
-        //        .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
-        //        .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
-        //        .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller:"apartmentController" })
-
-        //});
+            var apartmentApp = angular.module('apartrentApp', ['ngRoute', 'apartrentResultController', 'userProfileController', 'apartmentController','loginController']);
 
         apartmentApp.config(function ($routeProvider, $locationProvider) {
 
             $routeProvider
-                .when("/Index.html", { templateUrl: "home.html"})
-                .when("", { templateUrl: "home.html" })
-                .when("/", { templateUrl: "home.html" })
-                .when("/index.html", { templateUrl: "home.html"})
-                .when("/home.html", { templateUrl: "home.html" })
-                .when("/searchResult/:id.html", {
-                    templateUrl: "searchResult.html", controller: "apartrentResultController"
+                .when("/Index.html", {
+                    templateUrl: "home.html", controller: "apartrentSearchController", resolve: {
+                        UserLogin: function ($q) {
+                            return $q.when();
+                        }
                     }
                 })
-                .when("/searchResult/:id/viewApartment.html", { templateUrl: "viewApartment.html", controller: "apartrentResultController" })
-                .when("/yourProfile/:id.html", { templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/editAccount.html", { templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/becomeRenter.html", { templateUrl: "UserDashBoard/becomeRenter.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/myOrders.html", { templateUrl: "UserDashBoard/myOrders.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/myReviews.html", { templateUrl: "UserDashBoard/myReviews.html", controller: "userProfileController" })
-                .when("/yourProfile/:id/addApartment.html", { templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/userApartments.html", { templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/editApartment.html", { templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/viewUserApartment.html", { templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController" })
-                .when("/yourProfile/:id/userApartments/pendingOrders.html", { templateUrl: "RenterDashBoard/pendingOrders.html", controller: "apartmentController" })
+
+                .when("/", { templateUrl: "home.html" })
+                .when("/index.html", { templateUrl: "home.html" })
+                .when("/home.html", { templateUrl: "home.html" })
+
+                .when("/searchResult/:id", {
+                    templateUrl: "searchResult.html", controller: "apartrentResultController", resolve: {
+                        searchResultBackend: function (apartmentsDataForLocationService) {
+                            return apartmentsDataForLocationService.requestData();
+                        }
+                    }
+                })
+                .when("/searchResult/:id/viewApartment.html", {
+                    templateUrl: "viewApartment.html", controller: "apartrentResultController", resolve: {
+                        searchResultBackend: function (currentApartment) {
+                            return currentApartment.requestData();
+                        }
+                    }
+                })
+
+                .when("/yourProfile/:id.html", {
+                    templateUrl: "UserDashBoard/yourProfile.html", controller: "userProfileController", resolve:{
+                        backendData: function ($q) {
+                            return $q.when();
+                        }
+                    }
+                })
+                .when("/yourProfile/:id/editAccount.html", {
+                    templateUrl: "UserDashBoard/editAccount.html", controller: "userProfileController", resolve: {
+                        backendData: function ($q) {
+                            return $q.when();
+                        }
+                    } })
+                .when("/yourProfile/:id/becomeRenter.html", {
+                    templateUrl: "UserDashBoard/becomeRenter.html", controller: "userProfileController", resolve: {
+                        backendData: function ($q) {
+                            return $q.when();
+                        }
+                    } })
+                .when("/yourProfile/:id/myOrders.html", {
+                    templateUrl: "UserDashBoard/myOrders.html", controller: "userProfileController", resolve: {
+                        backendData: function ($http, userProfile) {
+                            return $http.get("api/orders/UserOrders?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password).then(function (response) {
+                                if (response.data) {
+                                    userProfile.data.orders = response.data;
+                                    userProfile.getData();
+                                }
+                            });
+                        }
+                    }})
+                .when("/yourProfile/:id/myReviews.html", {
+                    templateUrl: "UserDashBoard/myReviews.html", controller: "userProfileController", resolve: {
+                        backendData: function ($http, userProfile) {
+                            return $http.get("api/reviews/UserReviews?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password).then(function (response) {
+                                if (response.data) {
+                                    userProfile.data.reviews = response.data;
+                                    userProfile.getData();
+                                }
+                            });
+                        }
+                    }
+                })
+
+                .when("/yourProfile/:id/addApartment.html", {
+                    templateUrl: "RenterDashBoard/addApartment.html", controller: "apartmentController", resolve: {
+                        currentApartmentData: function ($q) {
+                            return $q.when();
+                        }
+                    }
+                })
+                .when("/yourProfile/:id/userApartments.html", {
+                    templateUrl: "RenterDashBoard/userApartments.html", controller: "apartmentController", resolve: {
+                        currentApartmentData: function ($q) {
+                            return $q.when();
+                        }
+                    }
+                })
+                .when("/yourProfile/:id/editApartment.html", {
+                    templateUrl: "RenterDashBoard/editApartment.html", controller: "apartmentController", resolve: {
+                        currentApartmentData: function ($q) {
+                            return $q.when();
+                        }
+                    }
+                })
+                .when("/yourProfile/:id/viewUserApartment.html", {
+                    templateUrl: "RenterDashBoard/viewUserApartment.html", controller: "apartmentController", resolve: {
+                        currentApartmentData: function (currentApartment) {
+                            return currentApartment.requestData();
+                        }
+                    }
+                })
+                .when("/yourProfile/:id/userApartments/pendingOrders.html", {
+                    templateUrl: "RenterDashBoard/pendingOrders.html", controller: "apartmentController" ,resolve: {
+                        currentApartmentData: function ($http, userProfile) {
+                            return $http.get("api/orders/PendingOrders?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password).then(function (response) {
+                                if (response.data) {
+                                    userProfile.data.pendingOrders = response.data;
+                                    userProfile.getData();
+                                }
+                            });
+                        }
+                    }
+                })  
 
 
             $locationProvider.html5Mode({
                 enabled: true,
                 requireBase: false
             });
-
-
-            //$locationProvider.hashPrefix('');
         });
 
 
-        apartmentApp.run(function ($rootScope, $location, $route, apartmentsDataForLocationService, countriesService,currentApartment) {
-            //$rootScope.$on('$locationChangeSuccess', function () { // caching location change
+        apartmentApp.run(function ($rootScope, $location, $route, userProfile, countriesService, $window) {
+            $rootScope.$on('$locationChangeSuccess', function () { // caching location change
 
-            //    if ($location.path() === $rootScope.oldLocation)
-            //      $rootScope.oldLocation = $location.path();//need to add token here
-            //});
+                if ($location.path() === $rootScope.oldLocation || $rootScope.oldLocation == '/Login.html')
+                    userProfile.refreshData();
+            });
 
             $rootScope.$watch(function () { return $location.path(); }, function (newLocation) { // watch if user change url
                 if ($rootScope.oldLocation != newLocation) {
@@ -250,19 +300,18 @@
                             $rootScope.searchHide = true;
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
-                            apartmentsDataForLocationService.getApartmentsData();
+                            //apartmentsDataForLocationService.getApartmentsData();
                             countriesService.getData();
-                            if (caseParam[3] == "viewApartment.html")
-                                currentApartment.getData();
+                            //if (caseParam[3] == "viewApartment.html")
+                            //    currentApartment.getData();
                             break;
                         case "yourProfile":
                             $rootScope.searchHide = true;
                             $rootScope.viewProfile = false;
                             $rootScope.oldLocation = $location.path();
-
                             break;
                         default:
-                             $rootScope.searchHide = false;
+                            $rootScope.searchHide = false;
                             $rootScope.viewProfile = true;
                             $rootScope.oldLocation = $location.path();
                             break;
@@ -273,18 +322,36 @@
 
         });
 
-        apartmentApp.factory("apartmentsDataForLocationService", function ($rootScope) {
-            var apartmentsData = {};
+        apartmentApp.factory("apartmentsDataForLocationService", function ($rootScope, $http) {
+            var apartmentsData = {
+                countryID : '',
+                fromDate :'',
+                toDate : '',
+                numberOfGuests : ''
+            };
 
             apartmentsData.data = '';
-            apartmentsData.setApartmentsData = function (data) {
-                this.data = data;
-                this.getApartmentsData();
+            apartmentsData.setApartmentsData = function (countryID, fromDate, toDate, numberOfGuests) {
+                this.countryID = countryID;
+                this.fromDate = fromDate;
+                this.toDate = toDate;
+                this.numberOfGuests = numberOfGuests;
+
             };
 
-            apartmentsData.getApartmentsData = function () {
-                $rootScope.$broadcast('getApartmentsData');
+            apartmentsData.requestData = function () {
+                return $http.get('api/apartment/ApartmentLocation?countryID=' + this.countryID + '&numberOfGuests=' + this.numberOfGuests + '&fromDate=' + this.fromDate.toDateString() + '&toDate=' + this.toDate.toDateString()).then(function (response) {
+                    if (response.data) {
+                        apartmentsData.data = response.data
+                       // $rootScope.$broadcast('getApartmentsData');
+                        return apartmentsData.data;
+                    }
+                });
+
+
             };
+
+       
 
             apartmentsData.resetData = function () {
                 apartmentsData = {};
@@ -292,21 +359,49 @@
             return apartmentsData;
 
         }); // save the data gained from the server on the apartments client searched
-        apartmentApp.factory("currentApartment", function ($rootScope) {
-            var apartmentsData = {};
+
+
+        apartmentApp.factory("currentApartment", function ($rootScope, $http) {
+            var apartmentsData = {
+              apartmentID :'',
+              fromDate:'',
+              toDate:'',
+              priceForStaying:'',
+              pricePerDay :'',
+              pricePerGuest :''
+            };
 
             apartmentsData.data = '';
+
             apartmentsData.setData = function (data) {
-                this.data = data;
-                this.getData();
+                apartmentsData.apartmentID = data.apartmentID;
+                apartmentsData.fromDate = data.fromDate;
+                apartmentsData.toDate = data.toDate;
+                apartmentsData.priceForStaying = data.priceForStaying;
+                apartmentsData.pricePerDay = data.pricePerDay;
+                apartmentsData.pricePerGuest = data.pricePerGuest;
+                return;
             };
 
-            apartmentsData.getData = function () {
-                $rootScope.$broadcast('getCurrentApartment');
+            apartmentsData.requestData = function () {
+                return $http.get('api/apartment/GetApartment?apartmentID=' + this.apartmentID).then(function (response) {
+                    if (response.data) {
+                        apartmentsData.data = response.data;
+                        apartmentsData.data.fromDate = apartmentsData.fromDate;
+                        apartmentsData.data.toDate = apartmentsData.toDate;
+                        apartmentsData.data.priceForStaying = apartmentsData.priceForStaying;
+                        apartmentsData.data.pricePerDay = apartmentsData.pricePerDay;
+                        apartmentsData.data.pricePerGuest = apartmentsData.pricePerGuest;
+                        //$rootScope.$broadcast('getApartmentsData'); if everything work can be deleted
+                        return apartmentsData.data;
+                    }
+                });
             };
+
+           
 
             apartmentsData.resetData = function () {
-                apartmentsData = {};
+                return apartmentsData = {};
             };
             return apartmentsData;
         });
@@ -315,7 +410,7 @@
         apartmentApp.factory("countriesService", function ($rootScope) {
             var countriesData = {};
 
-             countriesData.data = '';
+            countriesData.data = '';
 
             countriesData.setData = function (data) {
                 this.data = data;
@@ -333,27 +428,32 @@
 
 
         });// save the countries data
-        apartmentApp.factory("userProfile", function ($rootScope) {
-            var userProfile = {};
 
+        apartmentApp.factory("userProfile", function ($rootScope, $window) {
+            var userProfile = {};
+            userProfile.currentApartmentID = '';
             userProfile.data = '';
 
             userProfile.setData = function (data) {
+               // $window.localStorage.removeItem('userProfile');
                 this.data = data;
-                if (data != null || data != '')
-                    $rootScope.role = data.role
-                else
-                    $rootScope.role = -1;
-                this.getData();
+               // $window.localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                return this.getData();
             };
 
             userProfile.getData = function () {
+                //$window.localStorage.setItem('userProfile', userProfile);
                 $rootScope.$broadcast('getUserData');
+            };
+
+            userProfile.refreshData = function () {
+                //userProfile = JSON.parse($window.localStorage.getItem('userProfile'));
+                return this.getData();
             };
 
             userProfile.resetData = function () {
                 this.setData('');
-
+               // $window.localStorage.removeItem('userProfile');
             };
             return userProfile;
 
@@ -372,6 +472,8 @@
                 $rootScope.$broadcast('getCategories');
             };
 
+
+
             categories.resetData = function () {
                 categories.data = '';
             };
@@ -382,12 +484,12 @@
         var date = new Date();//fetchin date object for today date
 
         apartmentApp.controller("navBarController", function ($scope, $http, $rootScope, countriesService, userProfile, $route, $location) {
-
+           // ng - controller="navBarController"
             var navBar = this;
             navBar.reloadData = function () {
                 $route.reload();
             }
-            $rootScope.role = -1; //change the view of navBar
+           // $rootScope.role = -1; //change the view of navBar
             $scope.countries = [];
 
             $scope.showLogin = false;
@@ -433,19 +535,18 @@
 
             };
 
+
             $scope.login = function () { //login vadilation through get request
+                userProfile.resetData();
                 $http.get('api/users/login?userName=' + $scope.loginUserName + '&password=' + $scope.loginPassword).then(function (response) {
                     if (response.data) {
-                        userProfile.resetData();
                         userProfile.setData(response.data); //save data in factory
-                        $scope.user = userProfile.data;//save data in user global variable
                         $scope.errorLoginDisplay = false;
-                        $rootScope.role = response.data.role; // change role to change navBar status
                         userProfile.data.password = $scope.loginPassword;// all the userProfile will be in token for now i need to save the password like this
-                        $scope.handelNavBarLogin();//close login
                         $scope.loginUserName = "";
                         $scope.loginPassword = "";
-                        return true;
+                        $scope.handelNavBarLogin();
+                        return;
                     }
                     $scope.errorLoginDisplay = true;
                     return false;
@@ -509,7 +610,7 @@
 
 
 
-        apartmentApp.controller('apartrentSearchController', function ($scope, $rootScope, $http, $route, apartmentsDataForLocationService, countriesService, categoriesFactory) {
+        apartmentApp.controller('apartrentSearchController', function ($scope, $rootScope, $http, $route, apartmentsDataForLocationService, countriesService, categoriesFactory, userProfile) {
             $scope.fromDate = new Date(date);//today date for search
             $scope.searchAndResultDiv = false;//show all the div
             $scope.errorMessage = '';//when somthing get wrong
@@ -521,10 +622,8 @@
 
             $scope.searchParams = [];//the parameters of the  search
 
-
-
             apartmentsDataForLocationService.resetData();//reset all saved apartments for search pattern
-           // $scope.apartmentsDataForLocation = apartmentsDataForLocationService;//save the location service in local variable
+            // $scope.apartmentsDataForLocation = apartmentsDataForLocationService;//save the location service in local variable
 
 
             var apartmentSearch = this;
@@ -535,8 +634,8 @@
             $scope.getCountries = function () {// get requrst to featch all the countries
                 $http.get('api/countries').then(function (response) {
                     if (response.data) {
-                       $scope.countries = response.data;
-                       countriesService.setData($scope.countries);
+                        $scope.countries = response.data;
+                        countriesService.setData($scope.countries);
 
                     }
 
@@ -555,20 +654,7 @@
             $scope.getCategories();
 
             $scope.searchApartment = function () {
-                $http.get('api/apartment/ApartmentLocation?countryID=' + $scope.searchCountryID + '&numberOfGuests=' + $scope.searchGuests + '&fromDate=' + $scope.searchAvailableFromDate.toDateString() + '&toDate=' + $scope.searchAvailableToDate.toDateString()).then(function (response) {
-                    $scope.searchButtonDisabled = true;
-                    if (response.data.length == 0 || response.data == undefined) {
-                        $scope.errorMessage = 'Something went wrong.No data was found';
-
-                        $scope.errorMessageDisplay = true;
-                        $scope.searchButtonDisabled = false;
-                        return;
-                    }
-                    apartmentsDataForLocationService.setApartmentsData(response.data);//save apartments data of current location and send event to apartmentResult controller to featch the data too
-                    $scope.searchButtonDisabled = false;
-                    $rootScope.searchHide = true;
-
-                });
+                apartmentsDataForLocationService.setApartmentsData($scope.searchCountryID, $scope.searchAvailableFromDate, $scope.searchAvailableToDate, $scope.searchGuests)
             };
 
         });

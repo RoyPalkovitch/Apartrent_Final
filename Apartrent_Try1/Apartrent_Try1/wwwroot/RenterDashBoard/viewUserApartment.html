@@ -29,45 +29,45 @@
                 </p>
 
                 <br />
-                <p>{{$parent.currentApartmentData.address}}</p>
+                <p>{{$parent.userDetails.currentApartment.address}}</p> 
 
                 <p>
-                    {{$parent.currentApartmentData.pricePerDay}}
+                    {{$parent.userDetails.currentApartment.pricePerDay}}
                 </p>
 
-                <p>{{countries[$parent.currentApartmentData.countryID-1].countryName}}</p>
-                <p>{{$parent.currentApartmentData.apartmentType}}</p>
-                <p>{{$parent.currentApartmentData.description}}</p>
+                <p>{{countries[$parent.userDetails.currentApartment.countryID-1].countryName}}</p>
+                <p>{{$parent.userDetails.currentApartment.apartmentType}}</p>
+                <p>{{$parent.userDetails.currentApartment.description}}</p>
 
                 <h3>Apartment Features:</h3><input type="checkbox" ng-model="selectFeat" />
                 <div ng-show="selectFeat">
 
-                    <p>{{$parent.currentApartmentData.numberOfGuests}}</p>
+                    <p>{{$parent.userDetails.currentApartment.numberOfGuests}}</p>
 
-                    <p>{{$parent.currentApartmentData.shower}}</p>
-                    <p>{{$parent.currentApartmentData.wifi}}</p>
-                    <p>{{$parent.currentApartmentData.tv}}</p>
-                    <p>{{$parent.currentApartmentData.cables}}</p>
-                    <p>{{$parent.currentApartmentData.satellite}}</p>
-                    <p>{{$parent.currentApartmentData.pets}}</p>
-                    <p>{{$parent.currentApartmentData.bath}}</p>
-                    <p>{{$parent.currentApartmentData.livingRoom}}</p>
-                    <p>{{$parent.currentApartmentData.livingRoomDescription}}</p>
+                    <p>{{$parent.userDetails.currentApartment.shower}}</p>
+                    <p>{{$parent.userDetails.currentApartment.wifi}}</p>
+                    <p>{{$parent.userDetails.currentApartment.tv}}</p>
+                    <p>{{$parent.userDetails.currentApartment.cables}}</p>
+                    <p>{{$parent.userDetails.currentApartment.satellite}}</p>
+                    <p>{{$parent.userDetails.currentApartment.pets}}</p>
+                    <p>{{$parent.userDetails.currentApartment.bath}}</p>
+                    <p>{{$parent.userDetails.currentApartment.livingRoom}}</p>
+                    <p>{{$parent.userDetails.currentApartment.livingRoomDescription}}</p>
 
-                    <p>{{$parent.currentApartmentData.numberOfBedRooms}}</p>
+                    <p>{{$parent.userDetails.currentApartment.numberOfBedRooms}}</p>
 
-                    <p>{{$parent.currentApartmentData.bedRoomDescription}}</p>
-                    <p>{{$parent.currentApartmentData.queenSizeBed}}</p>
-                    <p>{{$parent.currentApartmentData.doubleBed}}</p>
-                    <p>{{$parent.currentApartmentData.singleBed}}</p>
-                    <p>{{$parent.currentApartmentData.sofaBed}}</p>
-                    <p>{{$parent.currentApartmentData.bedsDescription}}</p>
+                    <p>{{$parent.userDetails.currentApartment.bedRoomDescription}}</p>
+                    <p>{{$parent.userDetails.currentApartment.queenSizeBed}}</p>
+                    <p>{{$parent.userDetails.currentApartment.doubleBed}}</p>
+                    <p>{{$parent.userDetails.currentApartment.singleBed}}</p>
+                    <p>{{$parent.userDetails.currentApartment.sofaBed}}</p>
+                    <p>{{$parent.userDetails.currentApartment.bedsDescription}}</p>
                 </div>
             </div>
             <br />
 
             Show Reviews:<input type="checkbox" ng-model="selectRev">
-            <div ng-repeat="review in $parent.currentApartmentData.reviews track by $index" ng-show="selectRev">
+            <div ng-repeat="review in $parent.userDetails.currentApartment.reviews track by $index" ng-show="selectRev">
                 <div>
                     {{review.userName}}
                     {{review.description}}
@@ -77,8 +77,8 @@
             </div>
             <br />
             <br />
-            Apartment Approve Orders:<input type="checkbox" ng-model="selectOrders">
-            <div ng-repeat="order in $parent.currentApartmentData.orders track by $index" ng-show="selectOrders">
+            Apartment Approve Orders:<input type="checkbox" ng-model="selectOrders" ng-click="getApartmentOrders()">
+            <div ng-repeat="order in $parent.userDetails.currentApartment.orders track by $index" ng-show="selectOrders">
                 <div>
                     <p>From:{{order.userName}}</p>
                     <p>Check-In:{{order.fromDate}}</p>

@@ -1,0 +1,46 @@
+﻿<div>
+    Select New Apartment Category:<select ng-model="$parent.editCategoryID">
+        <option ng-repeat="category in categories" ng-value="category.categoryID">{{category.apartmentType}}</option>
+    </select>
+    <br />
+
+    Number Of Guests: <input placeholder="{{$parent.userDetails.currentApartment.numberOfGuests}}" ng-model="$parent.editNumberOfGuests" type="range" min="1" max="20" />
+    <br />
+
+    Address: <input placeholder="{{$parent.userDetails.currentApartment.address}}" ng-model="$parent.editAddress" type="text" />
+    <br />
+    Select country:<select ng-model="$parent.editCountryID">
+        <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+    </select>
+    <br />
+    From Date: <input type="date" ng-model="$parent.editFromDate" />
+    <br />
+
+    To Date: <input type="date" min="{{editFromDate| date:'yyyy-MM-dd'}}" ng-model="$parent.editToDate" />
+    <br />
+
+    Price Per Day<input type="number" placeholder="{{$parent.userDetails.currentApartment.pricePerDay}}" ng-model="$parent.editPricePerDay" />
+    <br />
+    Description <textarea placeholder="{{$parent.userDetails.currentApartment.description}}" ng-model="$parent.editDescription"></textarea>
+    <br />
+    <input type="checkbox" ng-model="$parent.showFeatures" /> Advance Edit
+    <div ng-show="showFeatures">
+        Shower:<input ng-model="$parent.editIsShower" type="checkbox" ng-checked="$parent.userDetails.currentApartment.shower" />
+        Bath:<input ng-model="$parent.editIsBath" type="checkbox" ng-checked="$parent.userDetails.currentApartment.bath" />
+        WIFI:<input ng-model="$parent.editIsWIFI" type="checkbox" ng-checked="$parent.userDetails.currentApartment.wifi" />
+        TV:<input ng-model="$parent.editIsTV" type="checkbox" ng-checked="$parent.userDetails.currentApartment.tv" />
+        Cables:<input ng-model="$parent.editIsCables" type="checkbox" ng-checked="$parent.userDetails.currentApartment.cables" />
+        Satellite:<input ng-model="$parent.editIsSatellite" type="checkbox" ng-checked="$parent.userDetails.currentApartment.satellite" />
+        Pets:<input ng-model="$parent.editIsPets" type="checkbox" ng-checked="$parent.userDetails.currentApartment.pets" />
+        Number of Bed Rooms<input placeholder="{{$parent.userDetails.currentApartment.numberOfBedRooms}}" ng-model="$parent.editNumberOfBedRooms" type="number" />
+        Living Room:<input ng-model="$parent.editIsLivingRoom" ng-checked="$parent.userDetails.currentApartment.livingRoom" type="checkbox" />
+        BedRoom Description:<textarea placeholder="{{$parent.userDetails.currentApartment.bedRoomDescription}}" ng-model="$parent.editBedRoomDescription"></textarea>
+        Living Room Description:<textarea placeholder="{{$parent.userDetails.currentApartment.livingRoomDescription}}" ng-model="$parent.editLivingRoomDescription"></textarea>
+        Queen Size Bed: <input min="0" placeholder="{{$parent.userDetails.currentApartment.queenSizeBed}}" ng-model="$parent.editQueenSizeBed" type="number" />
+        Double Bed: <input min="0" placeholder="{{$parent.userDetails.currentApartment.doubleBed}}" ng-model="$parent.editDoubleBed" type="number" />
+        Single Bed: <input min="0" placeholder="{{$parent.userDetails.currentApartment.singleBed}}" ng-model="$parent.editSingleBed" type="number" />
+        Sofa Bed: <input min="0" placeholder="{{$parent.userDetails.currentApartment.sofaBed}}" ng-model="$parent.editSofaBed" type="number" />
+        Beds Description: <textarea placeholder="{{$parent.userDetails.currentApartment.bedsDescription}}" ng-model="$parent.editBedsDescription"></textarea>
+    </div>
+    <a ng-click="editApartment()" ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">Save</a>
+</div>

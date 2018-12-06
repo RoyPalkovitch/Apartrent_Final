@@ -21,7 +21,7 @@
         </div>
         <div>
             <div class="renterProfileContent" ng-repeat="apartment in userDetails.renterApartments track by $index"> <!--מחקתי 2 דיבים-->
-                    <a ng-click="getApartment(apartment)" ng-href="yourProfile/{{userDetails.userName}}/viewUserApartment.html">
+                    <a ng-click="getApartment($index)" ng-href="yourProfile/{{userDetails.userName}}/viewUserApartment.html">
                         <p>{{countries[apartment.countryID-1].countryName}}</p>
                         <p>{{apartment.address}}</p>
                         <p>{{apartment.apartmentType}}</p>
@@ -29,7 +29,7 @@
                         <p>{{apartment.toDate}}</p>
                         <p>{{apartment.pricePerDay}}</p>
                     </a><br />
-                    <a ng-click="getIndex($index)" ng-href="yourProfile/{{userDetails.userName}}/editApartment.html">Edit Apartment</a>
+                    <a ng-click="getApartment($index)" ng-href="yourProfile/{{userDetails.userName}}/editApartment.html">Edit Apartment</a>
                     <button ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
 
             </div>

@@ -1,96 +1,92 @@
 ﻿<div>
-
-    <p>
-        <img /> save spot for imgs
-    </p>
-
+    <div>
+        <p>
+            <img /> save spot for imgs
+        </p>
+    </div>
     <br />
-    <p>{{currentApartmentData.address}}</p>
+    <div>
+        <p>Address:{{currentApartmentData.address}}</p>
+        <p>Country:{{currentApartmentData.countryName}}</p>
+        <p>Apartment type:{{currentApartmentData.apartmentType}}</p>
+        <p>Apartment Description:{{currentApartmentData.description}}</p>
+        <p>{{currentApartmentData.firstName}}</p>
+        <p>{{currentApartmentData.lastName}}</p>
+    </div>
+    <div>
+        <p>
+            <h3>Apartment Features:</h3>
+        <p>{{currentApartmentData.numberOfGuests}}</p>
 
+        <p>{{currentApartmentData.shower}}</p>
+        <p>{{currentApartmentData.wifi}}</p>
+        <p>{{currentApartmentData.tv}}</p>
+        <p>{{currentApartmentData.cables}}</p>
+        <p>{{currentApartmentData.satellite}}</p>
+        <p>{{currentApartmentData.pets}}</p>
+        <p>{{currentApartmentData.bath}}</p>
+        <p>{{currentApartmentData.livingRoom}}</p>
+        <p>{{currentApartmentData.livingRoomDescription}}</p>
 
+        <p>{{currentApartmentData.numberOfBedRooms}}</p>
 
-    <p>{{currentApartmentData.countryName}}</p>
-    <p>{{currentApartmentData.apartmentType}}</p>
-    <p>{{currentApartmentData.description}}</p>
-
-    <p>
-        {{currentApartmentData.firstName}}
-        {{currentApartmentData.lastName}}
-    </p>
-
-
-    <p>
-        <h3>Apartment Features:</h3>
-    <p>{{currentApartmentData.numberOfGuests}}</p>
-
-    <p>{{currentApartmentData.shower}}</p>
-    <p>{{currentApartmentData.wifi}}</p>
-    <p>{{currentApartmentData.tv}}</p>
-    <p>{{currentApartmentData.cables}}</p>
-    <p>{{currentApartmentData.satellite}}</p>
-    <p>{{currentApartmentData.pets}}</p>
-    <p>{{currentApartmentData.bath}}</p>
-    <p>{{currentApartmentData.livingRoom}}</p>
-    <p>{{currentApartmentData.livingRoomDescription}}</p>
-
-    <p>{{currentApartmentData.numberOfBedRooms}}</p>
-
-    <p>{{currentApartmentData.bedRoomDescription}}</p>
-    <p>{{currentApartmentData.queenSizeBed}}</p>
-    <p>{{currentApartmentData.doubleBed}}</p>
-    <p>{{currentApartmentData.singleBed}}</p>
-    <p>{{currentApartmentData.sofaBed}}</p>
-    <p>{{currentApartmentData.bedsDescription}}</p>
-</div>
-
-
-<div ng-if="userDetails">
-    <h3>place a review(for your notice reviews will be post only if you have purches a stay in this currentApartmentData. you can review the renter before staying and then write your full review :D)</h3>
-    <textarea ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
-    <input type="range" min="1" max="5" ng-model="$parent.reviewRating" />
-    <button ng-click="newReview()">Send Review</button>
-</div>
-
-
-<h3>Reviews:</h3>
-<div  ng-repeat="review in currentApartmentData.reviews track by $index">
-    <div ng-if="review.userName != userDetails.userName">
-        {{review.userName}}
-        {{review.description}}
-        {{review.rating}}
+        <p>{{currentApartmentData.bedRoomDescription}}</p>
+        <p>{{currentApartmentData.queenSizeBed}}</p>
+        <p>{{currentApartmentData.doubleBed}}</p>
+        <p>{{currentApartmentData.singleBed}}</p>
+        <p>{{currentApartmentData.sofaBed}}</p>
+        <p>{{currentApartmentData.bedsDescription}}</p>
     </div>
 
-    <div ng-if="review.userName == userDetails.userName">
-        <div ng-show="currentReview != $index">
+
+    <div ng-if="userDetails">
+        <h3>place a review(for your notice reviews will be post only if you have purches a stay in this currentApartmentData. you can review the renter before staying and then write your full review :D)</h3>
+        <textarea ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
+        <input type="range" min="1" max="5" ng-model="$parent.reviewRating" />
+        <button ng-click="newReview()">Send Review</button>
+    </div>
+
+
+    <h3>Reviews:</h3>
+    <div ng-repeat="review in currentApartmentData.reviews track by $index">
+        <div ng-if="review.userName != userDetails.userName">
             {{review.userName}}
             {{review.description}}
             {{review.rating}}
-            <button ng-click="editReviewHandler($index)">Edit Review</button>
-            <button ng-click="deleteReview(review,$index)">Delete Review</button>
         </div>
-        <div ng-show="currentReview == $index">
-            <textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
-            <input type="range" min="1" max="5" ng-model="$parent.$parent.editRating" />
-            <button ng-click="editReview(review,$index)">Send Review</button>
-            <button ng-click="deleteReview(review,$index)">Delete Review</button>
+
+        <div ng-if="review.userName == userDetails.userName">
+            <div ng-show="currentReview != $index">
+                {{review.userName}}
+                {{review.description}}
+                {{review.rating}}
+                <button ng-click="editReviewHandler($index)">Edit Review</button>
+                <button ng-click="deleteReview(review,$index)">Delete Review</button>
+            </div>
+            <div ng-show="currentReview == $index">
+                <textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
+                <input type="range" min="1" max="5" ng-model="$parent.$parent.editRating" />
+                <button ng-click="editReview(review,$index)">Send Review</button>
+                <button ng-click="deleteReview(review,$index)">Delete Review</button>
+            </div>
         </div>
+        <br />
     </div>
-    <br />
+
+    <div class="orderBar" ng-if="userDetails">
+        <p>
+            {{currentApartmentData.pricePerDay}}
+        </p>
+        <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
+        <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
+        <div><p>Price per guest{{currentApartmentData.pricePerGuest}}</p></div>
+
+
+        <p>
+            {{currentApartmentData.fromDate}}
+            {{currentApartmentData.toDate}}
+        </p>
+        <button ng-click="newOrder()">Order Now</button>
+    </div>
+    <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
 </div>
-
-<div class="orderBar" ng-if="userDetails">
-    <p>
-        {{currentApartmentData.pricePerDay}}
-    </p>
-    <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
-    <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
-    <div><p>Price per guest{{currentApartmentData.pricePerGuest}}</p></div>
-
-
-    <p>
-        {{currentApartmentData.fromDate}}
-        {{currentApartmentData.toDate}}
-    </p>
-    <button ng-click="newOrder()">Order Now</button>
-</div>
-<div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>

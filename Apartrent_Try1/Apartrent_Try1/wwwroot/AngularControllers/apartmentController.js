@@ -1,7 +1,7 @@
 ﻿
-var apartmentController = angular.module('apartmentController', []);
 
-apartmentController.controller('apartmentController', function ($scope, $rootScope, $route, $http, userProfile, categoriesFactory, countriesService, currentApartment) {
+var apartmentController = angular.module('apartmentController', []);
+apartmentController.controller('apartmentController', function ($scope, $rootScope, $route, currentApartmentData, $http, currentApartment, userProfile, categoriesFactory, countriesService) {
 
     var apartment = this;
     apartment.reloadData = function () {
@@ -10,10 +10,11 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
 
     $scope.userDetails = userProfile.data;
     $scope.categories = categoriesFactory.data;
-    $scope.apartmentData = '';
     $scope.countries = countriesService.data;
     $rootScope.viewProfile = false;
 
+
+    $scope.userDetails.currentApartment = currentApartmentData;
 
 
     $scope.$on("getUserData", function () {//event catch for user who just login to save his data
@@ -24,11 +25,6 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
         $scope.categories = categoriesFactory.data;
     });
 
-    $scope.$on("getCurrentApartment", function () {
-        $scope.currentApartmentData = currentApartment.data;
-        //  userProfile.getData();
-        $scope.getApartmentOrders($scope.currentApartmentData.apartmentID); 
-    });
 
     $scope.$on("getCountries", function () {
         $scope.countries = countriesService.data;
@@ -83,10 +79,13 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
         });
     };
 
-    $scope.getIndex = function (apartmentIndex) {
-        $scope.userDetails.currentApartment = $scope.userDetails.renterApartments[apartmentIndex];
-        $scope.userDetails.tempIndex = apartmentIndex;
+    $scope.getApartment = function (apartmentIndex) {
+        $scope.data = $scope.userDetails.renterApartments[apartmentIndex];
+        currentApartment.setData($scope.data);
     };
+
+
+
     $scope.editApartment = function () {
         $scope.editedApartment = {// add new apartment object
             apartmentID: $scope.userDetails.currentApartment.apartmentID,
@@ -126,37 +125,31 @@ apartmentController.controller('apartmentController', function ($scope, $rootSco
             });
     };
 
-    $scope.getApartment = function (apartment) {
-        $http.get("api/apartment/GetApartment?apartmentID=" + apartment.apartmentID).then(function (response) {
-            if (response.data) {
-                currentApartment.setData(response.data);
-
-            }
-        });
-    };
-
     $scope.getApartmentOrders = function (apartmentID) {
+
+        if ($scope.userDetails.currentApartment.orders || $scope.userDetails.currentApartment.orders === null) {
+            return;
+        }
         $http.get("api/orders/ApartmentOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password + "&apartmentID=" + apartmentID).then(function (response) {
             if (response.data) {
-                $scope.currentApartmentData.orders = response.data;
+                return $scope.userDetails.currentApartment.orders = response.data;
             }
         });
+        $scope.userDetails.currentApartment.orders = null;
+
     };
+
 
     $scope.getPendingOrders = function () {
-        $http.get("api/orders/PendingOrders?userName=" + $scope.userDetails.userName + "&password=" + $scope.userDetails.password).then(function (response) {
-            if (response.data) {
-                $scope.userDetails.pendingOrders = response.data;
-            }
-        });
+
     };
 
-    $scope.changeOrderStatus = function (index, order, tempApprove) {
+    $scope.changeOrderStatus = function ( order, tempApprove) {
         order.approved = tempApprove;
         order.renterUserName = $scope.userDetails.userName;
         $http.put("api/orders?password=" + $scope.userDetails.password, order).then(function (response) {
             if (response.data) {
-                $scope.getPendingOrders();
+                apartment.reloadData();
             }
         });
     };

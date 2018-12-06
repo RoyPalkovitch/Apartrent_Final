@@ -1,0 +1,111 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <base href="/" />
+    <script src="angular.js"></script>
+    <script src="angular_ui_route.js"></script>
+
+    <!--App config Controllers-->
+    <script src="apartrentConfiguration.js"></script>
+    <script src="indexController.js"></script>
+
+    <!--Register/Login Controllers-->
+    <script src="UserBar/Controller/registerController.js"></script>
+    <script src="UserBar/Controller/loginController.js"></script>
+
+    <!--Search And Result Controllers-->
+    <script src="searchController.js"></script>
+    <script src="SearchResult/Controller/searchResultController.js"></script>
+    <script src="SearchResult/Controller/viewApartmentController.js"></script>
+
+    <!--Factories And Services-->
+    <script src="Factories and Services/userProfileFactory.js"></script>
+    <script src="Factories and Services/countriesFactory.js"></script>
+    <script src="Factories and Services/categoriesFactory.js"></script>
+    <script src="Factories and Services/startupResolveFactory.js"></script>
+    <script src="Factories and Services/apartmentsFactory.js"></script>
+
+    <!--Orders/Reviews Controllers-->
+    <script src="SearchResult/Controller/searchedApartmentReviewsController.js"></script>
+    <script src="SearchResult/Controller/placeOrderController.js"></script>
+
+    <!--Profile Controllers-->
+    <script src="UserProfile/Profile/Controller/editAccountController.js"></script>
+    <script src="UserProfile/Profile/Controller/ProfileController.js"></script>
+    <script src="UserProfile/Profile/Controller/userOrdersController.js"></script>
+    <script src="UserProfile/Profile/Controller/userReviewsController.js"></script>
+
+    <!--Renter Controllers-->
+    <script src="UserProfile/RenterFeatures/Controller/userApartmentsController.js"></script>
+    <script src="UserProfile/RenterFeatures/Controller/pendingOrdersController.js"></script>
+    <script src="UserProfile/RenterFeatures/Controller/editApartmentController.js"></script>
+    <script src="UserProfile/RenterFeatures/Controller/addApartmentController.js"></script>
+    <script src="UserProfile/RenterFeatures/Controller/pendingOrdersController.js"></script>
+    <script src="UserProfile/RenterFeatures/Controller/currentUserApartmentViewController.js"></script>
+</head>
+<body>
+    <div ng-app="apartrentApp">
+
+        <div ng-switch="role" ng-controller="indexController">
+            <ul ng-switch-when="undefined">
+                <li>
+                    <a ui-sref="Login">Login</a>
+                </li>
+                <li>
+                    <a ui-sref="Register">Register</a>
+                </li>
+            </ul>
+            <ul ng-switch-when="0">
+                <li>
+                    <a ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                        <div>
+                            Name:{{userDetails.firstName}}
+                            {{userDetails.lastName}}
+                            <br />User Name:{{userDetails.userName}}
+                        </div>
+                    </a>
+                </li>
+
+                <li>
+                    <a ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                        <div>
+                            Join us Now and<br /> become a renter
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a><div ng-click="$parent.logOut()">Log Out</div></a>
+                </li>
+            </ul>
+            <ul ng-switch-when="1">
+                <li>
+                    <a ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                        <div>
+                            Name:{{userDetails.firstName}}
+                            {{userDetails.lastName}}
+                            <br />User Name:{{userDetails.userName}}<br />
+                            Pending Orders:{{$parent.userDetails.pendingNotification}}
+                        </div>
+                    </a>
+                </li>
+                <li>
+                    <a ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                        Add Apartment
+                    </a>
+                </li>
+                <li>
+                    <a ng-click="$parent.logOut()">logOut</a>
+                </li>
+            </ul>
+        </div>
+
+        <ui-view></ui-view>
+        <br /><br />
+        <div class="footer">
+            footer
+        </div>
+    </div>
+</body>
+</html>
