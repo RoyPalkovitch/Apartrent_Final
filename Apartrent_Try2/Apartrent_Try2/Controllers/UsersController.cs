@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-
 namespace Apartrent_Try2.Controllers
 {
     [Route("api/[controller]")]
@@ -13,11 +14,20 @@ namespace Apartrent_Try2.Controllers
     {
         [HttpGet("Login")]
         public Users Login([FromQuery]Users users)
-        {
-            
+        {          
             return DB.UsersDB.Login(users);
         }
 
+
+        [HttpGet("NewToken")]
+        [Authorize]
+        public string NewToken()
+        {
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role =Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            return AuthService.GetToken(userName,role).ToString();
+
+        }
         [HttpGet("UserProfile")]
         public Users GetUserProfile([FromQuery] string userName)
         {
@@ -25,16 +35,18 @@ namespace Apartrent_Try2.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         public bool EditUser([FromBody]Users users)
         {
+            users.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             return DB.UsersDB.EditUser(users);
         }
 
-
         [HttpDelete]
-        public bool DeleteUser([FromQuery]Users users)
-        {
-            return DB.UsersDB.DeleteUser(users);
+        [Authorize]
+        public bool DeleteUser([FromQuery]string token)
+        {         
+            return DB.UsersDB.DeleteUser(((ClaimsIdentity)User.Identity).FindFirst("UserName").Value);
         }
 
 

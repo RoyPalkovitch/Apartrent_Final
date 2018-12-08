@@ -4,6 +4,7 @@
     'addApartmentController', 'currentUserApartmentViewController']);
 
 apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvider) {
+
     $stateProvider
         .state("root",
             {
@@ -160,4 +161,12 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
 
     $urlRouterProvider.otherwise("Pagenotfound");
     $locationProvider.html5Mode(true);
+
 });
+
+//apartrentApp.run(function ($http, $window){
+//    if ($window.localStorage.getItem("UserToken")) {
+//        $http.defaults.headers.common.Authorization = 'Bearer ' + $window.localStorage.getItem("UserToken");
+
+//    }
+//});

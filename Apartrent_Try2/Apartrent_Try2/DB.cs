@@ -23,7 +23,7 @@ namespace Apartrent_Try2
                     if (ValidateUser(user.UserName, user.Password, conn))
                     {
                         UpdateUserLastLogin(conn, user);
-                        return GetYourUserProfile(user.UserName,user.Password,conn);
+                        return GetYourUserProfile(user.UserName, user.Password, conn);
                     }
 
                     return null;
@@ -65,20 +65,18 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteUser(Users user)
+            public static bool DeleteUser(string user)
             {
+                if (String.IsNullOrEmpty(user))
+                    return false;
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (ValidateUser(user.UserName, user.Password, conn))
+                    using (SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE UserName=@UserName", conn))
                     {
-                        using (SqlCommand cmd = new SqlCommand("DELETE FROM Users WHERE UserName=@UserName", conn))
-                        {
-                            cmd.Add("@UserName", user.UserName);
-                            return cmd.ExecuteNonQuery() == 1;
-                        }
+                        cmd.Add("@UserName", user);
+                        return cmd.ExecuteNonQuery() == 1;
                     }
-                    return false;
                 }
             }
 
@@ -125,7 +123,7 @@ namespace Apartrent_Try2
                     }
                     bool result = false;
                     if (storedHashPassword != null)
-                         result = hash.Verify(password, storedHashPassword);
+                        result = hash.Verify(password, storedHashPassword);
                     return result;
 
                 }
@@ -169,86 +167,88 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static Users GetYourUserProfile(string userName,string password,SqlConnection conn)
+            public static Users GetYourUserProfile(string userName, string password, SqlConnection conn)
             {
 
-                    using (SqlCommand cmd = new SqlCommand("SELECT Gender,[Address],PhoneNumber,Email,FirstName,LastName,Users.CountryID AS CountryID,CountryName,Role FROM Users INNER JOIN Countries ON Users.CountryID=Countries.CountryID WHERE UserName=@UserName", conn))
+                using (SqlCommand cmd = new SqlCommand("SELECT Gender,[Address],PhoneNumber,Email,FirstName,LastName,Users.CountryID AS CountryID,CountryName,Role FROM Users INNER JOIN Countries ON Users.CountryID=Countries.CountryID WHERE UserName=@UserName", conn))
+                {
+                    cmd.Add("@UserName", userName);
+                    Users userDetails;
+                    using (SqlDataReader dr = cmd.ExecuteReader())
                     {
-                        cmd.Add("@UserName", userName);
-                        Users userDetails;
-                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        dr.Read();
+                        userDetails = new Users()
                         {
-                            dr.Read();
-                            userDetails = new Users()
-                            {
-                                UserName = userName,
+                            UserName = userName,
 
-                                Gender = dr.GetBoolean(0),
-                                Address = dr.GetString(1),
-                                PhoneNumber = dr.GetString(2),
-                                Email = dr.GetString(3),
-                                FirstName = dr.GetString(4),
-                                LastName = dr.GetString(5),
-                                CountryID = dr.GetInt32(6),
-                                CountryName = dr.GetString(7),
-                                Role = dr.GetInt32(8)
-                            };
-                            if (userDetails.Role == 0)
-                                return userDetails;
-
-
-                        }
-                        if (userDetails.Role == (int)Role.Renter)
-                        {
-
-                            cmd.CommandText = "SELECT Apartment.ApartmentID AS ApartmentID,CountryID,Apartment.CategoryID as CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Description],NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets,NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription,ApartmentType FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.ApartmentID = ApartmentFeatures.ApartmentID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID WHERE Apartment.RenterUserName = @UserName";
-                            using (SqlDataReader dr = cmd.ExecuteReader())
-                            {
-                                List<Apartment> temp = new List<Apartment>();
-                                while (dr.Read())
-                                {
-                                    Apartment apartment = new Apartment()
-                                    {
-                                        ApartmentID = dr.GetInt32(0),
-                                        CountryID = dr.GetInt32(1),//can be localy
-                                        CategoryID = dr.GetInt32(2),
-                                        Address = dr.GetString(3),
-                                        PricePerDay = dr.GetDouble(4),
-                                        FromDate = new DateTime(dr.GetInt64(5)),
-                                        ToDate = new DateTime(dr.GetInt64(6)),
-                                        Description = dr.GetString(7),
-                                        NumberOfGuests = dr.GetInt32(8),
-                                        Shower = dr.GetBoolean(9),
-                                        Bath = dr.GetBoolean(10),
-                                        WIFI = dr.GetBoolean(11),
-                                        TV = dr.GetBoolean(12),
-                                        Cables = dr.GetBoolean(13),
-                                        Satellite = dr.GetBoolean(14),
-                                        Pets = dr.GetBoolean(15),
-                                        NumberOfBedRooms = dr.GetInt32(16),
-                                        LivingRoom = dr.GetBoolean(17),
-                                        BedRoomDescription = dr.GetString(18),
-                                        LivingRoomDescription = dr.GetString(19),
-                                        QueenSizeBed = dr.GetInt32(20),
-                                        DoubleBed = dr.GetInt32(21),
-                                        SingleBed = dr.GetInt32(22),
-                                        SofaBed = dr.GetInt32(23),
-                                        BedsDescription = dr.GetString(24),
-                                        ApartmentType = dr.GetString(25)
-
-                                    };
-                                    temp.Add(apartment);
-                                }
-                                userDetails.RenterApartments = temp;
-
-                            }
-                            userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName,password,conn);
+                            Gender = dr.GetBoolean(0),
+                            Address = dr.GetString(1),
+                            PhoneNumber = dr.GetString(2),
+                            Email = dr.GetString(3),
+                            FirstName = dr.GetString(4),
+                            LastName = dr.GetString(5),
+                            CountryID = dr.GetInt32(6),
+                            CountryName = dr.GetString(7),
+                            Role = dr.GetInt32(8)
+                        };
+                        if (userDetails.Role == 0)
                             return userDetails;
-                        }
+
 
                     }
-                    return null;
-                
+                    if (userDetails.Role == (int)Role.Renter)
+                    {
+
+                        cmd.CommandText = "SELECT Apartment.ApartmentID AS ApartmentID,CountryID,Apartment.CategoryID as CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Description],NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets,NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription,ApartmentType FROM Apartment INNER JOIN ApartmentFeatures ON Apartment.ApartmentID = ApartmentFeatures.ApartmentID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID WHERE Apartment.RenterUserName = @UserName";
+                        using (SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            List<Apartment> temp = new List<Apartment>();
+                            while (dr.Read())
+                            {
+                                Apartment apartment = new Apartment()
+                                {
+                                    ApartmentID = dr.GetInt32(0),
+                                    CountryID = dr.GetInt32(1),//can be localy
+                                    CategoryID = dr.GetInt32(2),
+                                    Address = dr.GetString(3),
+                                    PricePerDay = dr.GetDouble(4),
+                                    FromDate = new DateTime(dr.GetInt64(5)),
+                                    ToDate = new DateTime(dr.GetInt64(6)),
+                                    Description = dr.GetString(7),
+                                    NumberOfGuests = dr.GetInt32(8),
+                                    Shower = dr.GetBoolean(9),
+                                    Bath = dr.GetBoolean(10),
+                                    WIFI = dr.GetBoolean(11),
+                                    TV = dr.GetBoolean(12),
+                                    Cables = dr.GetBoolean(13),
+                                    Satellite = dr.GetBoolean(14),
+                                    Pets = dr.GetBoolean(15),
+                                    NumberOfBedRooms = dr.GetInt32(16),
+                                    LivingRoom = dr.GetBoolean(17),
+                                    BedRoomDescription = dr.GetString(18),
+                                    LivingRoomDescription = dr.GetString(19),
+                                    QueenSizeBed = dr.GetInt32(20),
+                                    DoubleBed = dr.GetInt32(21),
+                                    SingleBed = dr.GetInt32(22),
+                                    SofaBed = dr.GetInt32(23),
+                                    BedsDescription = dr.GetString(24),
+                                    ApartmentType = dr.GetString(25)
+
+                                };
+                                temp.Add(apartment);
+                            }
+                            userDetails.RenterApartments = temp;
+
+                        }
+                        userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName, password, conn);
+                        userDetails.Password = null;
+                        userDetails.Token = (string)AuthService.GetToken(userDetails.UserName, userDetails.Role);
+                        return userDetails;
+                    }
+
+                }
+                return null;
+
 
             }
 
@@ -365,7 +365,7 @@ namespace Apartrent_Try2
                     conn.Open();
                     if (changeRenterStatus && !RenterDB.BecomeRenter(userName, password, conn))
                         return -1;
-                    
+
                     else if (!changeRenterStatus && !UsersDB.ValidateRenter(userName, password, conn))
                         return -1;
 
@@ -784,7 +784,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetPendingOrders(string userName, string password,SqlConnection conn)
+            public static List<Orders> GetPendingOrders(string userName, string password, SqlConnection conn)
             {
                 if (conn == null)
                 {
@@ -880,7 +880,7 @@ namespace Apartrent_Try2
                                 "UPDATE Orders SET Approved = 0 WHERE Orders.OrderID = (SELECT Orders.OrderID FROM Orders " + // set approved to 0 where orders of the same apartment are between the dates of the approved order
                                 "JOIN (SELECT Orders.FromDate,Orders.ToDate,OrderID,ApartmentID FROM Orders WHERE Orders.OrderID = @OrderID) AS Step1 ON Step1.ApartmentID = Orders.ApartmentID" + // add the order the as been approved for comparison 
                                 " WHERE (Orders.Approved IS NULL OR Orders.Approved = 0) AND Orders.FromDate BETWEEN Step1.FromDate AND Step1.ToDate OR Orders.ToDate BETWEEN Step1.FromDate AND Step1.ToDate AND NOT Orders.OrderID = Step1.OrderID)";
-                            if(cmd.ExecuteNonQuery() > 0)
+                            if (cmd.ExecuteNonQuery() > 0)
                             {
                                 return GetPendingOrders(orders.RenterUserName, password, conn);
                             }

@@ -20,6 +20,7 @@ namespace Apartrent_Try2
         public int CountryID { get; set; }
         public string CountryName { get; set; }
         public int Role { get; set; }
+        public string Token { get; set; }
         public List<Apartment> RenterApartments { get; set; }
         public List<Orders> PendingOrders { get; set; }
 
