@@ -85,7 +85,8 @@
                             Name:{{userDetails.firstName}}
                             {{userDetails.lastName}}
                             <br />User Name:{{userDetails.userName}}<br />
-                            Pending Orders:{{$parent.userDetails.pendingNotification}}
+                           <span ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">Pending Orders: 0</span>
+                            <span ng-if="userDetails.pendingNotification > 0">Pending Orders:{{$parent.userDetails.pendingNotification}}</span>
                         </div>
                     </a>
                 </li>

@@ -39,14 +39,19 @@ namespace Apartrent_Try2.Controllers
         public bool EditUser([FromBody]Users users)
         {
             users.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            return DB.UsersDB.EditUser(users);
+            if (String.IsNullOrEmpty(users.UserName))
+                return false;
+              return DB.UsersDB.EditUser(users);
         }
 
         [HttpDelete]
         [Authorize]
-        public bool DeleteUser([FromQuery]string token)
-        {         
-            return DB.UsersDB.DeleteUser(((ClaimsIdentity)User.Identity).FindFirst("UserName").Value);
+        public bool DeleteUser()
+        {
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            if (String.IsNullOrEmpty(userName))
+                return false;
+            return DB.UsersDB.DeleteUser(userName);
         }
 
 

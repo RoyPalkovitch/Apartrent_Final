@@ -22,8 +22,8 @@ namespace Apartrent_Try2
 
                     if (ValidateUser(user.UserName, user.Password, conn))
                     {
-                        UpdateUserLastLogin(conn, user);
-                        return GetYourUserProfile(user.UserName, user.Password, conn);
+                        UpdateUserLastLogin(conn, user.UserName);
+                        return GetYourUserProfile(user.UserName, conn);
                     }
 
                     return null;
@@ -129,45 +129,18 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool ValidateRenter(string userName, string password, SqlConnection conn)
-            {
 
-                string storedHashPassword = null;
-                PasswordHash hash = new PasswordHash();
-
-                using (SqlCommand cmd = new SqlCommand("SELECT Password,Role FROM Users WHERE UserName=@UserName", conn))
-                {
-                    cmd.Add("@UserName", userName);
-                    int role = 0;
-                    using (SqlDataReader dr = cmd.ExecuteReader())
-                    {
-                        if (dr.Read())
-                        {
-                            storedHashPassword = dr.GetString(0);
-                            role = dr.GetInt32(1);
-
-                        }
-                    }
-
-                    if (hash.Verify(password, storedHashPassword) && role == (int)Role.Renter)
-                        return true;
-
-                    return false;
-
-                }
-            }
-
-            public static void UpdateUserLastLogin(SqlConnection conn, Users user)
+            public static void UpdateUserLastLogin(SqlConnection conn, string userName)
             {
                 using (SqlCommand cmd = new SqlCommand("UPDATE Users SET LastLogin=@LastLogin WHERE UserName=@UserName", conn))
                 {
                     cmd.Add("@LastLogin", DateTime.Now.Ticks);
-                    cmd.Add("@UserName", user.UserName);
+                    cmd.Add("@UserName", userName);
                     cmd.ExecuteNonQuery();
                 }
             }
 
-            public static Users GetYourUserProfile(string userName, string password, SqlConnection conn)
+            public static Users GetYourUserProfile(string userName, SqlConnection conn)
             {
 
                 using (SqlCommand cmd = new SqlCommand("SELECT Gender,[Address],PhoneNumber,Email,FirstName,LastName,Users.CountryID AS CountryID,CountryName,Role FROM Users INNER JOIN Countries ON Users.CountryID=Countries.CountryID WHERE UserName=@UserName", conn))
@@ -191,11 +164,11 @@ namespace Apartrent_Try2
                             CountryName = dr.GetString(7),
                             Role = dr.GetInt32(8)
                         };
-                        if (userDetails.Role == 0)
-                            return userDetails;
-
 
                     }
+                    userDetails.Token = (string)AuthService.GetToken(userDetails.UserName, userDetails.Role);
+                    if (userDetails.Role == 0)
+                        return userDetails;
                     if (userDetails.Role == (int)Role.Renter)
                     {
 
@@ -240,9 +213,8 @@ namespace Apartrent_Try2
                             userDetails.RenterApartments = temp;
 
                         }
-                        userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName, password, conn);
+                        userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName,  conn);
                         userDetails.Password = null;
-                        userDetails.Token = (string)AuthService.GetToken(userDetails.UserName, userDetails.Role);
                         return userDetails;
                     }
 
@@ -262,41 +234,35 @@ namespace Apartrent_Try2
         public static class RenterDB
         {
 
-            public static bool BecomeRenter(string userName, string password, SqlConnection conn)
+            public static bool BecomeRenter(string userName, SqlConnection conn)
             {
 
-                if (!UsersDB.ValidateUser(userName, password, conn))
-                {
-                    return false;
-                }
-                using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Role=@Role WHERE UserName=@RenterUserName AND Password=@Password", conn))
+                using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Role=@Role WHERE UserName=@RenterUserName", conn))
                 {
                     cmd.Add("@RenterUserName", userName);
-                    cmd.Add("@Password", password);
                     cmd.Add("@Role", (int)Role.Renter);
                     return cmd.ExecuteNonQuery() == 1;
                 }
 
             }
 
-            public static bool DeleteRenterStatus(string userName, string password)
+            public static bool DeleteRenterStatus(string userName)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING)) //need to delete apartments too
                 {
                     conn.Open();
-                    if (UsersDB.ValidateRenter(userName, password, conn))
-                    {
                         using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Role=@Role WHERE UserName=@RenterUserName", conn))
                         {
                             cmd.Add("@RenterUserName", userName);
+                            cmd.Add("@Role", (int)Role.User);
                             if (cmd.ExecuteNonQuery() == 1)
                             {
                                 cmd.CommandText = "DELETE FROM Apartment WHERE RenterUserName=@RenterUserName";
-                                cmd.Add("@Role", (int)Role.User);
+                            return cmd.ExecuteNonQuery() >= 1;
 
                             }
                         }
-                    }
+                    
                     return false;
                 }
             }
@@ -358,15 +324,12 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static int AddApartment(Apartment apartment, string userName, string password, bool changeRenterStatus)
+            public static int AddApartment(Apartment apartment, string userName, bool changeRenterStatus)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (changeRenterStatus && !RenterDB.BecomeRenter(userName, password, conn))
-                        return -1;
-
-                    else if (!changeRenterStatus && !UsersDB.ValidateRenter(userName, password, conn))
+                    if (changeRenterStatus && !RenterDB.BecomeRenter(userName,conn))
                         return -1;
 
                     using (SqlCommand cmd = new SqlCommand("INSERT INTO Apartment(RenterUserName,CountryID,CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Apartment].Description)output INSERTED.ApartmentID VALUES(@RenterUserName,@CountryID,@CategoryID,@Address,@PricePerDay,@AvailableFromDate,@AvailableToDate,@Description)", conn))
@@ -384,9 +347,9 @@ namespace Apartrent_Try2
                             return apartment.ApartmentID;
                         else
                         {
-                            DeleteApartment(apartment.ApartmentID, userName, password);
+                            DeleteApartment(apartment.ApartmentID, userName,conn);
                             if (changeRenterStatus)
-                                RenterDB.DeleteRenterStatus(userName, password);
+                                RenterDB.DeleteRenterStatus(userName);
                             return -1;
                         }
                     }
@@ -420,14 +383,20 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteApartment(int apartmentID, string userName, string password)
+            public static bool DeleteApartment(int apartmentID, string userName,SqlConnection conn)
             {
 
-                using (SqlConnection conn = new SqlConnection(CONN_STRING))
+                if (conn == null)
                 {
-                    conn.Open();
-                    if (!UsersDB.ValidateRenter(userName, password, conn))
-                        return false;
+                    conn = new SqlConnection(CONN_STRING);
+                }
+                using (conn)
+                {
+                    if (conn.State == System.Data.ConnectionState.Closed)
+                    {
+                        conn.Open();
+
+                    }
                     using (SqlCommand cmd = new SqlCommand("DELETE FROM Apartment WHERE ApartmentID=@ApartmentID", conn))
                     {
                         cmd.Add("@ApartmentID", apartmentID);
@@ -436,15 +405,12 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool EditApartment(Apartment apartment, bool editFeature, string userName, string password)
+            public static bool EditApartment(Apartment apartment, bool editFeature, string userName)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!UsersDB.ValidateRenter(userName, password, conn))
-                    {
-                        return false;
-                    }
+
                     using (SqlCommand cmd = new SqlCommand("UPDATE Apartment SET CountryID=@CountryID,CategoryID=@CategoryID,[Address]=@Address,PricePerDay=@PricePerDay,AvailableFromDate=@AvailableFromDate,AvailableToDate=@AvailableToDate,Description=@Description WHERE ApartmentID=@ApartmentID AND RenterUserName=@UserName", conn))
                     {
                         cmd.Add("@UserName", userName);
@@ -590,7 +556,7 @@ namespace Apartrent_Try2
                         }
                     }
                 }
-            } //will be added in js when clicking on add new apartment
+            }
 
 
         }
@@ -626,15 +592,11 @@ namespace Apartrent_Try2
         public static class ReviewsDB
         {
 
-            public static int NewReview(Reviews reviews, string password)
+            public static int NewReview(Reviews reviews)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING)) //NEED FIX!
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password, conn))
-                    {
-                        return -1;
-                    }
                     using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS (SELECT Apartment.RenterUserName FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID AND Apartment.RenterUserName = @UserName) INSERT INTO Reviews(Rating,[Description],UserName,ApartmentID) output INSERTED.ReviewID VALUES (@Rating,@Description,@UserName,@ApartmentID)", conn))
                     {
                         try
@@ -653,13 +615,11 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteReview(Reviews reviews, string password)
+            public static bool DeleteReview(Reviews reviews)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password, conn))
-                        return false;
                     using (SqlCommand cmd = new SqlCommand("DELETE FROM Reviews WHERE ReviewID=@ReviewID AND UserName=@UserName AND ApartmentID=@ApartmentID", conn))
                     {
                         cmd.Add("@ReviewID", reviews.ReviewID);
@@ -670,13 +630,12 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool EditReview(Reviews reviews, string password)
+            public static bool EditReview(Reviews reviews)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateUser(reviews.UserName, password, conn))
-                        return false;
+
                     using (SqlCommand cmd = new SqlCommand("UPDATE Reviews SET Rating=@Rating,[Description]=@Description WHERE ReviewID=@ReviewID AND UserName=@UserName AND ApartmentID=@ApartmentID", conn))
                     {
                         cmd.Add("@Rating", reviews.Rating);
@@ -689,13 +648,12 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Reviews> GetUserReviews(string userName, string password)
+            public static List<Reviews> GetUserReviews(string userName)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!UsersDB.ValidateUser(userName, password, conn))
-                        return null;
+
                     using (SqlCommand cmd = new SqlCommand("SELECT ReviewID,ApartmentID,Rating,[Description] FROM Reviews WHERE UserName=@UserName", conn))
                     {
                         List<Reviews> reviews = new List<Reviews>();
@@ -725,14 +683,11 @@ namespace Apartrent_Try2
 
         public static class OrdersDB
         {
-            public static bool NewOrder(string password, Orders order)
+            public static bool NewOrder(Orders order)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!UsersDB.ValidateUser(order.UserName, password, conn))
-                        return false;
-
                     double totalDays = (order.ToDate - order.FromDate).TotalDays > 0 ? (order.ToDate - order.FromDate).TotalDays : 1;
                     using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS(SELECT Orders.OrderID FROM Orders WHERE ((Orders.FromDate BETWEEN @FromDate AND @ToDate) OR (Orders.ToDate BETWEEN @FromDate AND @ToDate)) AND Orders.UserName = @UserName AND Orders.ApartmentID = @ApartmentID) INSERT INTO Orders(ApartmentID,RenterUserName,UserName,Price,OrderDate,FromDate,ToDate)VALUES(@ApartmentID,@RenterUserName,@UserName,(SELECT Apartment.PricePerDay * @TotalDays FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID),@OrderDate,@FromDate,@ToDate )", conn))
                     {
@@ -748,13 +703,11 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetUserOrders(string userName, string password)
+            public static List<Orders> GetUserOrders(string userName)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateUser(userName, password, conn))
-                        return null;
                     using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,RenterUserName,Price,OrderDate,FromDate,ToDate,Approved,OrderID FROM Orders WHERE UserName=@UserName", conn))
                     {
                         cmd.Add("@UserName", userName);
@@ -784,7 +737,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetPendingOrders(string userName, string password, SqlConnection conn)
+            public static List<Orders> GetPendingOrders(string userName, SqlConnection conn)
             {
                 if (conn == null)
                 {
@@ -795,8 +748,7 @@ namespace Apartrent_Try2
                     if (conn.State == System.Data.ConnectionState.Closed)
                     {
                         conn.Open();
-                        if (!DB.UsersDB.ValidateRenter(userName, password, conn))
-                            return null;
+
                     }
                     using (SqlCommand cmd = new SqlCommand("SELECT ApartmentID,UserName,Price,OrderDate,FromDate,ToDate,OrderID FROM Orders WHERE RenterUserName=@RenterUserName AND Approved IS NULL", conn))
                     {
@@ -825,13 +777,11 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetApartmentOrders(string userName, string password, int apartmentID)
+            public static List<Orders> GetApartmentOrders(string userName, int apartmentID)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateRenter(userName, password, conn))
-                        return null;
                     using (SqlCommand cmd = new SqlCommand("SELECT OrderID,Price,FromDate,ToDate,OrderDate,Approved,UserName FROM Orders WHERE ApartmentID = @ApartmentID AND Approved = 1", conn))
                     {
                         cmd.Add("@ApartmentID", apartmentID);
@@ -859,13 +809,11 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static object UpdateOrderStatus(string password, Orders orders)
+            public static object UpdateOrderStatus(Orders orders)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (!DB.UsersDB.ValidateRenter(orders.RenterUserName, password, conn))
-                        return false;
 
                     using (SqlCommand cmd = new SqlCommand())
                     {
@@ -882,7 +830,7 @@ namespace Apartrent_Try2
                                 " WHERE (Orders.Approved IS NULL OR Orders.Approved = 0) AND Orders.FromDate BETWEEN Step1.FromDate AND Step1.ToDate OR Orders.ToDate BETWEEN Step1.FromDate AND Step1.ToDate AND NOT Orders.OrderID = Step1.OrderID)";
                             if (cmd.ExecuteNonQuery() > 0)
                             {
-                                return GetPendingOrders(orders.RenterUserName, password, conn);
+                                return GetPendingOrders(orders.RenterUserName, conn);
                             }
 
                         }

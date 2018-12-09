@@ -1,6 +1,6 @@
 ﻿var editController = angular.module('editAccountController', []);
 
-editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile,$window) {
+editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile) {
 
     $scope.editAccount = function () {
         $scope.userEditedDetails = { // edited user object... 
@@ -13,10 +13,17 @@ editController.controller('editAccountController', function ($scope, $http, $roo
             phoneNumber: $scope.editedPhoneNumber ? $scope.editedPhoneNumber : $rootScope.userDetails.phoneNumber,
             userName: $rootScope.userDetails.userName
         };
-        $scope.config = userProfile.config;
-        $http.put("api/users", $scope.userEditedDetails, $scope.config).then(function (successCallback, errorCallback) {
+
+        $http.put("api/users", $scope.userEditedDetails, userProfile.config).then(function (successCallback, errorCallback) {
             if (successCallback.data) {
-                userProfile.setData($scope.userEditedDetails);
+                $rootScope.userDetails.firstName = $scope.userEditedDetails.firstName;
+                $rootScope.userDetails.lastName = $scope.userEditedDetails.lastName;
+                $rootScope.userDetails.gender = $scope.userEditedDetails.gender;
+                $rootScope.userDetails.email = $scope.userEditedDetails.email;
+                $rootScope.userDetails.address = $scope.userEditedDetails.address;
+                $rootScope.userDetails.countryID = $scope.userEditedDetails.countryID;
+                $rootScope.userDetails.phoneNumber = $scope.userEditedDetails.phoneNumber;
+                userProfile.setData($rootScope.userDetails);
                 window.history.back();
                 return;
             }

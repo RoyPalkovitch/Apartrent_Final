@@ -1,4 +1,4 @@
-﻿<div ng-repeat="orders in userDetails.orders track by $index">
+﻿<div ng-if="userDetails.orders.length > 0" ng-repeat="orders in userDetails.orders track by $index">
     <a>
         {{orders.renterUserName}}<br />
         {{orders.fromDate}}<br />
@@ -11,4 +11,7 @@
             <span ng-switch-when="false">Declined</span>
         </span>
     </a>
+</div>
+<div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
+    <a ui-sref="index">It seems like you havent purches any thing click here and start to travel</a>
 </div>

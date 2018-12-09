@@ -1,6 +1,6 @@
 ﻿var addApartmentController = angular.module('addApartmentController', []);
 
-addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope) {
+addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location) {
 
 
     $scope.addApartment = function (notRenterYet) {
@@ -30,15 +30,18 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             sofaBed: $scope.sofaBed ? $scope.sofaBed : 0,
             bedsDescription: $scope.bedsDescription
         };
-        if (notRenterYet === undefined)
-            notRenterYet = false;
-        $http.post("api/apartment?userName=" + $rootScope.userDetails.userName + "&password=" + $rootScope.userDetails.password + "&changeRenterStatus=" + notRenterYet, $scope.newApartment).then(function (response) {
+        
+        $http.post("api/apartment", $scope.newApartment, userProfile.config).then(function (response) {
             if (response.data) {
                 if (notRenterYet) {// add new apartment if the user wasnt renter before 
+                    userProfile.setToken(response.data.token);
                     $rootScope.role = 1;
                     $rootScope.userDetails.renterApartments = [];
+                    $scope.newApartment.apartmentID = response.data.apartmentID;
+                } else {
+
+                    $scope.newApartment.apartmentID = response.data;
                 }
-                $scope.newApartment.apartmentID = response.data;
                 $rootScope.userDetails.renterApartments.push($scope.newApartment);
                 userProfile.setData($rootScope.userDetails);
                 return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);

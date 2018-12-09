@@ -1,4 +1,4 @@
-﻿<div ng-repeat="review in userDetails.reviews">
+﻿<div ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
     <div ng-show="currentReview != $index">
         {{review.description}}
         {{review.rating}}
@@ -11,4 +11,7 @@
         <button ng-click="editReview(review,$index)">Send Review</button>
         <button ng-click="deleteReview(review,$index)">Delete Review</button>
     </div>
+</div>
+<div ng-if="userDetails.reviews.length <= 0 || userDetails.reviews === undefiend">
+    <h4>No reviews yet, dont forget to review the apartments you have rent, better reviews = better staying next time :D</h4>
 </div>

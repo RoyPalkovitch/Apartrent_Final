@@ -25,7 +25,7 @@ registerController.controller('registerController', function ($scope, $http, $lo
         };
         $http.post('api/Users', $scope.newUser).then(function (response) {
             if (response.data) { //post request for signup and clear the inputs
-                $location.url('/Login');
+                $location.url('/index');
             }
         });
     };

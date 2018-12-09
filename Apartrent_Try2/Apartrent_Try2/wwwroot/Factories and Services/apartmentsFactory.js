@@ -29,29 +29,31 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
     };
 
     apartments.currentApartmentData = function (searchParams) {
-        if ($window.sessionStorage.getItem("lastViewedData"))
-            lastViewedData = JSON.parse($window.sessionStorage.getItem("lastViewedData"));
+        //if ($window.sessionStorage.getItem("lastViewedData"))
+        //    lastViewedData = JSON.parse($window.sessionStorage.getItem("lastViewedData"));
 
-        if (searchParams.apartmentID !== lastViewedData.apartmentID && (searchParams.fromDate !== lastViewedData.fromDate || searchParams.fromDate === undefined && lastViewedData.fromDate === undefined)) {
-            return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
-                if (response.data) {
-                    response.data.countryName = countries[response.data.countryID - 1].countryName;
-                    response.data.fromDate ? apartments.fromDate : response.data.fromDate;
-                    response.data.toDate ? apartments.toDate : response.data.toDate;
-                    response.data.numberOfGuests ? apartments.numberOfGuests : response.data.numberOfGuests;
-                    response.data.pricePerGuest ? apartments.pricePerGuest : response.data.pricePerGuest;
-                    response.data.priceForStaying ? apartments.priceForStaying : response.data.fromDate.priceForStaying;
-                    if ($location.path().includes("SearchResult/"))
-                        $window.sessionStorage.setItem("lastViewedData", JSON.stringify(response.data));
-                    return response.data;
-                } else {
-                    return $location.url('/Pagenotfound');
+        //if (searchParams.apartmentID !== lastViewedData.apartmentID && (searchParams.fromDate !== lastViewedData.fromDate || searchParams.fromDate === undefined && lastViewedData.fromDate === undefined)) {
+        return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
+            if (response.data) {
+                response.data.countryName = countries[response.data.countryID - 1].countryName;
+
+                if ($location.path().includes("SearchResult/")) {
+                    response.data.fromDate = apartments.fromDate;
+                    response.data.toDate = apartments.toDate;
+                    response.data.numberOfGuests = apartments.numberOfGuests;
+                    response.data.pricePerGuest = apartments.pricePerGuest;
+                    response.data.priceForStaying = apartments.priceForStaying;
                 }
 
-            });
-        } else {
-            return lastViewedData;
-        }
+                return response.data;
+            } else {
+                return $location.url('/Pagenotfound');
+            }
+
+        });
+        //} else {
+        //    return lastViewedData;
+        //}
     };
 
     return apartments;

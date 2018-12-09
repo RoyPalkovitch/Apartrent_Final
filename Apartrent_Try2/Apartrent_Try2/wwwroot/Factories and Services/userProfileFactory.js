@@ -2,41 +2,42 @@
 var apartrentApp = angular.module('apartrentApp');
 
 apartrentApp.factory("userProfile", function ($rootScope, $window, $http) {
-    var userProfile = {};   
+    var userProfile = {};
     userProfile.data = '';
-    
-    userProfile.setData = function (data) {
-        $window.localStorage.removeItem('userProfile');
-        this.data = data;
-        $window.localStorage.setItem('userProfile', JSON.stringify(userProfile.data));
-        return this.getData();
 
+    userProfile.setData = function (data) {
+        this.data = data;
+        $window.sessionStorage.setItem('userProfile', JSON.stringify(userProfile.data));
+
+        return this.getData();
 
     };
 
 
     userProfile.setToken = function (token) {
-      //  $http.defaults.headers.common.Authorization = 'Bearer ' + response.token;
-        $window.localStorage.setItem("userToken", JSON.stringify(token));
-        var config = {
-            headers: {
-                'Authorization': 'Bearer ' + token
-            }
-        };
-        userProfile.config = config;
-        return;
+        if (token) {
+            $window.sessionStorage.setItem("userToken", JSON.stringify(token));
+            var config = {
+                headers: {
+                    'Authorization': 'Bearer ' + token
+                }
+            };
+            userProfile.config = config;
+            return true;
+        }
+        return false;
     };
 
     userProfile.getData = function () {
-         $rootScope.$broadcast('getUserData');
+        $rootScope.$broadcast('getUserData');
     };
 
     userProfile.resetData = function () {
         this.setData('');
-        $window.localStorage.removeItem('userProfile');
-        $window.localStorage.removeItem("userToken");
+        $window.sessionStorage.removeItem('userProfile');
+        $window.sessionStorage.removeItem("userToken");
 
-        this.getData();
+        return this.getData();
     };
     return userProfile;
 

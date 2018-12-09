@@ -4,12 +4,11 @@ pendingOrdersController.controller('pendingOrdersController', function ($scope, 
 
     $scope.changeOrderStatus = function (order,tempApprove) {
         order.approved = tempApprove;
-        order.renterUserName = $rootScope.userDetails.userName;
-        $http.put("api/orders?password=" + $rootScope.userDetails.password, order).then(function (response) {
+        $http.put("api/orders", order, userProfile.config).then(function (response) {
             if (response.data) {
                 $rootScope.userDetails.pendingOrders = response.data;
                 $rootScope.userDetails.pendingNotification = $rootScope.userDetails.pendingOrders.length;
-                userProfile($rootScope.userDetails);
+                userProfile.setData($rootScope.userDetails);
             }
         });
     };

@@ -1,6 +1,6 @@
 ﻿var editApartmentController = angular.module('editApartmentController', []);
 
-editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$,$location,$rootScope) {
+editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$, $location, $rootScope, userProfile) {
 
     $rootScope.userDetails.currentApartment = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex];
 
@@ -34,11 +34,12 @@ editApartmentController.controller('editApartmentController', function ($scope, 
         };
         if ($scope.showFeatures === undefined)
             $scope.showFeatures = false;
-        $http.put("api/apartment?editFeature=" + $scope.showFeatures + "&userName=" + $rootScope.userDetails.userName + "&password=" + $rootScope.userDetails.password, $scope.editedApartment)
+        $http.put("api/apartment?editFeature=" + $scope.showFeatures, $scope.editedApartment, userProfile.config)
             .then(function (response) {
                 if (response.data) {
                     $rootScope.userDetails.currentApartment = '';
                     $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex] = $scope.editedApartment;
+                    userProfile.setData($rootScope.userDetails);
                     return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
 
                 }

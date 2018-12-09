@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -33,21 +35,40 @@ namespace Apartrent_Try2.Controllers
         }
 
         [HttpPost]
-        public int AddApartment([FromQuery]string userName, [FromQuery]string password, [FromQuery]bool changeRenterStatus, [FromBody]Apartment apartment)
+        [Authorize]
+        public int AddApartment([FromBody]Apartment apartment)
         {
-            return DB.ApartmentDB.AddApartment(apartment, userName, password, changeRenterStatus);
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            if (String.IsNullOrEmpty(userName))
+                return -1;
+
+            bool changeRenterStatus = false;
+            if (role == 0)
+                changeRenterStatus = true;
+            return DB.ApartmentDB.AddApartment(apartment, userName, changeRenterStatus);
         }
 
         [HttpDelete]
-        public bool DeleteApartment([FromQuery]int apartmentID, [FromQuery]string userName, [FromQuery]string password)
+        [Authorize]
+        public bool DeleteApartment([FromQuery]int apartmentID)
         {
-            return DB.ApartmentDB.DeleteApartment(apartmentID, userName, password);
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            if (String.IsNullOrEmpty(userName) || role != 1)
+                return false;
+            return DB.ApartmentDB.DeleteApartment(apartmentID, userName,null);
         }
 
         [HttpPut]
-        public bool EditApartment([FromQuery]string userName, [FromQuery]string password, [FromQuery]bool editFeature, [FromBody]Apartment apartment)
+        [Authorize]
+        public bool EditApartment([FromQuery]bool editFeature, [FromBody]Apartment apartment)
         {
-            return DB.ApartmentDB.EditApartment(apartment, editFeature, userName, password);
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            if (String.IsNullOrEmpty(userName) || role != 1)
+                return false;
+            return DB.ApartmentDB.EditApartment(apartment, editFeature, userName);
         }
     }
 }

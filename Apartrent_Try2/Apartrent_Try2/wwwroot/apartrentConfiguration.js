@@ -79,7 +79,7 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
             controller: "userOrdersController",
             resolve: {
                 orders: function ($http, userProfile) {
-                    return $http.get("api/orders/UserOrders?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password).then(function (response) {
+                    return $http.get("api/orders/UserOrders", userProfile.config).then(function (response) {
                         if (response.data) {
                             return response.data;
                         }
@@ -94,7 +94,7 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
             controller: "userReviewsController",
             resolve: {
                 reviews: function ($http, userProfile) {
-                    return $http.get("api/reviews/UserReviews?userName=" + userProfile.data.userName + "&password=" + userProfile.data.password).then(function (response) {
+                    return $http.get("api/reviews/UserReviews", userProfile.config).then(function (response) {
                         if (response.data) {
                             return response.data;
                         }
@@ -163,10 +163,3 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
     $locationProvider.html5Mode(true);
 
 });
-
-//apartrentApp.run(function ($http, $window){
-//    if ($window.localStorage.getItem("UserToken")) {
-//        $http.defaults.headers.common.Authorization = 'Bearer ' + $window.localStorage.getItem("UserToken");
-
-//    }
-//});
