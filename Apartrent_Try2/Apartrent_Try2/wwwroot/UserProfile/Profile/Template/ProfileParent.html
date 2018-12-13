@@ -6,7 +6,7 @@
             <a ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
             <a ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
             <a ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
-            <a>Delete User</a>
+            <a ng-if="deleteoptOn">Delete User</a>
 
         </div>
     </div>
@@ -15,11 +15,11 @@
             <br />
             <a>save spot for image<img /></a>
             <a ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
-            <child ng-show="deleteRenterStatus">Delete renter status</child>
             <a ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</a>
             <a ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My reviews</a>
             <a ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
-            <a>Delete User</a>
+            <a ng-if="deleteoptOn">Delete renter status</a>
+            <a ng-if="deleteoptOn">Delete User</a>
 
         </div>
     </div>

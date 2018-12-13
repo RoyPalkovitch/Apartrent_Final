@@ -6,7 +6,7 @@
         <button ng-click="deleteReview(review,$index)">Delete Review</button>
     </div>
     <div ng-show="currentReview == $index">
-        <textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
+        <span><span ng-click="editReviewHandler(-1)">[x]</span><textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea></span>
         <input type="range" min="1" max="5" ng-model="$parent.$parent.editRating" />
         <button ng-click="editReview(review,$index)">Send Review</button>
         <button ng-click="deleteReview(review,$index)">Delete Review</button>

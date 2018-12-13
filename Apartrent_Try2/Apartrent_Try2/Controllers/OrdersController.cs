@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ namespace Apartrent_Try2.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
+        
 
         [HttpGet("UserOrders")]
         public List<Orders> GetUserOrders()
@@ -31,7 +33,7 @@ namespace Apartrent_Try2.Controllers
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
             if (String.IsNullOrEmpty(userName) || role != 1)
                 return null;
-            return DB.OrdersDB.GetPendingOrders(userName,null);
+            return DB.OrdersDB.GetPendingOrders(userName, null);
         }
 
         [HttpGet("ApartmentOrders")]

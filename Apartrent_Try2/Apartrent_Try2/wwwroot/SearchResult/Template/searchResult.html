@@ -1,28 +1,35 @@
-﻿<div ng-controller="searchController">
-    <div>
-        <h3>Where would you like to travel?</h3>
-        <select ng-disabled="errorMessageDisplay" ng-model="searchCountryID" required id="countrySelect">
-            <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
-        </select>   
-        Check in: <input ng-model="searchCheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" />
-        Check Out:<input min="{{searchCheckIn | date:'yyyy-MM-dd'}}" type="date" ng-model="searchCheckOut" />
-        Guests: <input ng-disabled="errorMessageDisplay" type="range" min="1" max="20" step="1" ng-model="searchGuests" /><p>{{searchGuests}}</p>
-        <a ui-sref="SearchResult({countryID:searchCountryID,fromDate:searchCheckIn.toDateString(),toDate:searchCheckOut.toDateString(),guests:searchGuests})">Send</a>
+﻿<div style="position:center">
+    <form class="w3-animate-left w3-row w3-bar-block w3-leftbar w3-border w3-border-deep-purple w3-quarter w3-hide-small" style="position:absolute;height:100%;"  ng-controller="searchController">
+        <div class="w3-cell-row">
+            <h4>Where would you like to travel?</h4>
+            <select class=" w3-input" ng-disabled="errorMessageDisplay" ng-model="searchCountryID" required id="countrySelect">
+                <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+            </select>
+        </div>
+        <div class="w3-cell-row ">
+            <div><h5>Check In:</h5><input class="w3-input" ng-model="searchCheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" /></div>
+            <div><h5>Check Out:</h5><input class="w3-input" min="{{searchCheckIn | date:'yyyy-MM-dd'}}" type="date" ng-model="searchCheckOut" /></div>
+        </div>
+        <div class="w3-cell-row "><h5>Guests:</h5><input class="w3-input" ng-disabled="errorMessageDisplay" type="range" placeholder="1" min="1" max="20" step="1" ng-model="searchGuests" /><h6>Number of guests:{{searchGuests}}</h6></div>
+        <a class="w3-button w3-purple w3-round w3-hover-blue w3-center" ui-sref="SearchResult({countryID:searchCountryID,fromDate:searchCheckIn.toDateString(),toDate:searchCheckOut.toDateString(),guests:searchGuests})">Send</a>
+    </form>
+
+    <div class="w3-content w3-cell w3-animate-bottom " style="padding-left:355px;position:relative;overflow-y:auto" ng-repeat="apartment in searchResult track by $index">
+        <a class="w3-card-4" ng-click="setApartmentData(apartment)" ui-sref="ApartmentView({apartmentID:apartment.apartmentID,fromDate:apartment.fromDate,toDate:apartment.toDate,guests:apartment.numberOfGuests})">
+            <div class="w3-border w3-border-blue w3-hover-border-purple" style="height:430px">
+                <header> save spot for images</header>
+                <div><p>Address:{{apartment.address}}</p></div>
+                <div><p>Apartment Type:{{apartment.apartmentType}}</p></div>
+                <div><p>From Date:{{apartment.fromDate}}</p></div>
+                <div><p>To Date:{{apartment.toDate}}</p></div>
+                <div><p>Days:{{apartment.totalNumberOfDays}}</p></div>
+                <div><p>Renter:{{apartment.renterUserName}}</p></div>
+                <div><p>Price for all days:{{apartment.priceForStaying}}</p></div>
+                <div><p>Price Per Day:{{apartment.pricePerDay}}</p></div>
+                <div><p>Price per guest{{apartment.pricePerGuest}}</p></div>
+            </div>
+        </a>
+        <!-- need to add rating,image -->
     </div>
 </div>
-<br /><br />
-<div id="apartmentCell" ng-repeat="apartment in searchResult track by $index">
-    <a ng-click="setApartmentData(apartment)" ui-sref="ApartmentView({apartmentID:apartment.apartmentID,fromDate:apartment.fromDate,toDate:apartment.toDate,guests:apartment.numberOfGuests})">
-        <div><p>Address:{{apartment.address}}</p></div>
-        <div><p>Apartment Type:{{apartment.apartmentType}}</p></div>
-        <div><p>From Date:{{apartment.fromDate}}</p></div>
-        <div><p>To Date:{{apartment.toDate}}</p></div>
-        <div><p>Days:{{apartment.totalNumberOfDays}}</p></div>
-        <div><p>Renter:{{apartment.renterUserName}}</p></div>
-        <div><p>Price for all days:{{apartment.priceForStaying}}</p></div>
-        <div><p>Price Per Day:{{apartment.pricePerDay}}</p></div>
-        <div><p>Price per guest{{apartment.pricePerGuest}}</p></div>
-
-    </a>
-    <!-- need to add rating,image -->
-</div>
+<br /><br /><br /><br /><br /><br /><br /><br />

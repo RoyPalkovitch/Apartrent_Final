@@ -28,7 +28,12 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 return;
             }
         });
-
     };
+
+    $scope.$parent.deleteoptOn = !$scope.$parent.deleteoptOn;
+
+    $scope.$on('$destroy', function () {
+        $scope.$parent.deleteoptOn = false;
+    });
 
 });

@@ -1,8 +1,8 @@
 ﻿var profileController = angular.module('profileController', []);
 
-profileController.controller('profileController', function ($scope, $window, $rootScope, userProfile) {
+profileController.controller('profileController', function ($scope, $window, $rootScope, $location, userProfile) {
     if (!userProfile.data)
-        return;
+        $location.url("/Pagenotfound");
     if (userProfile.data) {
         // $rootScope.userDetails = JSON.parse($window.sessionStorage.getItem("userProfile"));
         $rootScope.userDetails = userProfile.data;
@@ -14,5 +14,6 @@ profileController.controller('profileController', function ($scope, $window, $ro
     if ($window.sessionStorage.getItem("categoriesData")) {
         $scope.categories = JSON.parse($window.sessionStorage.getItem("categoriesData"));
     }
-
+    if ($scope.deleteoptOn)
+        $scope.deleteoptOn = false;
 });

@@ -1,4 +1,4 @@
-﻿var apartrentApp = angular.module('apartrentApp', ['ui.router', 'registerController', 'loginController', 'searchController', 'searchResultController', 'indexController',
+﻿var apartrentApp = angular.module('apartrentApp', ['ui.router','registerController', 'loginController', 'searchController', 'searchResultController', 'indexController',
     'viewApartmentController', 'placeOrdersController', 'searchedApartmentReviewsController', 'editAccountController', 'profileController',
     'userOrdersController', 'userReviewsController', 'pendingOrdersController', 'userApartmentsController', 'editApartmentController',
     'addApartmentController', 'currentUserApartmentViewController']);

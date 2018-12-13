@@ -3,11 +3,15 @@
 
 var registerController = angular.module('registerController', []);
 
-registerController.controller('registerController', function ($scope, $http, $location, $window) {
+registerController.controller('registerController', function ($scope, $http, $location, $window, $rootScope) {
 
 
     if ($window.sessionStorage.getItem('countriesData')) {
         $scope.countries = JSON.parse($window.sessionStorage.getItem('countriesData'));
+    }
+
+    if ($rootScope.userDetails) {
+        $location.url('/index');
     }
 
     $scope.signUp = function () {
@@ -25,7 +29,8 @@ registerController.controller('registerController', function ($scope, $http, $lo
         };
         $http.post('api/Users', $scope.newUser).then(function (response) {
             if (response.data) { //post request for signup and clear the inputs
-                $location.url('/index');
+                $rootScope.userDetails = "Just Register";
+                $location.url('/Login');
             }
         });
     };

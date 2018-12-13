@@ -7,6 +7,8 @@ searchController.controller('searchController', function ($scope, $window) {
     if ($window.sessionStorage.getItem('countriesData')) { // if countries is available the promise of the startup as worked. 
         $scope.countries = JSON.parse($window.sessionStorage.getItem('countriesData'));//retriving countries data to controller
         $scope.categories = JSON.parse($window.sessionStorage.getItem('categoriesData'));//retriving categories data to controller
-    }    
+    }
+
+    $scope.searchGuests = 1;
 
 });

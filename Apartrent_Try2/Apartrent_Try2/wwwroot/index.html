@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ApartRent</title>
     <base href="/" />
-    <script src="angular.js"></script>
-    <script src="angular_ui_route.js"></script>
-
+    <!--Dependecies-->
+    <script src="Angular_Dependencies/angular.js"></script>
+    <script src="Angular_Dependencies/angular_ui_route.js"></script>
+    <link href="Angular_Dependencies/W3_CSS.css" rel="stylesheet" />
     <!--App config Controllers-->
     <script src="apartrentConfiguration.js"></script>
     <script src="indexController.js"></script>
@@ -44,68 +46,46 @@
     <script src="UserProfile/RenterFeatures/Controller/pendingOrdersController.js"></script>
     <script src="UserProfile/RenterFeatures/Controller/currentUserApartmentViewController.js"></script>
 </head>
-<body>
-    <div ng-app="apartrentApp">
+<body style="overflow-y:hidden">
+    <div ng-app="apartrentApp" class="w3-row">
+        <div class="w3-bar w3-purple w3-mobile w3-animate-top" style="height:60px" ng-switch="role" ng-controller="indexController">
+            <div ng-switch-when="undefined">
+                <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Login">Login</a>
+                <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Register">Register</a>
+                <div style="padding-left:40%;"><h1 ui-sref="index" style="margin:0;padding-top:0" class="w3-mobile w3-bar-item w3-hover-black">Apartrent</h1></div>
+            </div>
+            <div class="w3-bar w3-purple" ng-switch-when="0">
+                <div>
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                        Hello:{{userDetails.userName}}
+                    </a>
 
-        <div ng-switch="role" ng-controller="indexController">
-            <ul ng-switch-when="undefined">
-                <li>
-                    <a ui-sref="Login">Login</a>
-                </li>
-                <li>
-                    <a ui-sref="Register">Register</a>
-                </li>
-            </ul>
-            <ul ng-switch-when="0">
-                <li>
-                    <a ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
-                        <div>
-                            Name:{{userDetails.firstName}}
-                            {{userDetails.lastName}}
-                            <br />User Name:{{userDetails.userName}}
-                        </div>
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                        Join us Now and<br /> become a renter
                     </a>
-                </li>
-
-                <li>
-                    <a ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
-                        <div>
-                            Join us Now and<br /> become a renter
-                        </div>
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">Log Out</a>
+                </div>
+            </div>
+            <div class="w3-bar w3-purple" style="height:60px" ng-switch-when="1">
+                <div>
+                    <a class="w3-bar-item w3-button w3-hover-blue" style="height:61px" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                        Hello:{{userDetails.userName}}<br />
+                        <span ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">Pending Orders: 0</span>
+                        <span ng-if="userDetails.pendingNotification > 0">Pending Orders:{{$parent.userDetails.pendingNotification}}</span>
                     </a>
-                </li>
-                <li>
-                    <a><div ng-click="$parent.logOut()">Log Out</div></a>
-                </li>
-            </ul>
-            <ul ng-switch-when="1">
-                <li>
-                    <a ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
-                        <div>
-                            Name:{{userDetails.firstName}}
-                            {{userDetails.lastName}}
-                            <br />User Name:{{userDetails.userName}}<br />
-                           <span ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">Pending Orders: 0</span>
-                            <span ng-if="userDetails.pendingNotification > 0">Pending Orders:{{$parent.userDetails.pendingNotification}}</span>
-                        </div>
-                    </a>
-                </li>
-                <li>
-                    <a ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                    <a class="w3-bar-item w3-button w3-hover-blue  w3-padding-16" style="height:61px" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
                         Add Apartment
                     </a>
-                </li>
-                <li>
-                    <a ng-click="$parent.logOut()">logOut</a>
-                </li>
-            </ul>
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">logOut</a>
+                </div>
+            </div>
         </div>
 
         <ui-view></ui-view>
         <br /><br />
-        <div class="footer">
+        <footer class="w3-container w3-tea" style="position:fixed">
             footer
-        </div>
+        </footer>
     </div>
 </body>
 </html>

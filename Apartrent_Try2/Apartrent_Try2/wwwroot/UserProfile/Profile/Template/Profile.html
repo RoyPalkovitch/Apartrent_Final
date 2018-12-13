@@ -1,6 +1,6 @@
-﻿<div ng-if="userDetails.pendingOrders.length > 0" class="renterProfileContent" ng-repeat="orders in userDetails.pendingOrders track by $index" ng-controller="pendingOrdersController">
-    
-    <h3>Pending orders from your apartments:</h3>
+﻿
+<h3>Pending orders from your apartments:</h3>
+<div ng-if="userDetails.pendingOrders.length > 0" class="renterProfileContent" ng-repeat="orders in userDetails.pendingOrders track by $index" ng-controller="pendingOrdersController">
 
     <a>
         {{orders.userName}}<br />
@@ -11,7 +11,7 @@
 
     </a>
     <button ng-click="changeOrderStatus(orders,true)">Approve</button>
-    <button ng-click="changeOrderStatus(orders,false)">Decline</button>
+    <button ng-click="changeOrderStatus(orders,false)">Decline</button><br /><br />
 </div>
 <div ng-if="userDetails.pendingOrders.length <= 0">
     <h4>No Pending Orders here for now</h4>
