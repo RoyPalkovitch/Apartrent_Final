@@ -1,21 +1,24 @@
-﻿<div>
-
-    User Name:<input type="text" ng-model="$parent.newUserName" />
-    <br />
-    Password:<input type="password" ng-model="$parent.newPassword" /><br />
-    Gender:<select ng-model="$parent.newGender">
-        <option value="true">Male</option>
-        <option value="false">Female</option>
-    </select>
-    <br />
-    Address:<input type="text" ng-model="$parent.newAddress" /><br />
-    Phone Number:<input type="tel" ng-model="$parent.newPhoneNumber" /><br />
-    Email:<input type="email" ng-model="$parent.newEmail" /><br />
-    First Name:<input type="text" ng-model="$parent.newFirstName" /><br />
-    Last Name:<input type="text" ng-model="$parent.newLastName" /><br />
-    Country: <select ng-model="$parent.newCountryID" required id="countrySelect">
-        <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
-    </select>
-    <br />
-    <button ng-click="signUp()">Register</button>
-</div>
+﻿
+<center  class="w3-container w3-center" style="margin-top:5.7%;">
+    <form class="w3-animate-bottom w3-padding-16" style="background-color:white;width:50%;margin-left:25%">
+        <h1>Register</h1><br />
+        <h6>User Name:</h6><input class="w3-input" style="width:40%;margin-left:30%" maxlength="10" type="text" required ng-model="$parent.newUserName" />
+        <br />
+        <h6>Password:</h6><input class="w3-input" style="width:40%;margin-left:30%" maxlength="8" type="password" required ng-model="$parent.newPassword" /><br />
+        <br />
+        <h6> Email:</h6><input class="w3-input" required maxlength="30" style="width:40%;margin-left:30%" type="email" ng-model="$parent.newEmail" /><br />
+        <h6>Country:</h6> <select class="w3-select" required style="width:40%" ng-model="$parent.newCountryID" id="countrySelect">
+            <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+        </select>
+        <h6>First Name:</h6><input class="w3-input" required maxlength="10" style="width:40%;margin-left:30%" type="text" ng-model="$parent.newFirstName" /><br />
+        <h6>Last Name:</h6><input class="w3-input" required maxlength="10" style="width:40%;margin-left:30%" type="text" ng-model="$parent.newLastName" /><br />
+        <h6> Gender:</h6><select class="w3-select" style="width:40%" required ng-model="$parent.newGender">
+            <option value="true">Male</option>
+            <option value="false">Female</option>
+        </select>
+        <h6>Address:</h6><input class="w3-input" required maxlength="30" style="width:40%;margin-left:30%" type="text" ng-model="$parent.newAddress" /><br />
+        <h6>Phone Number:</h6><input class="w3-input" required maxlength="15" style="width:40%;margin-left:30%" type="tel" ng-model="$parent.newPhoneNumber" /><br />
+        <br />
+        <button class="w3-button w3-purple w3-round w3-hover-blue" ng-click="signUp()">Register</button>
+    </form>
+</center>

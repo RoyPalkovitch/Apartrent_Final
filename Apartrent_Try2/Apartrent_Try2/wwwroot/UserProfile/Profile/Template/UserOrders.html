@@ -1,17 +1,22 @@
-﻿<div ng-if="userDetails.orders.length > 0" ng-repeat="orders in userDetails.orders track by $index">
-    <a>
-        {{orders.renterUserName}}<br />
-        {{orders.fromDate}}<br />
-        {{orders.toDate}}<br />
-        {{orders.orderDate}}<br />
-        {{orders.price}}<br />
-        <span ng-switch="orders.approved">
-            <span ng-switch-when="null">Pending</span>
-            <span ng-switch-when="true">Approved!</span>
-            <span ng-switch-when="false">Declined</span>
-        </span>
-    </a>
-</div>
-<div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
-    <a ui-sref="index">It seems like you havent purches any thing click here and start to travel</a>
+﻿<div style="margin-top:4.7%;margin-left:15%" class="w3-animate-bottom ">
+    <div class="w3-container w3-card w3-padding-16" ng-if="userDetails.orders.length > 0" ng-repeat="orders in userDetails.orders track by $index">
+        <a class="w3-content ">
+            <p class="w3-border-bottom">Renter Name: {{orders.renterUserName}}</p>
+            <p class="w3-border-bottom">Check-In: {{orders.fromDate}}</p>
+            <p class="w3-border-bottom">Check-Out: {{orders.toDate}}</p>
+            <p class="w3-border-bottom">Order Date: {{orders.orderDate}}</p>
+            <p class="w3-border-bottom">Price: {{orders.price}}</p>
+            
+            <span ng-switch="orders.approved">
+                Status:
+                <span class="w3-purple" ng-switch-when="null">Pending</span>
+                <span class="w3-green" ng-switch-when="true">Approved!</span>
+                <span class="w3-red" ng-switch-when="false">Declined</span>
+            </span>
+        </a>
+
+    </div>
+    <div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
+        <a ui-sref="index">It seems like you havent purches any thing click here and start to travel</a>
+    </div>
 </div>

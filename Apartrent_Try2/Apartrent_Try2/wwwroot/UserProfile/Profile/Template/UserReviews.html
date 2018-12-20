@@ -1,17 +1,26 @@
-﻿<div ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
-    <div ng-show="currentReview != $index">
-        {{review.description}}
-        {{review.rating}}
-        <button ng-click="editReviewHandler($index)">Edit Review</button>
-        <button ng-click="deleteReview(review,$index)">Delete Review</button>
+﻿<form style="margin-left:15%;" class="w3-animate-bottom">
+    <div class=" w3-card-2 w3-quarter"  ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
+        <div ng-show="currentReview != $index">
+
+            {{$index+1}}.
+            <p>Description:{{review.description}}</p>
+            <p>Rate:{{review.rating}}</p>
+            <div>
+                <button class="w3-button w3-round w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
+                <button class="w3-button w3-round w3-red" ng-click="deleteReview(review,$index)">Delete Review</button>
+            </div>
+        </div>
+        <div class="w3-content w3-card-2" ng-show="currentReview == $index">
+            <textarea class="w3-input" placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
+            <h6>Current Rating:  {{$parent.editRating}}</h6><input class="w3-input" type="range" min="1" max="5" ng-model="$parent.editRating" />
+            <div>
+                <button class="w3-button w3-round w3-green" ng-click="editReview(review,$index)">Send Review</button>
+                <button class="w3-button w3-round w3-red" ng-click="editReviewHandler(-1)">Close edit</button>
+            </div>
+        </div>
     </div>
-    <div ng-show="currentReview == $index">
-        <span><span ng-click="editReviewHandler(-1)">[x]</span><textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea></span>
-        <input type="range" min="1" max="5" ng-model="$parent.$parent.editRating" />
-        <button ng-click="editReview(review,$index)">Send Review</button>
-        <button ng-click="deleteReview(review,$index)">Delete Review</button>
-    </div>
-</div>
-<div ng-if="userDetails.reviews.length <= 0 || userDetails.reviews === undefiend">
-    <h4>No reviews yet, dont forget to review the apartments you have rent, better reviews = better staying next time :D</h4>
-</div>
+    <center ng-if="userDetails.reviews.length <= 0 || userDetails.reviews === undefiend">
+        
+        <h2 style="margin-top:10%">No reviews yet, dont forget to review the apartments you have rent, better reviews = better staying next time :D</h2>
+    </center>
+</form>

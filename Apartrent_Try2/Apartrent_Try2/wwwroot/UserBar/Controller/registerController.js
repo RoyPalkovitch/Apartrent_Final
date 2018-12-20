@@ -27,6 +27,8 @@ registerController.controller('registerController', function ($scope, $http, $lo
             CountryID: $scope.newCountryID
 
         };
+        if ($scope.newUser.userName === undefined || $scope.newUser.length < 11 || $scope.newUser.password === undefined || $scope.newUser.password.length < 8)
+            return;
         $http.post('api/Users', $scope.newUser).then(function (response) {
             if (response.data) { //post request for signup and clear the inputs
                 $rootScope.userDetails = "Just Register";

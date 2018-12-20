@@ -2,6 +2,11 @@
 
 editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile) {
 
+
+    $scope.editedGender = $rootScope.userDetails.gender ? "Male" : "Female";
+
+    $scope.editedCountryID = $rootScope.userDetails.countryID;
+
     $scope.editAccount = function () {
         $scope.userEditedDetails = { // edited user object... 
             firstName: $scope.editFirstName ? $scope.editFirstName : $rootScope.userDetails.firstName, //checking if there is a value if no then the detail stay the same

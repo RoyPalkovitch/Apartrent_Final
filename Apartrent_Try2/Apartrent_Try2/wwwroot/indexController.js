@@ -1,6 +1,6 @@
 ﻿var indexController = angular.module('indexController', []);
 
-indexController.controller('indexController', function ($scope, $rootScope, $window, $location, userProfile, $http) {
+indexController.controller('indexController', function ($scope, $rootScope, $window, $location, userProfile) {
 
     $rootScope.userDetails;
     $scope.$on('getUserData', function () {
@@ -24,5 +24,26 @@ indexController.controller('indexController', function ($scope, $rootScope, $win
         if ($location.path().includes("/Profile"))
             return $location.url('/index');
         return;
+    };
+
+    $rootScope.showNav = false;
+
+    $scope.openSideBar =async function () {
+        document.getElementById("openNavButton").style.display = 'none';
+        document.getElementById("sideBar").style.display = "block";
+        document.getElementById("sideBar").style.width = "25%";
+        document.getElementById("sideBar").style.marginRight ="0%";
+
+        for (var i = 1; i <= 25; i++) {
+            await $scope.sleep(13);
+            document.getElementById("main").style.marginRight = (i + "%").toString();
+            if (document.getElementById("sideBar").style.marginRight.valueOf() < 0)
+            document.getElementById("sideBar").style.marginRight = (i + 30 + "%").toString();
+
+        }
+    };
+
+    $scope.sleep = function (ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     };
 });

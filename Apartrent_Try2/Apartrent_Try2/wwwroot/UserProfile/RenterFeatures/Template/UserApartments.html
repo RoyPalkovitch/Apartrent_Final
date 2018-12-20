@@ -1,15 +1,16 @@
-﻿<div ng-repeat="apartment in userDetails.renterApartments track by $index">
-
-    <a ui-sref="ProfileParent.CurrentUserApartmentView({userName:userDetails.userName,apartmentID:apartment.apartmentID})">
-        <p>{{countries[apartment.countryID-1].countryName}}</p>
-        <p>{{apartment.address}}</p>
-        <p>{{apartment.apartmentType}}</p>
-        <p>{{apartment.fromDate}}</p>
-        <p>{{apartment.toDate}}</p>
-        <p>{{apartment.pricePerDay}}</p>
-    </a>
-    <a ui-sref="ProfileParent.EditApartment({userName:userDetails.userName,apartmentIndex:$index})">Edit Apartment</a>
-    <button ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
+﻿<div class="w3-container w3-animate-bottom" style="margin-top:6%;margin-left:15%" ng-repeat="apartment in userDetails.renterApartments track by $index">
+    <div class="w3-card-2 w3-content">
+        <a class="w3-hover-text-purple" ui-sref="ProfileParent.CurrentUserApartmentView({userName:userDetails.userName,apartmentID:apartment.apartmentID})">
+            <p>Country: {{countries[apartment.countryID-1].countryName}}</p>
+            <p>Address: {{apartment.address}}</p>
+            <p>Apartment type: {{apartment.apartmentType}}</p>
+            <p>Availabe from date: {{apartment.fromDate}}</p>
+            <p>Available to date: {{apartment.toDate}}</p>
+            <p>Price per day: {{apartment.pricePerDay}}</p>
+        </a>
+        <a class="w3-button w3-purple w3-round w3-hover-blue" ui-sref="ProfileParent.EditApartment({userName:userDetails.userName,apartmentIndex:$index})">Edit Apartment</a>
+        <button class="w3-button w3-red w3-round w3-hover-blue" ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
+    </div>
     <br />
     <br />
 </div>

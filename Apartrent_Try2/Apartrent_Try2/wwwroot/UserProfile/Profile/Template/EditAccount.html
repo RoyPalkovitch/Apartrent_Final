@@ -1,18 +1,20 @@
 ﻿
-<div>
-    <br /><h1>Edit your Account </h1>
-    First Name: <input type="text" ng-model="$parent.editFirstName" placeholder="{{userDetails.firstName}}" /><br />
-    Last Name: <input type="text" ng-model="$parent.editLastName" placeholder="{{userDetails.lastName}}" /><br />
-    Gender:<select ng-model="$parent.editGender">
-        <option value="true">Male</option>
-        <option value="false">Female</option>
-    </select><br />
-    E-Mail: <input type="email" ng-model="$parent.editEmail" placeholder="{{userDetails.email}}" /><br />
-    Phone number: <input type="tel" ng-model="$parent.editPhoneNumber" placeholder="{{userDetails.phoneNumber}}" /><br />
-    Address: <input type="text" ng-model="$parent.editAddress" placeholder="{{userDetails.address}}" /><br />
-    Country: <select ng-model="$parent.editCountryID" required id="countrySelect">
-        <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
-    </select><br />
-    <button ng-click="editAccount()">Save</button>
+<div class="w3-container" style="margin-top:4.7%;margin-left:15%">
+    <form class="w3-content w3-animate-bottom">
+        <br /><h1>Edit Account </h1>
+        <h6>First Name:</h6> <input class="w3-input" maxlength="10" type="text" ng-model="$parent.editFirstName" style="width:22%" placeholder="{{userDetails.firstName}}" /><br />
+        <h6>Last Name:</h6> <input class="w3-input" maxlength="10" type="text" ng-model="$parent.editLastName" style="width:22%" placeholder="{{userDetails.lastName}}" /><br />
+        <h6>Country:</h6> <select class="w3-select" style="width:22%" ng-model="$parent.editCountryID" required id="countrySelect">
+            <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+        </select><br /><br />
+        <h6>E-Mail:</h6> <input class="w3-input"  maxlength="30" style="width:22%" type="email" ng-model="$parent.editEmail" placeholder="{{userDetails.email}}" /><br />
+        <h6>Gender:</h6><select ng-init="$parent.editGender" class="w3-select" style="width:22%" ng-model="$parent.editGender">
+            <option  value="true">Male</option>
+            <option  value="false">Female</option>
+        </select><br />
+        <h6>Phone number:</h6> <input type="tel" style="width:22%" maxlength="15"  class="w3-input" ng-model="$parent.editPhoneNumber" placeholder="{{userDetails.phoneNumber}}" /><br />
+        <h6>Address:</h6> <input type="text" style="width:22%"  maxlength="30" ng-model="$parent.editAddress" class="w3-input" placeholder="{{userDetails.address}}" /><br />
+        <button class="w3-button w3-purple w3-round" ng-click="editAccount()">Save</button>
+    </form>
 </div>
 

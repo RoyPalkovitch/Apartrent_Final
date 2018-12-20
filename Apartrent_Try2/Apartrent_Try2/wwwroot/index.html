@@ -46,15 +46,27 @@
     <script src="UserProfile/RenterFeatures/Controller/pendingOrdersController.js"></script>
     <script src="UserProfile/RenterFeatures/Controller/currentUserApartmentViewController.js"></script>
 </head>
-<body style="overflow-y:hidden">
+<body>
+
     <div ng-app="apartrentApp" class="w3-row">
-        <div class="w3-bar w3-purple w3-mobile w3-animate-top" style="height:60px" ng-switch="role" ng-controller="indexController">
-            <div ng-switch-when="undefined">
+        <div class="w3-bar w3-purple w3-mobile w3-animate-top" style="position:fixed;z-index:9999" ng-switch="role" ng-controller="indexController">
+
+            <h4 ui-sref="index" class="w3-mobile w3-hide-large w3-hide-medium w3-bar-item w3-hover-black">Apartrent mobile</h4>
+
+            <h1 ui-sref="index" style="margin:0;padding-top:0;height:100%" class="w3-hide-small w3-bar-item w3-hover-black">Apartrent</h1>
+
+            <button ng-show="showNav" style="padding-bottom:1.2%" id="openNavButton" class="w3-right w3-button w3-hide-small w3-xlarge" ng-click="openSideBar()">&#9776;</button>
+            
+            <!-- Need to change the method to work with mobile -->
+            <button ng-show="showNav" id="openNavButton" class="w3-right w3-button w3-hide-large w3-hide-medium w3-mobile w3-xlarge" ng-click="openSideBar()">&#9776;</button>
+
+
+            <div ng-switch-when="undefined" style="height:100%">
                 <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Login">Login</a>
                 <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Register">Register</a>
-                <div style="padding-left:40%;"><h1 ui-sref="index" style="margin:0;padding-top:0" class="w3-mobile w3-bar-item w3-hover-black">Apartrent</h1></div>
             </div>
-            <div class="w3-bar w3-purple" ng-switch-when="0">
+            <div class="w3-bar-item w3-purple" ng-switch-when="0">
+
                 <div>
                     <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
                         Hello:{{userDetails.userName}}
@@ -66,14 +78,14 @@
                     <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">Log Out</a>
                 </div>
             </div>
-            <div class="w3-bar w3-purple" style="height:60px" ng-switch-when="1">
+            <div style="height:100%" ng-switch-when="1">
                 <div>
-                    <a class="w3-bar-item w3-button w3-hover-blue" style="height:61px" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px;padding-bottom:10%" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
                         Hello:{{userDetails.userName}}<br />
                         <span ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">Pending Orders: 0</span>
                         <span ng-if="userDetails.pendingNotification > 0">Pending Orders:{{$parent.userDetails.pendingNotification}}</span>
                     </a>
-                    <a class="w3-bar-item w3-button w3-hover-blue  w3-padding-16" style="height:61px" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px;" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
                         Add Apartment
                     </a>
                     <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">logOut</a>

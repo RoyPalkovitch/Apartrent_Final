@@ -9,6 +9,5 @@ searchController.controller('searchController', function ($scope, $window) {
         $scope.categories = JSON.parse($window.sessionStorage.getItem('categoriesData'));//retriving categories data to controller
     }
 
-    $scope.searchGuests = 1;
-
+  
 });

@@ -61,6 +61,7 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
             controller: "profileController",
             abstract: true
         })
+
         .state("ProfileParent.Profile", {
             url: "/Profile/userName=:userName",
             templateUrl: "UserProfile/Profile/Template/Profile.html",

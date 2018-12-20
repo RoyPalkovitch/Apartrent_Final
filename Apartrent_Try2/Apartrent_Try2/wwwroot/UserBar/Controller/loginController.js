@@ -4,6 +4,10 @@ loginController.controller('loginController', function ($scope,$rootScope, $http
 
 
     $scope.login = function () { //login vadilation through get request
+        if ( $scope.loginUserName === undefined || $scope.loginUserName.length > 11 || $scope.loginPassword === undefined || $scope.loginPassword.length > 8) {
+            $scope.errorLoginDisplay = true;
+            return;
+        }
         $http.get('api/users/login?userName=' + $scope.loginUserName + '&password=' + $scope.loginPassword).then(function (response) {
             if (response.data) {
                 if (response.data.role === 1 && response.data.pendingOrders !== null)
@@ -17,7 +21,6 @@ loginController.controller('loginController', function ($scope,$rootScope, $http
                 $rootScope.role = response.data.role;
                 return window.history.back();
             }
-            $scope.errorLoginDisplay = true;
             return false;
         });
 

@@ -8,6 +8,8 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
             return $http.get('api/apartment/ApartmentLocation?countryID=' + searchParams.countryID + '&numberOfGuests=' + searchParams.guests + '&fromDate=' + searchParams.fromDate + '&toDate=' + searchParams.toDate).then(function (response) {
                 if (response.data) {
                     return response.data;
+                } else {
+                    return $q.when();
                 }
             });
         }
@@ -28,10 +30,6 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
     };
 
     apartments.currentApartmentData = function (searchParams) {
-        //if ($window.sessionStorage.getItem("lastViewedData"))
-        //    lastViewedData = JSON.parse($window.sessionStorage.getItem("lastViewedData"));
-
-        //if (searchParams.apartmentID !== lastViewedData.apartmentID && (searchParams.fromDate !== lastViewedData.fromDate || searchParams.fromDate === undefined && lastViewedData.fromDate === undefined)) {
         return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
             if (response.data) {
                 response.data.countryName = countries[response.data.countryID - 1].countryName;
@@ -47,12 +45,10 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
                 return response.data;
             } else {
                 return $location.url('/Pagenotfound');
+
             }
 
         });
-        //} else {
-        //    return lastViewedData;
-        //}
     };
 
     return apartments;
