@@ -20,7 +20,7 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
     };
 
     apartments.lastSearchParams = function (data) {
-
+        $window.sessionStorage.setItem("LastSearch", JSON.stringify(data));
         apartments.numberOfGuests = data.numberOfGuests;
         apartments.fromDate = data.fromDate;
         apartments.toDate = data.toDate;
@@ -33,13 +33,24 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
         return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
             if (response.data) {
                 response.data.countryName = countries[response.data.countryID - 1].countryName;
-
                 if ($location.path().includes("SearchResult/")) {
-                    response.data.fromDate = apartments.fromDate;
-                    response.data.toDate = apartments.toDate;
-                    response.data.numberOfGuests = apartments.numberOfGuests;
-                    response.data.pricePerGuest = apartments.pricePerGuest;
-                    response.data.priceForStaying = apartments.priceForStaying;
+                    var temp = JSON.parse($window.sessionStorage.getItem("LastSearch"));
+                    if (temp.apartmentID !== searchParams.apartmentID) {
+                        temp.apartmentID = searchParams.apartmentID;
+                        response.data.fromDate = apartments.fromDate;
+                        response.data.toDate = apartments.toDate;
+                        response.data.numberOfGuests = apartments.numberOfGuests;
+                        response.data.pricePerGuest = apartments.pricePerGuest;
+                        response.data.priceForStaying = apartments.priceForStaying;
+                        $window.sessionStorage.setItem("LastSearch", JSON.stringify(temp));
+                    }
+                    else if (temp.apartmentID === searchParams.apartmentID || (!apartments.pricePerGuest || !apartments.priceForStaying)) {
+                        response.data.fromDate = temp.fromDate;
+                        response.data.toDate = temp.toDate;
+                        response.data.numberOfGuests = temp.numberOfGuests;
+                        response.data.pricePerGuest = temp.pricePerGuest;
+                        response.data.priceForStaying = temp.priceForStaying;
+                    }
                 }
 
                 return response.data;

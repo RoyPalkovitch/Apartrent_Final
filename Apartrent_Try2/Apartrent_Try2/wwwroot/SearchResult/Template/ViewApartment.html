@@ -1,90 +1,206 @@
-﻿<div>
-    <div>
+﻿
+
+<div class="w3-sidebar w3-bar-block" style="width:10%" ng-if="userDetails">
+    <p class="w3-bar-item">
+        {{currentApartmentData.pricePerDay}}
+    </p>
+    <p class="w3-bar-item">Price for staying:</p>
+    <p class="w3-bar-item">{{currentApartmentData.priceForStaying}}</p>
+    <p class="w3-bar-item">Price Per Day:{{currentApartmentData.pricePerDay}}</p>
+    <p class="w3-bar-item">Price per guest:{{currentApartmentData.pricePerGuest}}</p>
+
+
+    <p class="w3-bar-item">
+        {{currentApartmentData.fromDate}}
+        {{currentApartmentData.toDate}}
+    </p>
+    <div class="w3-bar-item" ng-controller="placeOrdersController">
+        <button ng-click="newOrder(currentApartmentData)">Order Now</button>
+        <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
+    </div>
+</div>
+
+<div style="margin-left:10%;margin-top:4.7%;width:100%" class="w3-container w3-animate-bottom">
+
+    <div style="padding-bottom:170px" class="w3-border">
         <img /> save spot for imgs
     </div>
+
     <br />
     <div>
-        <p>Address:{{currentApartmentData.address}}</p>
-        <p>Country:{{currentApartmentData.countryName}}</p>
-        <p>Apartment type:{{currentApartmentData.apartmentType}}</p>
-        <p>Apartment Description:{{currentApartmentData.description}}</p>
-        <p>Host name:{{currentApartmentData.firstName}} {{currentApartmentData.lastName}}</p>
-    </div>
-    <div>
-        <p>
-            <h3>Apartment Features:</h3>
-        <p>{{currentApartmentData.numberOfGuests}}</p>
-
-        <p>{{currentApartmentData.shower}}</p>
-        <p>{{currentApartmentData.wifi}}</p>
-        <p>{{currentApartmentData.tv}}</p>
-        <p>{{currentApartmentData.cables}}</p>
-        <p>{{currentApartmentData.satellite}}</p>
-        <p>{{currentApartmentData.pets}}</p>
-        <p>{{currentApartmentData.bath}}</p>
-        <p>{{currentApartmentData.livingRoom}}</p>
-        <p>{{currentApartmentData.livingRoomDescription}}</p>
-
-        <p>{{currentApartmentData.numberOfBedRooms}}</p>
-
-        <p>{{currentApartmentData.bedRoomDescription}}</p>
-        <p>{{currentApartmentData.queenSizeBed}}</p>
-        <p>{{currentApartmentData.doubleBed}}</p>
-        <p>{{currentApartmentData.singleBed}}</p>
-        <p>{{currentApartmentData.sofaBed}}</p>
-        <p>{{currentApartmentData.bedsDescription}}</p>
+        <h3>Apartment Info:</h3>
+        <table class="w3-table-all w3-half" style="width:525px;">
+            <tr>
+                <th>Address:</th>
+                <th>Country:</th>
+            </tr>
+            <tr>
+                <td>{{currentApartmentData.address}} </td>
+                <td>{{currentApartmentData.countryName}}</td>
+            </tr>
+            <tr>
+                <th>Apartment type:</th>
+                <th>Host name:</th>
+            </tr>
+            <tr>
+                <td>{{currentApartmentData.apartmentType}}</td>
+                <td>{{currentApartmentData.firstName}} {{currentApartmentData.lastName}}</td>
+            </tr>
+        </table>
+        <article class="w3-border w3-half" style="height:157px;">
+            <h4>Apartment description</h4>
+            <p class="w3-text">{{currentApartmentData.description}}</p>
+        </article>
     </div>
 
+    <div style="margin-top:200px">
+        <h3>Apartment Features:</h3>
 
-    <div ng-if="userDetails" ng-controller="searchedApartmentReviewsController">
-        <h3>place a review(for your notice reviews will be post only if you have purches a stay in this currentApartmentData. you can review the renter before staying and then write your full review :D)</h3>
-        <textarea ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
-        <input type="range" min="1" max="5" ng-model="$parent.reviewRating" />
-        <button ng-click="newReview(currentApartmentData.apartmentID)">Send Review</button>
+        <table class="w3-table w3-border w3-sand w3-half" style="width:525px;height:465px">
+            <!--style="width:250px;float:left"-->
+            <tr>
+                <td>
+                    <h5>Living room:</h5>
+                    <img ng-if="currentApartmentData.livingRoom" src="../../ApartrentPhotos/living_room_Available.jpg" />
+                    <img ng-if="!currentApartmentData.livingRoom" src="../../ApartrentPhotos/living_room_UnAvailable.jpg" />
+                </td>
+                <td>
+                    <h5>TV:</h5> <img ng-if="currentApartmentData.tv" style="height:45px;width:45px" src="../../ApartrentPhotos/TV_available.jpg" />
+                    <img ng-if="!currentApartmentData.tv" style="height:45px;width:45px" src="../../ApartrentPhotos/TV_Unavailable.jpg" />
+                </td>
+            </tr>
+            <tr>
+
+                <td>
+                    <h5>Cables TV:</h5>
+                    <img ng-if="currentApartmentData.cables" style="height:45px;width:45px" src="../../ApartrentPhotos/Cable_Available.jpg" />
+                    <img ng-if="!currentApartmentData.cables" style="height:45px;width:45px" src="../../ApartrentPhotos/Cable_UnAvailable.jpg" />
+                </td>
+                <td>
+                    <h5>Satellite TV:</h5>
+                    <img ng-if="currentApartmentData.satellite" style="height:45px;width:45px" src="../../ApartrentPhotos/satellite_Available.jpg" />
+                    <img ng-if="!currentApartmentData.satellite" style="height:45px;width:45px" src="../../ApartrentPhotos/satellite_UnAvailable.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>Pets:</h5>
+                    <img ng-if="currentApartmentData.pets" style="height:45px;width:45px" src="../../ApartrentPhotos/pets_available.jpg" />
+                    <img ng-if="!currentApartmentData.pets" style="height:45px;width:45px" src="../../ApartrentPhotos/pets_Unavailable.jpg" />
+                </td>
+                <td>
+                    <h5>Wifi:</h5>
+                    <img ng-if="currentApartmentData.wifi" style="height:45px;width:45px" src="../../ApartrentPhotos/wifi_available.jpg" />
+                    <img ng-if="!currentApartmentData.wifi" style="height:45px;width:45px" src="../../ApartrentPhotos/wifi_Unavailable.jpg" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h5>Bath:</h5>
+                    <img ng-if="currentApartmentData.bath" style="height:45px;width:45px" src="../../ApartrentPhotos/Bath_Available.jpg" />
+                    <img ng-if="!currentApartmentData.bath" style="height:45px;width:45px" src="../../ApartrentPhotos/Bath_UnAvailable.jpg" />
+                </td>
+                <td>
+                    <h5>Shower:</h5>
+                    <img ng-if="currentApartmentData.shower" src="../../ApartrentPhotos/Shower_Available.jpg" />
+                    <img ng-if="!currentApartmentData.shower" src="../../ApartrentPhotos/Shower_UnAvailable.jpg" />
+                </td>
+
+            </tr>
+        </table>
+        <div class="w3-border w3-half " style="height:465px">
+            <table class="w3-table">
+
+                <tr>
+                    <th><h4>Rooms info:</h4></th>
+                </tr>
+                <tr>
+                    <td>
+                        <h5>Livingroom description:</h5>
+                    </td>
+                    <td><h6>{{currentApartmentData.livingRoomDescription}}</h6></td>
+
+                </tr>
+                <tr>
+
+
+                    <td><h5>Number of bedrooms:</h5></td>
+                    <td><h6>{{currentApartmentData.numberOfBedRooms}}</h6></td>
+                </tr>
+                <tr>
+                    <td><h5>Bedrooms Description:</h5></td>
+                    <td><h6>{{currentApartmentData.bedRoomDescription}}</h6></td>
+                </tr>
+
+                <tr>
+                    <th><h5>Quantity of beds:</h5></th>
+                    <th><h5>Queen size bed</h5></th>
+                    <th><h5>Double bed</h5></th>
+                    <th><h5>Single bed</h5></th>
+                    <th><h5>Sofa bed</h5></th>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td><h6>{{currentApartmentData.queenSizeBed}}</h6></td>
+                    <td><h6>{{currentApartmentData.doubleBed}}</h6></td>
+                    <td><h6>{{currentApartmentData.singleBed}}</h6></td>
+                    <td><h6>{{currentApartmentData.sofaBed}}</h6></td>
+                </tr>
+                <tr>
+
+                    <td><h5>Beds description:</h5></td>
+                    <td><h6>{{currentApartmentData.bedsDescription}}</h6></td>
+                </tr>
+
+            </table>
+        </div>
     </div>
 
+    <br />
+</div>
+<div style="margin-left:10%;" class="w3-container" ng-controller="searchedApartmentReviewsController">
     <h3>Reviews:</h3>
-    <div ng-repeat="review in currentApartmentData.reviews track by $index">
+    <div ng-if="currentApartmentData.reviews.length >= 1" ng-repeat="review in currentApartmentData.reviews track by $index">
         <div ng-if="review.userName != userDetails.userName">
             {{review.userName}}
             {{review.description}}
             {{review.rating}}
         </div>
 
-        <div ng-if="review.userName == userDetails.userName" ng-controller="searchedApartmentReviewsController">
+        <div class="w3-animate-bottom" ng-if="review.userName == userDetails.userName" ng-controller="searchedApartmentReviewsController">
             <div ng-show="currentReview != $index">
                 {{review.userName}}
                 {{review.description}}
                 {{review.rating}}
-                <button ng-click="editReviewHandler($index)">Edit Review</button>
-                <button ng-click="deleteReview(review,$index)">Delete Review</button>
+                <button class="w3-button w3-round w3-purple" ng-click="editReviewHandler($index)">Edit Review</button>
+                <button class="w3-button w3-round w3-red" ng-click="deleteReview(review,$index)">Delete Review</button>
             </div>
             <div ng-show="currentReview == $index">
-                <span><span ng-click="editReviewHandler(-1)">[x]</span><textarea placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea></span>
+                <textarea style="width:300px;height:70px;resize:none" maxlength="70" placeholder="{{review.description}}" ng-model="$parent.editDescription"></textarea>
+                <p ng-if="$parent.editDescription">words left:{{70-$parent.editDescription.length}}</p>
+                <p ng-if="!$parent.editDescription">words left:70</p>
                 <input type="range" min="1" max="5" ng-model="$parent.$parent.editRating" />
-                <button ng-click="editReview(review,$index)">Send Review</button>
-                <button ng-click="deleteReview(review,$index)">Delete Review</button>
+                <button class="w3-button w3-green w3-round" ng-click="editReview(review,$index)">Send Review</button>
+                <button class="w3-button w3-red w3-round" ng-click="editReviewHandler(-1)">Return</button>
             </div>
         </div>
-        <br />
     </div>
 
-    <div class="orderBar" ng-if="userDetails">
-        <p>
-            {{currentApartmentData.pricePerDay}}
-        </p>
-        <div><p>Price for all days:{{currentApartmentData.priceForStaying}}</p></div>
-        <div><p>Price Per Day:{{currentApartmentData.pricePerDay}}</p></div>
-        <div><p>Price per guest:{{currentApartmentData.pricePerGuest}}</p></div>
+    <div class="w3-animate-bottom" ng-if="currentApartmentData.reviews.length < 1">
+        <h4>No reviews yet, rent this apartment and be the first who rate it</h4>
+    </div>
 
-         
-        <p>
-            {{currentApartmentData.fromDate}}
-            {{currentApartmentData.toDate}}
-        </p>
-        <div ng-controller="placeOrdersController">
-             <button ng-click="newOrder(currentApartmentData)">Order Now</button>
-             <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
+    
+        <div ng-if="userDetails && noEditReview!== true" style="width:600px">
+            <h3>Write a review here:</h3>
+            <textarea style="width:300px;height:70px;resize:none" maxlength="70" ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
+            <p ng-if="$parent.reviewDescription">words left:{{70-$parent.reviewDescription.length}}</p>
+            <p ng-if="!$parent.reviewDescription">words left:70</p>
+            <input style="width:170px" class="w3-input" type="range" min="1" max="5" ng-model="$parent.reviewRating" />
+            <p>Rate:{{$parent.reviewRating}}</p>
+            <br />
+            <button class="w3-button w3-round w3-purple" ng-click="newReview(currentApartmentData.apartmentID)">Send Review</button>
         </div>
-    </div>
 </div>
+
+

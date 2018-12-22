@@ -1,8 +1,6 @@
 ﻿var searchedApartmentReviewsController = angular.module('searchedApartmentReviewsController', []);
 
 searchedApartmentReviewsController.controller('searchedApartmentReviewsController', function ($scope, userProfile, $http, $rootScope) {
-
-
     if ($rootScope.userDetails !== "" && $rootScope.userDetails !== undefined){
         $scope.newReview = function (apartmentID) {
             $scope.review = {
@@ -46,12 +44,12 @@ searchedApartmentReviewsController.controller('searchedApartmentReviewsControlle
                     $scope.editedReview.userName = $rootScope.userDetails.userName;
                     $rootScope.$broadcast("EditReview", { reviewIndex: index, reviewData: $scope.editedReview });
                 }
-
             });
         };
 
         $scope.editReviewHandler = function (index) {//Change the review view in the ui to see the apartment that being edit
             $scope.currentReview = index;
+            $scope.noEditReview = true;
         };
     }
 
