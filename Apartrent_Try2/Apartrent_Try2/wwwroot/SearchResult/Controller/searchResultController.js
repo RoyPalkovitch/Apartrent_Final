@@ -8,6 +8,8 @@ searchResultController.controller('searchResultController', function ($scope, $r
 
         apartmentsFactory.lastSearchParams(data);
     };
+
+
     if ($location.path().includes("SearchResult/"))
          $rootScope.showNav = true;
 
@@ -15,22 +17,10 @@ searchResultController.controller('searchResultController', function ($scope, $r
         $rootScope.showNav = false;
     });
 
-    $scope.sleep = function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    };
 
     $scope.closeSideBar = async function () {
 
-        for (var i = 25; i >= 1; i--) {
-            await $scope.sleep(13);
-            document.getElementById("main").style.marginRight = (i + "%").toString();
-            document.getElementById("sideBar").style.marginRight = (i-30 + "%").toString();
-
-        }
-        document.getElementById("openNavButton").style.display = "inline-block";
-        document.getElementById("sideBar").style.display = "none";
-
-        
+        document.getElementById("mySidebar").style.display = "none";
     };
 });
 

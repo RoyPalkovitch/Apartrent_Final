@@ -13,6 +13,7 @@ pendingOrdersController.controller('pendingOrdersController', function ($scope, 
         });
     };
 
+
     if ($rootScope.userDetails && $rootScope.role === 1) {
         $scope.getPending = function () {
             $http.get("api/orders/PendingOrders", userProfile.config).then(function (response) {

@@ -16,4 +16,14 @@ profileController.controller('profileController', function ($scope, $window, $ro
     }
     if ($scope.deleteoptOn)
         $scope.deleteoptOn = false;
+
+    $rootScope.showNav = true;
+    $scope.closeSideBar = function () {
+        document.getElementById("mySidebar").style.display = "none";
+        $rootScope.showNav = true;
+
+    };
+    $scope.$on('$destroy', function () {
+        $rootScope.showNav = false;
+    });
 });

@@ -9,6 +9,7 @@
     <script src="Angular_Dependencies/angular.js"></script>
     <script src="Angular_Dependencies/angular_ui_route.js"></script>
     <link href="Angular_Dependencies/W3_CSS.css" rel="stylesheet" />
+    <link href="SearchResult/Template/StyleSheet.css" rel="stylesheet" />
     <!--App config Controllers-->
     <script src="apartrentConfiguration.js"></script>
     <script src="indexController.js"></script>
@@ -46,55 +47,54 @@
     <script src="UserProfile/RenterFeatures/Controller/pendingOrdersController.js"></script>
     <script src="UserProfile/RenterFeatures/Controller/currentUserApartmentViewController.js"></script>
 </head>
-<body>
+<body style="width:100%;height:100%">
 
-    <div ng-app="apartrentApp" class="w3-row">
-        <div class="w3-bar w3-purple w3-mobile w3-animate-top" style="position:fixed;z-index:9999" ng-switch="role" ng-controller="indexController">
+    <div ng-app="apartrentApp">
+        <div class="w3-top" style="position:sticky;top:0">
+            <div class="w3-bar w3-purple w3-mobile w3-animate-top" ng-switch="role" ng-controller="indexController">
 
-            <h4 ui-sref="index" class="w3-mobile w3-hide-large w3-hide-medium w3-bar-item w3-hover-black">Apartrent mobile</h4>
+                <h1 ui-sref="index" style="margin:0;padding-top:0;" class="w3-bar-item w3-mobile w3-hover-black">Apartrent</h1>
 
-            <h1 ui-sref="index" style="margin:0;padding-top:0;height:100%" class="w3-hide-small w3-bar-item w3-hover-black">Apartrent</h1>
+                <!-- <button ng-show="showNav" style="padding-bottom:1.2%" id="openNavButton" class="w3-right w3-button w3-hide-small w3-xlarge" ng-click="openSideBar()">&#9776;</button>-->
+                <!-- Need to change the method to work with mobile -->
 
-            <button ng-show="showNav" style="padding-bottom:1.2%" id="openNavButton" class="w3-right w3-button w3-hide-small w3-xlarge" ng-click="openSideBar()">&#9776;</button>
-            
-            <!-- Need to change the method to work with mobile -->
-            <button ng-show="showNav" id="openNavButton" class="w3-right w3-button w3-hide-large w3-hide-medium w3-mobile w3-xlarge" ng-click="openSideBar()">&#9776;</button>
+                <div ng-switch-when="undefined">
+                    <a class="w3-bar-item  w3-button w3-hover-blue w3-col" style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="Login">Login</a>
+                    <a class="w3-bar-item  w3-button w3-hover-blue w3-col" style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="Register">Register</a>
+                </div>
 
+                <div ng-switch-when="0">
 
-            <div ng-switch-when="undefined" style="height:100%">
-                <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Login">Login</a>
-                <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="Register">Register</a>
-            </div>
-            <div class="w3-bar-item w3-purple" ng-switch-when="0">
-
-                <div>
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                    <a class="w3-bar-item  w3-button w3-hover-blue w3-col " style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
                         Hello:{{userDetails.userName}}
                     </a>
 
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
-                        Join us Now and<br /> become a renter
+                    <a class="w3-bar-item  w3-button w3-hover-blue  w3-col" style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                        Become a renter
                     </a>
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">Log Out</a>
+                    <a class="w3-bar-item  w3-button w3-hover-blue w3-col" style="padding-top:1.5%;padding-bottom:1.5%" ng-click="$parent.logOut()">Log Out</a>
                 </div>
-            </div>
-            <div style="height:100%" ng-switch-when="1">
-                <div>
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px;padding-bottom:10%" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
-                        Hello:{{userDetails.userName}}<br />
-                        <span ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">Pending Orders: 0</span>
-                        <span ng-if="userDetails.pendingNotification > 0">Pending Orders:{{$parent.userDetails.pendingNotification}}</span>
-                    </a>
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-padding-16" style="height:61px;" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
-                        Add Apartment
-                    </a>
-                    <a class="w3-bar-item w3-button w3-hover-blue w3-right w3-padding-16" style="height:61px" ng-click="$parent.logOut()">logOut</a>
+                <div ng-switch-when="1">
+                    <div>
+                        <a class="w3-bar-item w3-button w3-hover-blue w3-col" style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="ProfileParent.Profile({userName:userDetails.userName})">
+                            Hello:{{userDetails.userName}}
+                            <span class="w3-badge w3-green" ng-if="userDetails.pendingNotification === 0 || userDetails.pendingNotification === undefined">0</span>
+                            <span class="w3-badge w3-green" ng-if="userDetails.pendingNotification > 0">{{$parent.userDetails.pendingNotification}}</span>
+                        </a>
+                        <a class="w3-bar-item w3-button w3-hover-blue w3-col " style="padding-top:1.5%;padding-bottom:1.5%" ui-sref="ProfileParent.AddApartment({userName:userDetails.userName})">
+                            Add Apartment
+                        </a>
+                        <a class="w3-bar-item w3-button w3-hover-blue w3-col " style="padding-top:1.5%;padding-bottom:1.5%" ng-click="$parent.logOut()">logOut</a>
+
+                    </div>
+                    <button ng-show="showNav" id="openNavButton" class="w3-button w3-block w3-center w3-hide-large" ng-click="openSideBar()">&#9776;</button>
+
                 </div>
+
+
             </div>
         </div>
-
-        <ui-view></ui-view>
-        <br /><br />
+        <ui-view style="width:100%"></ui-view>
         <footer class="w3-container w3-tea" style="position:fixed">
             footer
         </footer>

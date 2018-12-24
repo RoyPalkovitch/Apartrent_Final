@@ -28,22 +28,9 @@ indexController.controller('indexController', function ($scope, $rootScope, $win
 
     $rootScope.showNav = false;
 
-    $scope.openSideBar =async function () {
-        document.getElementById("openNavButton").style.display = 'none';
-        document.getElementById("sideBar").style.display = "block";
-        document.getElementById("sideBar").style.width = "25%";
-        document.getElementById("sideBar").style.marginRight ="0%";
+    $scope.openSideBar = function () {
+        document.getElementById("mySidebar").style.display = "block";
+        $rootScope.showNav = false;
 
-        for (var i = 1; i <= 25; i++) {
-            await $scope.sleep(13);
-            document.getElementById("main").style.marginRight = (i + "%").toString();
-            if (document.getElementById("sideBar").style.marginRight.valueOf() < 0)
-            document.getElementById("sideBar").style.marginRight = (i + 30 + "%").toString();
-
-        }
-    };
-
-    $scope.sleep = function (ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
     };
 });

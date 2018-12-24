@@ -1,9 +1,9 @@
-﻿<div class="w3-container" style="margin-top:4.7%;margin-left:15%;">
-    <div class="w3-content w3-animate-bottom w3-round " >
+﻿<div style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+    <div class="w3-cell" id="pending">
         <h3>Welcome to your profile</h3>
         <h3 ng-if="role === 1">Pending orders from your apartments:</h3>
-        <div ng-if="userDetails.pendingOrders.length > 0" class=" w3-content w3-hover-text-purple" ng-repeat="orders in userDetails.pendingOrders track by $index" ng-controller="pendingOrdersController">
-            <div class="w3-card-2 w3-col w3-round" style="width:90%;background-color:white">
+        <div ng-if="userDetails.pendingOrders.length > 0"  ng-repeat="orders in userDetails.pendingOrders track by $index" ng-controller="pendingOrdersController">
+            <div>
                 <a ui-sref="ProfileParent.CurrentUserApartmentView({userName:userDetails.userName,apartmentID:orders.apartmentID})">
                     <h5 class="w3-border-bottom">Orderd from: {{orders.userName}}</h5>
                     <h5 class="w3-border-bottom">Check-In:{{orders.fromDate}}</h5>
@@ -12,9 +12,9 @@
                     <h5 class="w3-border-bottom">Price:{{orders.price}}</h5>
                 </a>
                 <button class="w3-button w3-green w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,true)">Approve</button>
-                <button class="w3-button w3-red w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,false)">Decline</button><br /><br />
+                <button class="w3-button w3-red w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,false)">Decline</button>
             </div>
-        
+
         </div>
         <div ng-if="userDetails.pendingOrders.length <= 0">
             <h4>No Pending Orders here for now</h4>

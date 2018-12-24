@@ -1,9 +1,9 @@
-﻿<center >
-    <form name="LoginForm" class="w3-container w3-center w3-padding-32 w3-animate-bottom w3-round" style="width:50%;margin-top:9.7%;background-color:white">
-        <h4>User Name:</h4><input name="userName" class="w3-input" maxlength="10" style="width:40%;margin-left:30%" type="text" ng-model="$parent.loginUserName" required />
+﻿<center style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center" >
+    <form  name="LoginForm" class="w3-content w3-mobile w3-cell  w3-animate-bottom w3-round" style="width:100%;">
+        <h4>User Name:</h4><input id="Login" name="userName" class="w3-input w3-mobile" maxlength="10" style="width:60%;max-width:244.391px;" type="text" ng-model="$parent.loginUserName" required />
         <br />
-        <h4>Password:</h4><input name="password" class="w3-input" maxlength="8" style="width:40%;margin-left:30%" type="password" ng-model="$parent.loginPassword" required /><br />
-        <button class="w3-button w3-purple w3-round w3-hover-blue" ng-click="login()">Send</button>
+        <h4>Password:</h4><input  id="Login" name="password" class="w3-input w3-mobile" maxlength="8" style="width:60%;max-width:244.391px;" type="password" ng-model="$parent.loginPassword" required /><br />
+        <button class="w3-button w3-mobile w3-cell w3-round w3-purple w3-hover-blue"ng-click="login()">Send</button>
         <span id="errorLogin" ng-show="errorLoginDisplay">error somthing went wrong</span>
     </form>
 </center>

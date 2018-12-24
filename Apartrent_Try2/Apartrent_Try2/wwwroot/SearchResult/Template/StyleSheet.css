@@ -1,0 +1,20 @@
+﻿@media (min-width: 990px) {
+    #main {
+        padding-right: 25%;
+    }
+}
+
+@media (min-width: 1000px) {
+
+    #pending {
+        width: 700px;
+        margin-left: 211px;
+    }
+}
+@media (min-width: 990px) and (max-width:1005px) {
+
+    #pending {
+        width: 700px;
+        margin-left: 20%;
+    }
+}

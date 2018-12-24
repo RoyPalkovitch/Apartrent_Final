@@ -1,41 +1,41 @@
-﻿<div class="w3-sidebar w3-right w3-bar-block w3-card w3-animate-right" style="display:none;right:0;margin-top:4.7%;" id="sideBar">
-    <button class="w3-bar-item w3-button w3-large"
-            ng-click="closeSideBar()">
-        Close &times;
-    </button>
-    <form ng-controller="searchController">
-        <div>
-            <h4>Where would you like to travel?</h4>
-            <select class="w3-input w3-row-cell w3-hover-border-blue" ng-disabled="errorMessageDisplay" ng-model="searchCountryID" required id="countrySelect">
-                <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
-            </select>
-        </div>
-        <div class="w3-cell-row">
-            <div><h5>Check In:</h5><input class="w3-input w3-row-cell w3-hover-border-blue" ng-model="searchCheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" /></div>
-            <div><h5>Check Out:</h5><input class="w3-input w3-row-cell w3-hover-border-blue" min="{{searchCheckIn | date:'yyyy-MM-dd'}}" type="date" ng-model="searchCheckOut" /></div>
-        </div>
-        <div>
-            <h4>Guests:</h4> <select ng-model="searchGuests" class="w3-input w3-row-cell w3-hover-border-blue" ng-disabled="errorMessageDisplay">
-                <option ng-repeat="n in [].constructor(20) track by $index" ng-value="$index+1">{{$index+1}}</option>
-            </select>
-        </div><br />
-        <a class="w3-button w3-purple w3-round w3-hover-blue w3-center" ui-sref="SearchResult({countryID:searchCountryID,fromDate:searchCheckIn.toDateString(),toDate:searchCheckOut.toDateString(),guests:searchGuests})">Send</a>
-    </form>
-</div>
-
-<div id="main" class="w3-round  w3-animate-bottom " style="margin-left:1.0%;margin-top:4.7%;background-color:white;height:100%;">
- <h1 class="w3-center">Your Search Result:</h1>
-    <div class="w3-container"  ng-repeat="apartment in searchResult track by $index">
-        <a class="w3-card-4 w3-col w3-quarter" ng-click="setApartmentData(apartment)" ui-sref="ApartmentView({apartmentID:apartment.apartmentID,fromDate:apartment.fromDate,toDate:apartment.toDate,guests:apartment.numberOfGuests})">
-            <div class="w3-border w3-border-blue w3-hover-border-purple w3-round w3-content" style="background-color:white;">
-                <header> save spot for images</header>
-                <div><p>Address:{{apartment.address}}</p></div>
-                <div><p>Apartment Type:{{apartment.apartmentType}}</p></div>
-                <div><p>Days:{{apartment.totalNumberOfDays}}</p></div>
-                <div><p>Price for all days:{{apartment.priceForStaying}}</p></div>
-                <div><p>Price Per Day:{{apartment.pricePerDay}}</p></div>
+﻿
+    <div class="w3-sidebar w3-bar-block w3-hide-small w3-hide-medium w3-quarter w3-border" style="position:relative;right:0;">
+        <form class="w3-bar-item" ng-controller="searchController">
+            <div>
+                <h4 class="w3-bar-item">Where would you like to travel?</h4>
+                <select class="w3-bar-item w3-select w3-border-bottom" ng-disabled="errorMessageDisplay" ng-model="searchCountryID" required id="countrySelect">
+                    <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
+                </select>
             </div>
-        </a>
-        <!-- need to add rating,image -->
+            <div>
+                <div><h5 class="w3-bar-item">Check In:</h5><input class="w3-bar-item w3-input w3-border-bottom" ng-model="searchCheckIn" min="{{fromDate | date:'yyyy-MM-dd'}}" type="date" /></div>
+                <div><h5 class="w3-bar-item">Check Out:</h5><input class="w3-bar-item w3-input w3-border-bottom" min="{{searchCheckIn | date:'yyyy-MM-dd'}}" type="date" ng-model="searchCheckOut" /></div>
+            </div>
+            <div>
+                <h4 class="w3-bar-item ">Guests:</h4> <select class="w3-bar-item w3-select w3-border-bottom" ng-model="searchGuests" ng-disabled="errorMessageDisplay">
+                    <option ng-repeat="n in [].constructor(20) track by $index" ng-value="$index+1">{{$index+1}}</option>
+                </select>
+            </div><br />
+            <a class="w3-bar-item w3-button w3-purple w3-round" ui-sref="SearchResult({countryID:searchCountryID,fromDate:searchCheckIn.toDateString(),toDate:searchCheckOut.toDateString(),guests:searchGuests})">Send</a>
+        </form>
+    </div>
+
+<div class="w3-mobile" style="width:100%;display:flex;flex-wrap:wrap;flex-direction:column;justify-content:center;align-items:center;" id="main">
+
+    <h1>Your Search Result:</h1>
+    <div class="w3-content" style="display:flex;flex-wrap:wrap;">
+        <div class="w3-round-large w3-padding-16 w3-hover-shadow w3-mobile  w3-border" ng-repeat="apartment in searchResult track by $index">
+            <div style="cursor:pointer;text-align:center;" ng-click="setApartmentData(apartment)" ui-sref="ApartmentView({apartmentID:apartment.apartmentID,fromDate:apartment.fromDate,toDate:apartment.toDate,guests:apartment.numberOfGuests})">
+                <img /> save spot for images
+                <p>Address:{{apartment.address}}</p>
+                <p>Days:{{apartment.totalNumberOfDays}}</p>
+                <p>Price Per Day:{{apartment.pricePerDay}}</p>
+                <p>Price for Staying:{{apartment.priceForStaying}}</p>
+                <p>Apartment Type:{{apartment.apartmentType}}</p>
+            </div>
+
+            <!-- need to add rating,image -->
+        </div>
     </div>
 </div>
+<!--class="w3-padding-16 w3-round-large w3-hover-shadow w3-card-4 w3-cell w3-quarter"-->
