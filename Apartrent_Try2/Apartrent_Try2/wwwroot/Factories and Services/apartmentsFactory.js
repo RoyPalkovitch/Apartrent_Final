@@ -1,11 +1,14 @@
 ﻿var apartrentApp = angular.module('apartrentApp');
 
-apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location) {
+apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location,$rootScope) {
     var apartments = {};
     var countries = JSON.parse($window.sessionStorage.getItem("countriesData"));
     apartments.getApartments = function (searchParams) {
         if (searchParams.countryID && searchParams.guests && searchParams.fromDate && searchParams.toDate) {
+                $rootScope.reload = true;
             return $http.get('api/apartment/ApartmentLocation?countryID=' + searchParams.countryID + '&numberOfGuests=' + searchParams.guests + '&fromDate=' + searchParams.fromDate + '&toDate=' + searchParams.toDate).then(function (response) {
+                $rootScope.reload = false;
+
                 if (response.data) {
                     return response.data;
                 } else {
@@ -14,6 +17,8 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
             });
         }
         else {
+            $rootScope.reload = false;
+
             return $q.when();
         }
 
@@ -30,6 +35,7 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
     };
 
     apartments.currentApartmentData = function (searchParams) {
+            $rootScope.reload = true;
         return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
             if (response.data) {
                 response.data.countryName = countries[response.data.countryID - 1].countryName;
@@ -52,6 +58,7 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
                         response.data.priceForStaying = temp.priceForStaying;
                     }
                 }
+                $rootScope.reload = false;
 
                 return response.data;
             } else {

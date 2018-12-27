@@ -1,6 +1,6 @@
 ﻿var apartrentApp = angular.module('apartrentApp');
 
-apartrentApp.factory("startupResolve", function (countriesService, categoriesFactory,$window,$q,$http) {
+apartrentApp.factory("startupResolve", function (countriesService, categoriesFactory,$window,$q,$http,$rootScope) {
 
     var data = {};
 
@@ -10,11 +10,13 @@ apartrentApp.factory("startupResolve", function (countriesService, categoriesFac
         }
         else {
             return $http.get('api/countries').then(function (response) {
+                $rootScope.reload = true;
                 if (response.data) {
                     $window.sessionStorage.setItem('countriesData', JSON.stringify(response.data));
                 return $http.get("api/apartment/ApartmentType").then(function (response) {
                     if (response.data) {
                         $window.sessionStorage.setItem('categoriesData', JSON.stringify(response.data));
+                        $rootScope.reload = false;
                         return response;
                     }
                 });

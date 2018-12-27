@@ -1,22 +1,26 @@
-﻿<div style="margin-top:4.7%;margin-left:15%" class="w3-animate-bottom ">
-    <div class="w3-container w3-card w3-padding-16" ng-if="userDetails.orders.length > 0" ng-repeat="orders in userDetails.orders track by $index">
-        <a class="w3-content ">
-            <p class="w3-border-bottom">Renter Name: {{orders.renterUserName}}</p>
-            <p class="w3-border-bottom">Check-In: {{orders.fromDate}}</p>
-            <p class="w3-border-bottom">Check-Out: {{orders.toDate}}</p>
-            <p class="w3-border-bottom">Order Date: {{orders.orderDate}}</p>
-            <p class="w3-border-bottom">Price: {{orders.price}}</p>
-            
-            <span ng-switch="orders.approved">
-                Status:
-                <span class="w3-purple" ng-switch-when="null">Pending</span>
-                <span class="w3-green" ng-switch-when="true">Approved!</span>
-                <span class="w3-red" ng-switch-when="false">Declined</span>
-            </span>
-        </a>
+﻿<center class="w3-animate-bottom" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+    <div class="w3-cell" id="status">
+        <div style="width:100%" ng-if="userDetails.orders.length > 0">
+            <h3>Your Purches:</h3>
+            <div class="w3-border" ng-repeat="orders in userDetails.orders track by $index">
+                <a>
+                    <p class="w3-border-bottom">Renter Name: {{orders.renterUserName}}</p>
+                    <p class="w3-border-bottom">Check-In: {{orders.fromDate}}</p>
+                    <p class="w3-border-bottom">Check-Out: {{orders.toDate}}</p>
+                    <p class="w3-border-bottom">Order Date: {{orders.orderDate}}</p>
+                    <p class="w3-border-bottom">Price: {{orders.price}}</p>
 
+                    <span ng-switch="orders.approved">
+                        Status:
+                        <span class="w3-purple w3-mobile w3-border-bottom" ng-switch-when="null">Pending</span>
+                        <span class="w3-green w3-mobile w3-border-bottom" ng-switch-when="true">Approved!</span>
+                        <span class="w3-red w3-mobile w3-border-bottom" ng-switch-when="false">Declined</span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
+            <a ui-sref="index"><h6>It seems like you havent purches any thing click here and start to travel</h6></a>
+        </div>
     </div>
-    <div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
-        <a ui-sref="index">It seems like you havent purches any thing click here and start to travel</a>
-    </div>
-</div>
+</center>

@@ -18,11 +18,13 @@ profileController.controller('profileController', function ($scope, $window, $ro
         $scope.deleteoptOn = false;
 
     $rootScope.showNav = true;
-    $scope.closeSideBar = function () {
+
+    $scope.closeTopBar = function () {
         document.getElementById("mySidebar").style.display = "none";
         $rootScope.showNav = true;
 
     };
+    $scope.closeTopBar();
     $scope.$on('$destroy', function () {
         $rootScope.showNav = false;
     });

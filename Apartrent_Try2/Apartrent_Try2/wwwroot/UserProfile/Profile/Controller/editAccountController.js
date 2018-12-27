@@ -2,6 +2,7 @@
 
 editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile) {
 
+    //$scope.closeTopBar();
 
     $scope.editedGender = $rootScope.userDetails.gender ? "Male" : "Female";
 

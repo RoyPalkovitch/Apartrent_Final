@@ -1,29 +1,29 @@
-﻿<div class="w3-container w3-animate-bottom" style="margin-top:6%;margin-left:15%">
-<h1>Edit Apartment:</h1>
-    <form class="w3-content">
-        <h6>Apartment Category:</h6><select style="width:30%" class="w3-select" ng-model="$parent.editCategoryID">
+﻿<center class=" w3-animate-bottom" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+    <h1>Edit Apartment:</h1>
+    <form style="width:100%">
+        <h6>Apartment Category:</h6><select style="width:100%;max-width:244.391px;" class="w3-select" ng-model="$parent.editCategoryID">
             <option ng-repeat="category in categories" ng-value="category.categoryID">{{category.apartmentType}}</option>
         </select>
         <br />
-        <h6>Address:</h6> <input style="width:30%" class="w3-input" placeholder="{{$parent.userDetails.currentApartment.address}}" ng-model="$parent.editAddress" type="text" />
+        <h6>Address:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" placeholder="{{$parent.userDetails.currentApartment.address}}" ng-model="$parent.editAddress" type="text" />
         <br />
-        <h6>Select country:</h6><select style="width:30%" class="w3-select" ng-model="$parent.editCountryID">
+        <h6>Select country:</h6><select style="width:100%;max-width:244.391px;" class="w3-select" ng-model="$parent.editCountryID">
             <option ng-repeat="country in countries track by $index" ng-value="country.countryID">{{country.countryName}}</option>
         </select>
         <br />
-        <h6>From Date:</h6> <input style="width:30%" class="w3-input" type="date" ng-model="$parent.editFromDate" />
+        <h6>From Date:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" type="date" ng-model="$parent.editFromDate" />
         <br />
 
-        <h6>To Date:</h6> <input style="width:30%" class="w3-input" type="date" min="{{editFromDate| date:'yyyy-MM-dd'}}" ng-model="$parent.editToDate" />
+        <h6>To Date:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" type="date" min="{{editFromDate| date:'yyyy-MM-dd'}}" ng-model="$parent.editToDate" />
         <br />
 
-        <h6>Price Per Day:</h6><input style="width:30%" class="w3-input" type="number" placeholder="{{$parent.userDetails.currentApartment.pricePerDay}}" ng-model="$parent.editPricePerDay" />
+        <h6>Price Per Day:</h6><input style="width:100%;max-width:244.391px;" class="w3-input" type="number" placeholder="{{$parent.userDetails.currentApartment.pricePerDay}}" ng-model="$parent.editPricePerDay" />
         <br />
-        <h6>Number Of Guests</h6> <select ng-model="searchGuests" class="w3-select w3-cell" style="width:30%">
+        <h6>Number Of Guests</h6> <select ng-model="searchGuests" class="w3-select w3-cell" style="width:100%;max-width:244.391px;">
             <option ng-repeat="n in [].constructor(20) track by $index" ng-value="$index+1">{{$index+1}}</option>
         </select>
         <br />
-        <h6>Description:</h6> <textarea style="width:30%" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.description}}" ng-model="$parent.editDescription"></textarea>
+        <h6>Description:</h6> <textarea style="width:100%;max-width:244.391px;resize:none" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.description}}" ng-model="$parent.editDescription"></textarea>
         <br />
         <h5>Advance Edit:  <input type="checkbox" class="w3-check w3-round" ng-model="$parent.showFeatures" /></h5><br />
         <div class="w3-content" ng-show="showFeatures">
@@ -37,16 +37,16 @@
                 Pets:<input class="w3-input w3-check w3-cell" ng-model="$parent.editIsPets" type="checkbox" ng-checked="$parent.userDetails.currentApartment.pets" />
                 Living Room:<input class="w3-input w3-check w3-cell" ng-model="$parent.editIsLivingRoom" ng-checked="$parent.userDetails.currentApartment.livingRoom" type="checkbox" />
             </div><br />
-            <h6>Number of Bed Rooms: </h6><input style="width:30%" class="w3-input" placeholder="{{$parent.userDetails.currentApartment.numberOfBedRooms}}" ng-model="$parent.editNumberOfBedRooms" type="number" />
-            <h6>BedRoom Description:</h6><textarea style="width:30%" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.bedRoomDescription}}" ng-model="$parent.editBedRoomDescription"></textarea>
-            <h6>Living Room Description:</h6><textarea style="width:30%" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.livingRoomDescription}}" ng-model="$parent.editLivingRoomDescription"></textarea>
-            <h6>Queen Size Bed:</h6> <input style="width:30%" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.queenSizeBed}}" ng-model="$parent.editQueenSizeBed" type="number" />
-            <h6>Double Bed:</h6> <input style="width:30%" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.doubleBed}}" ng-model="$parent.editDoubleBed" type="number" />
-            <h6>Single Bed: </h6><input style="width:30%" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.singleBed}}" ng-model="$parent.editSingleBed" type="number" />
-            <h6>Sofa Bed:</h6> <input style="width:30%" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.sofaBed}}" ng-model="$parent.editSofaBed" type="number" />
-            <h6>Beds Description:</h6> <textarea style="width:30%" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.bedsDescription}}" ng-model="$parent.editBedsDescription"></textarea>
+            <h6>Number of Bed Rooms: </h6><input style="width:100%;max-width:244.391px;" class="w3-input" placeholder="{{$parent.userDetails.currentApartment.numberOfBedRooms}}" ng-model="$parent.editNumberOfBedRooms" type="number" />
+            <h6>BedRoom Description:</h6><textarea style="resize:none;width:100%;max-width:244.391px;" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.bedRoomDescription}}" ng-model="$parent.editBedRoomDescription"></textarea>
+            <h6>Living Room Description:</h6><textarea style="width:100%;max-width:244.391px;resize:none" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.livingRoomDescription}}" ng-model="$parent.editLivingRoomDescription"></textarea>
+            <h6>Queen Size Bed:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.queenSizeBed}}" ng-model="$parent.editQueenSizeBed" type="number" />
+            <h6>Double Bed:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.doubleBed}}" ng-model="$parent.editDoubleBed" type="number" />
+            <h6>Single Bed: </h6><input style="width:100%;max-width:244.391px;" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.singleBed}}" ng-model="$parent.editSingleBed" type="number" />
+            <h6>Sofa Bed:</h6> <input style="width:100%;max-width:244.391px;" class="w3-input" min="0" placeholder="{{$parent.userDetails.currentApartment.sofaBed}}" ng-model="$parent.editSofaBed" type="number" />
+            <h6>Beds Description:</h6> <textarea style="resize:none;width:100%;max-width:244.391px;" class="w3-input w3-border" placeholder="{{$parent.userDetails.currentApartment.bedsDescription}}" ng-model="$parent.editBedsDescription"></textarea>
         </div>
         <br />
         <a class="w3-button w3-purple w3-round w3-hover-blue" ng-click="editApartment()" ng-href="yourProfile/{{userDetails.userName}}/userApartments.html">Save</a>
     </form>
-</div>
+</center>

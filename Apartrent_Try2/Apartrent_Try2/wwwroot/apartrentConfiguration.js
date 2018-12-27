@@ -9,7 +9,12 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
         .state("root",
             {
                 url: "/index.html",
-                redirectTo: "index"
+                redirectTo: "index",
+                resolve: {
+                    promiseData: function (startupResolve) {
+                        return startupResolve.getData();
+                    }
+                }
             })
         .state("/index",
             {
@@ -160,7 +165,7 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
             templateUrl: "PageNotFound.html"
         });
 
-    $urlRouterProvider.otherwise("Pagenotfound");
+    $urlRouterProvider.otherwise("Pagenotfound.html");
     $locationProvider.html5Mode(true);
 
 });

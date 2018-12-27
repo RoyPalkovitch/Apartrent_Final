@@ -36,10 +36,13 @@ editApartmentController.controller('editApartmentController', function ($scope, 
             $scope.showFeatures = false;
         $http.put("api/apartment?editFeature=" + $scope.showFeatures, $scope.editedApartment, userProfile.config)
             .then(function (response) {
+                $rootScope.reload = true;
                 if (response.data) {
                     $rootScope.userDetails.currentApartment = '';
+                    $rootScope.reload = false;
                     $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex] = $scope.editedApartment;
                     userProfile.setData($rootScope.userDetails);
+
                     return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
 
                 }

@@ -1,4 +1,4 @@
-﻿<div style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+﻿<div class="w3-animate-bottom " style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
     <div class="w3-cell" id="pending">
         <h3>Welcome to your profile</h3>
         <h3 ng-if="role === 1">Pending orders from your apartments:</h3>
@@ -11,8 +11,8 @@
                     <h5 class="w3-border-bottom">Order Date:{{orders.orderDate}}</h5>
                     <h5 class="w3-border-bottom">Price:{{orders.price}}</h5>
                 </a>
-                <button class="w3-button w3-green w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,true)">Approve</button>
-                <button class="w3-button w3-red w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,false)">Decline</button>
+                <button class="w3-button w3-mobile w3-green w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,true)">Approve</button>
+                <button class="w3-button w3-mobile w3-red w3-round w3-hover-blue" ng-click="changeOrderStatus(orders,false)">Decline</button>
             </div>
 
         </div>

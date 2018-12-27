@@ -1,7 +1,10 @@
 ﻿var searchedApartmentReviewsController = angular.module('searchedApartmentReviewsController', []);
 
 searchedApartmentReviewsController.controller('searchedApartmentReviewsController', function ($scope, userProfile, $http, $rootScope) {
-    if ($rootScope.userDetails !== "" && $rootScope.userDetails !== undefined){
+
+
+
+    if ($rootScope.userDetails !== "" && $rootScope.userDetails !== undefined) {
         $scope.newReview = function (apartmentID) {
             $scope.review = {
                 description: $scope.reviewDescription,
@@ -9,10 +12,12 @@ searchedApartmentReviewsController.controller('searchedApartmentReviewsControlle
                 apartmentID: apartmentID
             };
             $http.post("api/reviews", $scope.review, userProfile.config).then(function (response) {
+                $rootScope.reload = true;
                 if (response.data && response.data > 0) {
                     $scope.review.reviewID = response.data;
                     $scope.reviewDescription = '';
                     $scope.review.userName = $rootScope.userDetails.userName;
+                    $rootScope.reload = false;
                     $rootScope.$broadcast("AddReview", { review: $scope.review }); // all the events catches in viewApartmentController
                 }
 
@@ -25,7 +30,10 @@ searchedApartmentReviewsController.controller('searchedApartmentReviewsControlle
                 reviewID: review.reviewID
             };
             $http.post("api/reviews/Delete", $scope.delReview, userProfile.config).then(function (response) {
+                $rootScope.reload = true;
                 if (response.data) {
+                    $rootScope.reload = false;
+
                     $rootScope.$broadcast("DeleteReview", { delData: index });
                 }
             });
@@ -40,16 +48,17 @@ searchedApartmentReviewsController.controller('searchedApartmentReviewsControlle
             };
             $scope.currentReview = -1;
             $http.put("api/reviews", $scope.editedReview, userProfile.config).then(function (response) {
+                $rootScope.reload = true;
                 if (response.data) {
                     $scope.editedReview.userName = $rootScope.userDetails.userName;
+                    $rootScope.reload = false;
                     $rootScope.$broadcast("EditReview", { reviewIndex: index, reviewData: $scope.editedReview });
                 }
             });
         };
-
         $scope.editReviewHandler = function (index) {//Change the review view in the ui to see the apartment that being edit
             $scope.currentReview = index;
-            $scope.noEditReview = true;
+            $rootScope.noEditReview = !$rootScope.noEditReview;
         };
     }
 

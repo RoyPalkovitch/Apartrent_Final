@@ -2,6 +2,8 @@
 
 addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location) {
 
+    if ($rootScope.showNav === undefined)
+        $rootScope.showNav = true;
 
     $scope.addApartment = function (notRenterYet) {
         $scope.newApartment = {// add new apartment object
@@ -30,9 +32,12 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             sofaBed: $scope.sofaBed ? $scope.sofaBed : 0,
             bedsDescription: $scope.bedsDescription
         };
-        
+
         $http.post("api/apartment", $scope.newApartment, userProfile.config).then(function (response) {
+            $rootScope.reload = true;
             if (response.data) {
+                $rootScope.reload = false;
+
                 if (notRenterYet) {// add new apartment if the user wasnt renter before 
                     userProfile.setToken(response.data.token);
                     $rootScope.role = 1;
@@ -46,6 +51,8 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
                 userProfile.setData($rootScope.userDetails);
                 return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
             } else {
+                $rootScope.reload = false;
+
                 return false; // need to make an error message
             }
         });

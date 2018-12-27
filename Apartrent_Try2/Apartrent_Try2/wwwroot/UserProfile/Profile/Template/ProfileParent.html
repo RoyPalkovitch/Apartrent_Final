@@ -1,25 +1,29 @@
-﻿<div>
-    <div class="w3-sidebar w3-bar-block w3-purple w3-animate-left w3-hide-small w3-hide-medium">
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16">save spot for image<img /></a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ng-if="deleteoptOn">Delete User</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-border-black w3-padding-16" ng-if="deleteoptOn&&role===1">Delete renter status</a>
-    </div>
+﻿<div style="width:100%">
 
-    <div class="w3-hide-large w3-mobile w3-purple" style="height:100%;width:100%">
-        <div class="" style="display:none" id="mySidebar">
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple">save spot for image<img /></a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn">Delete User</a>
-            <a class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn&&role===1">Delete renter status</a>
-            <button ng-click="closeSideBar()" class="w3-red w3-mobile w3-button w3-large">Close &times;</button>
+    <div class="w3-hide-large w3-mobile w3-purple">
+        <div style="display:none;"id="mySidebar">
+            <div class=" w3-mobile w3-button w3-hover-blue w3-purple" style="width:100%;max-width:320px"> <img style="width:50%"  src="/ApartrentPhotos/Bath_Available.jpg" class="w3-circle  w3-padding-16" /></div>
+            <div class=" w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn">Delete User</div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn&&role===1">Delete renter status</div>
+            <button ng-click="closeTopBar()" class="w3-red w3-mobile w3-button w3-large">Close &times;</button>
         </div>
     </div>
-    <ui-view></ui-view>
+
+
+    <div class="w3-sidebar w3-bar-block w3-purple w3-animate-left w3-hide-small w3-hide-medium">
+      <img style="width:70px;height:70px"  src="/ApartrentPhotos/Bath_Available.jpg" class="w3-circle" />
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</a>
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ng-if="deleteoptOn">Delete User</a>
+        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ng-if="deleteoptOn&&role===1">Delete renter status</a>
+    </div>
+
+
 </div>
+    <ui-view></ui-view>

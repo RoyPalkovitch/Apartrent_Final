@@ -1,26 +1,26 @@
-﻿<form style="margin-left:15%;" class="w3-animate-bottom">
-    <div class=" w3-card-2 w3-quarter"  ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
+﻿<div class="w3-animate-bottom" style="margin-top:20px;width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+    <div class="w3-card-2 w3-round-large" style="width:40%;" ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
         <div ng-show="currentReview != $index">
 
-            {{$index+1}}.
-            <p>Description:{{review.description}}</p>
+          
+            <p>{{$index+1}}. Description:{{review.description}}</p>
             <p>Rate:{{review.rating}}</p>
             <div>
-                <button class="w3-button w3-round w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
-                <button class="w3-button w3-round w3-red" ng-click="deleteReview(review,$index)">Delete Review</button>
+                <button class="w3-button w3-round w3-mobile w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
+                <button class="w3-button w3-round w3-red w3-mobile"  ng-click="deleteReview(review,$index)">Delete Review</button>
             </div>
         </div>
-        <div class="w3-content w3-card-2" ng-show="currentReview == $index">
-            <textarea class="w3-input" placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
-            <h6>Current Rating:  {{$parent.editRating}}</h6><input class="w3-input" type="range" min="1" max="5" ng-model="$parent.editRating" />
+        <div ng-show="currentReview == $index">
+            <textarea style="width:100%;max-width:244.391px;resize:none"  class="w3-input" placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
+            <h6>Current Rating:  {{$parent.editRating}}</h6><input type="range" min="1" max="5" ng-model="$parent.editRating" />
             <div>
-                <button class="w3-button w3-round w3-green" ng-click="editReview(review,$index)">Send Review</button>
-                <button class="w3-button w3-round w3-red" ng-click="editReviewHandler(-1)">Close edit</button>
+                <button class="w3-button w3-round w3-mobile w3-green" ng-click="editReview(review,$index)">Send Review</button>
+                <button class="w3-button w3-round w3-mobile w3-red" ng-click="editReviewHandler(-1)">Close edit</button>
             </div>
         </div>
     </div>
-    <center ng-if="userDetails.reviews.length <= 0 || userDetails.reviews === undefiend">
-        
-        <h2 style="margin-top:10%">No reviews yet, dont forget to review the apartments you have rent, better reviews = better staying next time :D</h2>
+    <center style="width:60%" ng-if="userDetails.reviews.length <= 0 || userDetails.reviews === undefiend">
+
+        <h2>No reviews yet, dont forget to review the apartments you have rent, better reviews = better staying next time :D</h2>
     </center>
-</form>
+</div>

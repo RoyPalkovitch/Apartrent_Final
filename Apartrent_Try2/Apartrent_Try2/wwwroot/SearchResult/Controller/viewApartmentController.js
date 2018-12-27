@@ -5,7 +5,7 @@ viewApartment.controller('viewApartmentController', function ($scope, $rootScope
     if ($scope.currentApartmentData === undefined)
         $scope.currentApartmentData = apartmentData;
 
-
+    $rootScope.noEditReview = true;
     if ($rootScope.userDetails !== "" && $rootScope.userDetails !== undefined) {
 
      

@@ -9,9 +9,13 @@ searchResultController.controller('searchResultController', function ($scope, $r
         apartmentsFactory.lastSearchParams(data);
     };
 
+    $scope.closeTopBar = function () {
+        document.getElementById("mySidebar").style.display = "none";
+        $rootScope.showNav = true;
 
-    if ($location.path().includes("SearchResult/"))
-         $rootScope.showNav = true;
+    };
+    $scope.closeTopBar();
+    $rootScope.showNav = true;
 
     $scope.$on('$destroy', function () {
         $rootScope.showNav = false;

@@ -5,9 +5,12 @@ pendingOrdersController.controller('pendingOrdersController', function ($scope, 
     $scope.changeOrderStatus = function (order, tempApprove) {
         order.approved = tempApprove;
         $http.put("api/orders", order, userProfile.config).then(function (response) {
+            $rootScope.reload = true;
             if (response.data) {
                 $rootScope.userDetails.pendingOrders = response.data;
                 $rootScope.userDetails.pendingNotification = $rootScope.userDetails.pendingOrders.length;
+                $rootScope.reload = false;
+
                 userProfile.setData($rootScope.userDetails);
             }
         });

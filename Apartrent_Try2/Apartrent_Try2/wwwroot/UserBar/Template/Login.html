@@ -1,9 +1,12 @@
-﻿<center style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center" >
-    <form  name="LoginForm" class="w3-content w3-mobile w3-cell  w3-animate-bottom w3-round" style="width:100%;">
-        <h4>User Name:</h4><input id="Login" name="userName" class="w3-input w3-mobile" maxlength="10" style="width:60%;max-width:244.391px;" type="text" ng-model="$parent.loginUserName" required />
+﻿<center style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
+    <form name="LoginForm" class="w3-content w3-mobile w3-cell  w3-animate-bottom w3-round" style="width:100%;">
+        <h4>User Name:</h4><input autocomplete="on" autofocus name="userName" class="w3-input w3-mobile" maxlength="10" style="width:60%;max-width:244.391px;" type="text" ng-model="$parent.loginUserName" required />
         <br />
-        <h4>Password:</h4><input  id="Login" name="password" class="w3-input w3-mobile" maxlength="8" style="width:60%;max-width:244.391px;" type="password" ng-model="$parent.loginPassword" required /><br />
-        <button class="w3-button w3-mobile w3-cell w3-round w3-purple w3-hover-blue"ng-click="login()">Send</button>
-        <span id="errorLogin" ng-show="errorLoginDisplay">error somthing went wrong</span>
+        <h4>Password:</h4><input autocomplete="on" name="password" class="w3-input w3-mobile" maxlength="8" style="width:60%;max-width:244.391px;" type="password" ng-model="$parent.loginPassword" required /><br />
+        <button class="w3-button w3-mobile w3-cell w3-round w3-purple w3-hover-blue" ng-click="login()">Send</button>
     </form>
+    <div auto ng-show="errorMessage" class="w3-panel w3-red">
+        <span class="w3-right w3-button w3-hover-none" ng-click="errorMessage = false">&times;</span>
+        <h3>Error user name or password is invalid</h3>
+    </div>
 </center>

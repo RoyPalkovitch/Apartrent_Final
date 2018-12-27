@@ -1,76 +1,112 @@
-﻿<div style="margin-top:4.7%;margin-left:15%" class="renterProfileContent">
+﻿<div class=" w3-animate-bottom" style="width:100%;display:flex;flex-direction:row;flex-wrap:wrap;justify-content:center;align-items:center;">
 
 
-    <div>
+    <div style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center;">
 
         <p>
             <img /> save spot for imgs
         </p>
 
         <br />
-        <p>{{userDetails.currentApartment.address}}</p>
+        <address>Address:{{userDetails.currentApartment.address}}</address>
 
         <p>
-            {{userDetails.currentApartment.pricePerDay}}
+            Price per day:{{userDetails.currentApartment.pricePerDay}}
         </p>
 
-        <p>{{countries[userDetails.currentApartment.countryID-1].countryName}}</p>
-        <p>{{userDetails.currentApartment.apartmentType}}</p>
-        <p>{{userDetails.currentApartment.description}}</p>
+        <p>Country:{{countries[userDetails.currentApartment.countryID-1].countryName}}</p>
+        <p>Apartment type:{{userDetails.currentApartment.apartmentType}}</p>
+        <p>Description:{{userDetails.currentApartment.description}}</p>
 
         <h3>Apartment Features:</h3><input type="checkbox" ng-model="selectFeat" />
-        <div ng-show="selectFeat">
+        <div style="max-height:644px;width:100%" ng-show="selectFeat">
 
-            <p>{{userDetails.currentApartment.numberOfGuests}}</p>
+            <table class="w3-table w3-border w3-sand w3-content " style="width:50%">
+                <!--style="width:250px;float:left"-->
+                <tr>
+                    <td>
+                        <h5>Living room:</h5>
+                        <img ng-if="currentApartmentData.livingRoom" src="../../ApartrentPhotos/living_room_Available.jpg" />
+                        <img ng-if="!currentApartmentData.livingRoom" src="../../ApartrentPhotos/living_room_UnAvailable.jpg" />
+                    </td>
+                    <td>
+                        <h5>TV:</h5> <img ng-if="currentApartmentData.tv" style="height:45px;width:45px" src="../../ApartrentPhotos/TV_available.jpg" />
+                        <img ng-if="!currentApartmentData.tv" style="height:45px;width:45px" src="../../ApartrentPhotos/TV_Unavailable.jpg" />
+                    </td>
+                </tr>
+                <tr>
 
-            <p>{{userDetails.currentApartment.shower}}</p>
-            <p>{{userDetails.currentApartment.wifi}}</p>
-            <p>{{userDetails.currentApartment.tv}}</p>
-            <p>{{userDetails.currentApartment.cables}}</p>
-            <p>{{userDetails.currentApartment.satellite}}</p>
-            <p>{{userDetails.currentApartment.pets}}</p>
-            <p>{{userDetails.currentApartment.bath}}</p>
-            <p>{{userDetails.currentApartment.livingRoom}}</p>
-            <p>{{userDetails.currentApartment.livingRoomDescription}}</p>
+                    <td>
+                        <h5>Cables TV:</h5>
+                        <img ng-if="currentApartmentData.cables" style="height:45px;width:45px" src="../../ApartrentPhotos/Cable_Available.jpg" />
+                        <img ng-if="!currentApartmentData.cables" style="height:45px;width:45px" src="../../ApartrentPhotos/Cable_UnAvailable.jpg" />
+                    </td>
+                    <td>
+                        <h5>Satellite TV:</h5>
+                        <img ng-if="currentApartmentData.satellite" style="height:45px;width:45px" src="../../ApartrentPhotos/satellite_Available.jpg" />
+                        <img ng-if="!currentApartmentData.satellite" style="height:45px;width:45px" src="../../ApartrentPhotos/satellite_UnAvailable.jpg" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h5>Pets:</h5>
+                        <img ng-if="currentApartmentData.pets" style="height:45px;width:45px" src="../../ApartrentPhotos/pets_available.jpg" />
+                        <img ng-if="!currentApartmentData.pets" style="height:45px;width:45px" src="../../ApartrentPhotos/pets_Unavailable.jpg" />
+                    </td>
+                    <td>
+                        <h5>Wifi:</h5>
+                        <img ng-if="currentApartmentData.wifi" style="height:45px;width:45px" src="../../ApartrentPhotos/wifi_available.jpg" />
+                        <img ng-if="!currentApartmentData.wifi" style="height:45px;width:45px" src="../../ApartrentPhotos/wifi_Unavailable.jpg" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <h5>Bath:</h5>
+                        <img ng-if="currentApartmentData.bath" style="height:45px;width:45px" src="../../ApartrentPhotos/Bath_Available.jpg" />
+                        <img ng-if="!currentApartmentData.bath" style="height:45px;width:45px" src="../../ApartrentPhotos/Bath_UnAvailable.jpg" />
+                    </td>
+                    <td>
+                        <h5>Shower:</h5>
+                        <img ng-if="currentApartmentData.shower" src="../../ApartrentPhotos/Shower_Available.jpg" />
+                        <img ng-if="!currentApartmentData.shower" src="../../ApartrentPhotos/Shower_UnAvailable.jpg" />
+                    </td>
 
-            <p>{{userDetails.currentApartment.numberOfBedRooms}}</p>
+                </tr>
+            </table>
+        </div>
+    </div>
 
-            <p>{{userDetails.currentApartment.bedRoomDescription}}</p>
-            <p>{{userDetails.currentApartment.queenSizeBed}}</p>
-            <p>{{userDetails.currentApartment.doubleBed}}</p>
-            <p>{{userDetails.currentApartment.singleBed}}</p>
-            <p>{{userDetails.currentApartment.sofaBed}}</p>
-            <p>{{userDetails.currentApartment.bedsDescription}}</p>
+    <br />
+    <div style="width:100%;max-height:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center;">
+        <h3>Show Reviews:</h3><input type="checkbox" ng-model="selectRev" ng-click="getApartmentReviews()">
+        <div class="w3-card-2 w3-round" style="width:30%" ng-repeat="review in userDetails.currentApartment.reviews track by $index" ng-show="selectRev">
+            <div>
+                <p>UserName:{{review.userName}}</p>
+                <p>Description:{{review.description}}</p>
+                <p>Rating:{{review.rating}}</p>
+            </div>
+            <br />
+        </div>
+        <div ng-if="userDetails.currentApartment.reviews.length === 0" ng-show="selectRev">
+            <h4>Sorry no reviews yet but keep on trying</h4>
         </div>
     </div>
     <br />
+    <div style="width:100%;max-height:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center;">
 
-    Show Reviews:<input type="checkbox" ng-model="selectRev" ng-click="getApartmentReviews()">
-    <div ng-repeat="review in userDetails.currentApartment.reviews track by $index" ng-show="selectRev">
-        <div>
-            {{review.userName}}
-            {{review.description}}
-            {{review.rating}}
+        <h3>Apartment Approve Orders:</h3><input type="checkbox" ng-model="selectOrders" ng-click="getApartmentOrders()">
+        <div class="w3-card-2 w3-round" style="width:30%" ng-repeat="order in userDetails.currentApartment.orders track by $index" ng-show="selectOrders">
+            <div>
+                <p>From:{{order.userName}}</p>
+                <p>Check-In:{{order.fromDate}}</p>
+                <p>Check-Out:{{order.toDate}}</p>
+                <p>Order Date:{{order.orderDate}}</p>
+                <p>Price:{{order.price}}</p>
+            </div>
+            <br />
         </div>
-        <br />
-    </div>
-    <div ng-if="userDetails.currentApartment.reviews.length === 0" ng-show="selectRev">
-        <h4>Sorry no reviews yet but keep on trying</h4>
-    </div>
-    <br />
-    <br />
-    Apartment Approve Orders:<input type="checkbox" ng-model="selectOrders" ng-click="getApartmentOrders()">
-    <div ng-repeat="order in userDetails.currentApartment.orders track by $index" ng-show="selectOrders">
-        <div>
-            <p>From:{{order.userName}}</p>
-            <p>Check-In:{{order.fromDate}}</p>
-            <p>Check-Out:{{order.toDate}}</p>
-            <p>Order Date:{{order.orderDate}}</p>
-            <p>Price:{{order.price}}</p>
+        <div ng-if="userDetails.currentApartment.orders.length === 0" ng-show="selectOrders">
+            <h4>No Approved orders yet</h4>
         </div>
-        <br />
-    </div>
-    <div ng-if="userDetails.currentApartment.orders.length === 0" ng-show="selectOrders">
-        <h4>Sorry no orders yet but keep on trying</h4>
     </div>
 </div>
