@@ -11,6 +11,7 @@ userApartmentsController.controller('userApartmentsController', function ($scope
                 $rootScope.userDetails.renterApartments.splice(apartmentIndex, 1);
                 userProfile.setData($rootScope.userDetails);
             }
+            //wew
         });
     };
 
