@@ -25,6 +25,9 @@ loginController.controller('loginController', function ($scope, $rootScope, $win
 
                 return window.history.back();
             }
+            $rootScope.reload = false;
+            $scope.errorMessage = true;
+
             return false;
         });
 

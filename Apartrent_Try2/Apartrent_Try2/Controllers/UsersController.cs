@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static System.Net.Mime.MediaTypeNames;
+
 namespace Apartrent_Try2.Controllers
 {
     [Route("api/[controller]")]
@@ -14,7 +17,7 @@ namespace Apartrent_Try2.Controllers
     {
         [HttpGet("Login")]
         public Users Login([FromQuery]Users users)
-        {          
+        { 
             return DB.UsersDB.Login(users);
         }
 
@@ -58,9 +61,12 @@ namespace Apartrent_Try2.Controllers
         [HttpPost]
         public bool SignUp([FromBody]Users user)
         {
+            
             PasswordHash hash = new PasswordHash();
             user.Password = hash.Hash(user.Password);
-            return DB.UsersDB.SignUp(user);
+            // return DB.UsersDB.SignUp(user);
+            return true;
         }
+
     }
 }

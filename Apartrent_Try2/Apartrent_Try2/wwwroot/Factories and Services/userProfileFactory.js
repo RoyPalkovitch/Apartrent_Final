@@ -1,7 +1,7 @@
 ﻿
 var apartrentApp = angular.module('apartrentApp');
 
-apartrentApp.factory("userProfile", function ($rootScope, $window, $http) {
+apartrentApp.factory("userProfile", function ($rootScope, $window, $http, $timeout) {
     var userProfile = {};
     userProfile.data = '';
 
@@ -16,6 +16,7 @@ apartrentApp.factory("userProfile", function ($rootScope, $window, $http) {
 
     userProfile.setToken = function (token) {
         if (token) {
+            this.refreshToken("temp");
             $window.sessionStorage.setItem("userToken", JSON.stringify(token));
             var config = {
                 headers: {
@@ -38,6 +39,21 @@ apartrentApp.factory("userProfile", function ($rootScope, $window, $http) {
         $window.sessionStorage.removeItem("userToken");
 
         return this.getData();
+    };
+
+    userProfile.refreshToken = function (firstTime) {
+        
+        if (!firstTime) {
+            $http.get("api/Users/NewToken", userProfile.config).then(function (response) {
+                if (response.data) {
+                    userProfile.setToken(response.data);
+                    $timeout(userProfile.refreshToken, 600000);
+                }
+            });
+        }
+        $timeout(this.refreshToken, 600000);
+        firstTime = null;
+
     };
     return userProfile;
 

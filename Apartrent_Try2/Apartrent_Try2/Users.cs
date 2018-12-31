@@ -1,12 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Apartrent_Try2
 {
     public class Users
     {
+        //private string userName;
+        //public string UserName { get { return userName; }
+        //    set {
+        //        if (value.Length > 5)
+        //            return;
+        //        else
+        //            userName = value;
+        //    } }
+        public object ProfileImage { get; set; }
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool Gender { get; set; }
@@ -23,7 +34,7 @@ namespace Apartrent_Try2
         public string Token { get; set; }
         public List<Apartment> RenterApartments { get; set; }
         public List<Orders> PendingOrders { get; set; }
-
+        
     }
 
     public enum Role

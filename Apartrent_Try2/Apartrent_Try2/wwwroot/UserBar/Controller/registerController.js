@@ -3,7 +3,7 @@
 
 var registerController = angular.module('registerController', []);
 
-registerController.controller('registerController', function ($scope, $http, $location, $window, $rootScope) {
+registerController.controller('registerController', function ($scope, $http, $location, fileReaderFactory, $window, $rootScope) {
     if ($window.sessionStorage.getItem("userToken"))
         $location.url("index");
 
@@ -14,8 +14,21 @@ registerController.controller('registerController', function ($scope, $http, $lo
     if ($rootScope.userDetails || $rootScope.userDetails === "Just Register") {
         $location.url('/index');
     }
-
+    $scope.newProfilePic = "../../ApartrentPhotos/index.jpg";
     $scope.signUp = function () {
+        var image = new Image();
+        image.src = $scope.newProfilePic;
+
+        var canvas = document.createElement("canvas");
+        canvas.width = 100;
+        canvas.height = 100;
+        image.width = 100;
+        image.height = 100;
+        image.onload = function () {
+            canvas.getContext('2d').drawImage(image, 0, 0);
+        };
+
+
         $scope.newUser = { // new user object
             userName: $scope.newUserName,
             password: $scope.newPassword,
@@ -25,8 +38,8 @@ registerController.controller('registerController', function ($scope, $http, $lo
             email: $scope.newEmail,
             firstName: $scope.newFirstName,
             lastName: $scope.newLastName,
-            CountryID: $scope.newCountryID
-
+            countryID: $scope.newCountryID,
+            profileImage: canvas.toDataURL().split("data:")[1]
         };
         if ($scope.newUser.userName.length > 10 || $scope.newUser.password.length > 10 ||
             $scope.newUser.address.length > 50 || $scope.newUser.phoneNumber.length > 15 ||
@@ -55,7 +68,16 @@ registerController.controller('registerController', function ($scope, $http, $lo
         });
     };
 
-    
+    $scope.imgUploadTry = function () {
+       
+        $http.post('api/users/userProfile', $scope.img)
+            .then(function (response) {
+                if (response) {
+                    $scope.profile = response.data;
+                }
+
+            });
+    };
 
 });
 
