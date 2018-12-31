@@ -16,18 +16,6 @@ registerController.controller('registerController', function ($scope, $http, $lo
     }
     $scope.newProfilePic = "../../ApartrentPhotos/index.jpg";
     $scope.signUp = function () {
-        var image = new Image();
-        image.src = $scope.newProfilePic;
-
-        var canvas = document.createElement("canvas");
-        canvas.width = 100;
-        canvas.height = 100;
-        image.width = 100;
-        image.height = 100;
-        image.onload = function () {
-            canvas.getContext('2d').drawImage(image, 0, 0);
-        };
-
 
         $scope.newUser = { // new user object
             userName: $scope.newUserName,
@@ -39,8 +27,9 @@ registerController.controller('registerController', function ($scope, $http, $lo
             firstName: $scope.newFirstName,
             lastName: $scope.newLastName,
             countryID: $scope.newCountryID,
-            profileImage: canvas.toDataURL().split("data:")[1]
+            profileImage:$scope.newProfilePic.split("data:")[1]
         };
+
         if ($scope.newUser.userName.length > 10 || $scope.newUser.password.length > 10 ||
             $scope.newUser.address.length > 50 || $scope.newUser.phoneNumber.length > 15 ||
             $scope.newUser.email.includes("@") === false || $scope.newUser.email.includes(".com") === false
@@ -64,6 +53,8 @@ registerController.controller('registerController', function ($scope, $http, $lo
 
                 $location.url('/Login');
             }
+            $rootScope.reload = false;
+
             return $scope.errorMessage = true;
         });
     };

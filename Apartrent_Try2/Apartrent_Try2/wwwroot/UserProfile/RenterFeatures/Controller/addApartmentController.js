@@ -4,7 +4,7 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
 
     if ($rootScope.showNav === undefined)
         $rootScope.showNav = true;
-
+    $scope.closeTopBar();
     $scope.addApartment = function (notRenterYet) {
         $scope.newApartment = {// add new apartment object
             categoryID: $scope.categoryID,

@@ -14,7 +14,7 @@ userReviewsController.controller('userReviewsController', function ($scope, $htt
             }
         });
     };
-    //$scope.closeTopBar();
+    $scope.closeTopBar();
     $scope.editReview = function (review, index) {
         $scope.editedReview = {
             apartmentID: review.apartmentID,

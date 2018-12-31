@@ -2,7 +2,6 @@
 
 userOrdersController.controller('userOrdersController', function ($rootScope, $scope, orders) {
 
-
-//    $scope.closeTopBar();
+     $scope.closeTopBar();
     $rootScope.userDetails.orders = orders;
 });

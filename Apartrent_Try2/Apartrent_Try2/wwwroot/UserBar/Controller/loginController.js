@@ -18,6 +18,7 @@ loginController.controller('loginController', function ($scope, $rootScope, $win
                 $scope.loginPassword = "";
                 userProfile.setToken(response.data.token);
                 response.data.token = null;
+                response.data.profileImage = "data:" + response.data.profileImage;
                 userProfile.setData(response.data); //save data in factory
                 $scope.errorLoginDisplay = false;
                 $rootScope.role = response.data.role;

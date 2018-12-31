@@ -18,6 +18,7 @@ namespace Apartrent_Try2
         //            userName = value;
         //    } }
         public object ProfileImage { get; set; }
+           
         public string UserName { get; set; }
         public string Password { get; set; }
         public bool Gender { get; set; }

@@ -15,7 +15,7 @@ pendingOrdersController.controller('pendingOrdersController', function ($scope, 
             }
         });
     };
-
+    $scope.closeTopBar();
 
     if ($rootScope.userDetails && $rootScope.role === 1) {
         $scope.getPending = function () {

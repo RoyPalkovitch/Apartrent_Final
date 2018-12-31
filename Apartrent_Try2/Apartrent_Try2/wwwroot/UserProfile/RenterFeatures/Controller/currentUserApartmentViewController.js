@@ -7,6 +7,7 @@ currentUserApartmentViewController.controller('currentUserApartmentViewControlle
     $scope.$on('$destroy', function () {
         $rootScope.showNav = false;
     });
+    $scope.closeTopBar();
     $scope.getApartmentOrders = function () {
 
         if ($rootScope.userDetails.currentApartment.orders) {

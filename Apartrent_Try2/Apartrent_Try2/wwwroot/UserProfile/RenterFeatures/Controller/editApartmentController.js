@@ -3,7 +3,7 @@
 editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$, $location, $rootScope, userProfile) {
 
     $rootScope.userDetails.currentApartment = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex];
-
+    $scope.closeTopBar();
     $scope.editApartment = function () {
         $scope.editedApartment = {// add new apartment object
             apartmentID: $rootScope.userDetails.currentApartment.apartmentID,

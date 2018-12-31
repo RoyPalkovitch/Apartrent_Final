@@ -2,9 +2,9 @@
 
 editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile) {
 
-    //$scope.closeTopBar();
+    $scope.closeTopBar();
 
-    $scope.editedGender = $rootScope.userDetails.gender ? "Male" : "Female";
+    $scope.newProfilePic = $rootScope.userDetails.profileImage;
 
     $scope.editedCountryID = $rootScope.userDetails.countryID;
 
@@ -17,11 +17,12 @@ editController.controller('editAccountController', function ($scope, $http, $roo
             address: $scope.editedAddress ? $scope.editAddress : $rootScope.userDetails.address,
             countryID: $scope.editedCountryID ? $scope.editedCountryID : $rootScope.userDetails.countryID,
             phoneNumber: $scope.editedPhoneNumber ? $scope.editedPhoneNumber : $rootScope.userDetails.phoneNumber,
-            userName: $rootScope.userDetails.userName
         };
 
         $http.put("api/users", $scope.userEditedDetails, userProfile.config).then(function (successCallback, errorCallback) {
+            $rootScope.reload = true;
             if (successCallback.data) {
+                $rootScope.reload = false;
                 $rootScope.userDetails.firstName = $scope.userEditedDetails.firstName;
                 $rootScope.userDetails.lastName = $scope.userEditedDetails.lastName;
                 $rootScope.userDetails.gender = $scope.userEditedDetails.gender;
@@ -33,7 +34,30 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 window.history.back();
                 return;
             }
+            $rootScope.reload = false;
+
         });
+    };
+    $scope.editProfileImage = function () {
+        $scope.newImage = { profileImage: $scope.newProfilePic.split("data:")[1] };
+        $http.put("api/users/UpdateProfileImage", $scope.newImage, userProfile.config).then(function (successCallback, errorCallback) {
+            $rootScope.reload = true;
+
+            if (successCallback) {
+                $rootScope.reload = false;
+                $rootScope.userDetails.profileImage = $scope.newProfilePic;
+                userProfile.setData($rootScope.userDetails);
+                $scope.newImage = false;
+
+            }
+            $rootScope.reload = false;
+        });
+
+    };
+
+    $scope.discardPicChange = function () {
+        $scope.newImage = false;
+        $scope.newProfilePic = $rootScope.userDetails.profileImage;
     };
 
     $scope.$parent.deleteoptOn = !$scope.$parent.deleteoptOn;

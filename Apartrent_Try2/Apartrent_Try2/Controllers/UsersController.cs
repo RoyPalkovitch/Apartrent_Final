@@ -46,6 +46,15 @@ namespace Apartrent_Try2.Controllers
                 return false;
               return DB.UsersDB.EditUser(users);
         }
+        [HttpPut("UpdateProfileImage")]
+        [Authorize]
+        public bool UpdateProfileImage([FromBody]Users user)
+        {
+            user.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            if (String.IsNullOrEmpty(user.UserName))
+                return false;
+            return DB.UsersDB.UpdateProfilePicture(user);
+        }
 
         [HttpDelete]
         [Authorize]
@@ -64,8 +73,8 @@ namespace Apartrent_Try2.Controllers
             
             PasswordHash hash = new PasswordHash();
             user.Password = hash.Hash(user.Password);
-            // return DB.UsersDB.SignUp(user);
-            return true;
+            return DB.UsersDB.SignUp(user);
+            
         }
 
     }
