@@ -1,5 +1,19 @@
 ﻿<center class=" w3-animate-bottom" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
     <h1>Edit Apartment:</h1>
+    <div class="w3-content">
+
+        <img src="{{editPicture[index]}}" style="width:100%;max-width:200px;max-height:200px">
+        <input type="file" class="w3-input w3-mobile" style="width:100%;max-width:244.391px;" ng-file-select="onFileSelect($files)" ng-model="editPicture[index]">
+
+        <div class="w3-row-padding w3-section">
+            <div class="w3-col w3-mobile s4" ng-repeat="n in [].constructor(5) track by $index">
+                <img ng-if="editPicture[$index] !== null " class="demo w3-mobile w3-opacity w3-hover-opacity-off" src="{{editPicture[$index]}}" style="width:100%;cursor:pointer;max-width:50px;max-height:50px" ng-click="changePicture($index)">
+                <img ng-if="editPicture[$index] === null" class="demo w3-mobile w3-opacity w3-hover-opacity-off" src="/ApartrentPhotos/default-profile-image.png" style="width:100%;cursor:pointer;max-width:50px;max-height:50px" ng-click="changePicture($index)">
+            </div>
+        </div>
+        <br /><button type="submit" class="w3-green w3-round w3-button w3-mobile" style="width:100%;max-width:244.391px;"  ng-click="editApartmentPicture()">Save Changes</button>
+
+    </div>
     <form style="width:100%">
         <h6>Apartment Category:</h6><select style="width:100%;max-width:244.391px;" class="w3-select" ng-model="$parent.editCategoryID">
             <option ng-repeat="category in categories" ng-value="category.categoryID">{{category.apartmentType}}</option>

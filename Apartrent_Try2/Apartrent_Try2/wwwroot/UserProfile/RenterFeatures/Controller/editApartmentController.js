@@ -1,9 +1,11 @@
 ﻿var editApartmentController = angular.module('editApartmentController', []);
 
-editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$, $location, $rootScope, userProfile) {
+editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$, $location, $rootScope, userProfile, imageHandlerFactory) {
 
     $rootScope.userDetails.currentApartment = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex];
     $scope.closeTopBar();
+    $scope.editPicture = $rootScope.userDetails.currentApartment.apartmentImage;
+    $scope.index = 0;
     $scope.editApartment = function () {
         $scope.editedApartment = {// add new apartment object
             apartmentID: $rootScope.userDetails.currentApartment.apartmentID,
@@ -47,5 +49,28 @@ editApartmentController.controller('editApartmentController', function ($scope, 
 
                 }
             });
+    };
+
+    $scope.changePicture = function (index) {
+        $scope.index = index;
+        if ($scope.editPicture[index] === null)
+            $scope.editPicture[index] = "/ApartrentPhotos/default-profile-image.png";
+        
+    };
+    $scope.editApartmentPicture = function () {
+
+        $scope.editImage = imageHandlerFactory.sendImage($scope.editPicture);
+        $scope.editImage.apartmentID = $rootScope.userDetails.currentApartment.apartmentID;
+        $http.put("api/apartment/updateApartmentImages", $scope.editImage, userProfile.config).then(function(response){
+            $rootScope.reload = true;
+
+            if (response.data) {
+                $rootScope.reload = false;
+                $rootScope.userDetails.renterApartment[$transition$.params().apartmentIndex].apartmentImage = $scope.editImage;
+                userProfile.setData($rootScope.userDetails);
+            }
+            $rootScope.reload = false;
+
+        });
     };
 });

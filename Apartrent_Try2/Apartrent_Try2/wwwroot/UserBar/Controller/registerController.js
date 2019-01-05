@@ -3,7 +3,7 @@
 
 var registerController = angular.module('registerController', []);
 
-registerController.controller('registerController', function ($scope, $http, $location, fileReaderFactory, $window, $rootScope) {
+registerController.controller('registerController', function ($scope, $http, $location, fileReaderFactory, imageHandlerFactory, $window, $rootScope) {
     if ($window.sessionStorage.getItem("userToken"))
         $location.url("index");
 
@@ -16,6 +16,7 @@ registerController.controller('registerController', function ($scope, $http, $lo
     }
     $scope.newProfilePic = "../../ApartrentPhotos/index.jpg";
     $scope.signUp = function () {
+        $scope.image = imageHandlerFactory.sendImage($scope.newProfilePic);
 
         $scope.newUser = { // new user object
             userName: $scope.newUserName,
@@ -27,7 +28,8 @@ registerController.controller('registerController', function ($scope, $http, $lo
             firstName: $scope.newFirstName,
             lastName: $scope.newLastName,
             countryID: $scope.newCountryID,
-            profileImage:$scope.newProfilePic.split("data:")[1]
+            profileImage: $scope.image.profileImage,
+            profileImageType: $scope.image.profileImageType
         };
 
         if ($scope.newUser.userName.length > 10 || $scope.newUser.password.length > 10 ||

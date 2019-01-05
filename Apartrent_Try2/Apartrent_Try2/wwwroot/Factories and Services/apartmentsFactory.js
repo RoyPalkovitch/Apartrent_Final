@@ -1,6 +1,6 @@
 ﻿var apartrentApp = angular.module('apartrentApp');
 
-apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location,$rootScope) {
+apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location, $rootScope, imageHandlerFactory) {
     var apartments = {};
     var countries = JSON.parse($window.sessionStorage.getItem("countriesData"));
     apartments.getApartments = function (searchParams) {
@@ -10,6 +10,10 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
                 $rootScope.reload = false;
 
                 if (response.data) {
+                    for (var i = 0; i < response.data.length; i++) {
+
+                        response.data[i].apartmentImage = imageHandlerFactory.constructImage(response.data[i].apartmentImageType[0], response.data[i].apartmentImage[0]);
+                    }
                     return response.data;
                 } else {
                     return $q.when();
@@ -39,6 +43,8 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
         return $http.get("api/apartment/GetApartment?apartmentID=" + searchParams.apartmentID).then(function (response) {
             if (response.data) {
                 response.data.countryName = countries[response.data.countryID - 1].countryName;
+                response.data.apartmentImage = imageHandlerFactory.constructImage(response.data.apartmentImageType, response.data.apartmentImageByte);
+
                 if ($location.path().includes("SearchResult/")) {
                     var temp = JSON.parse($window.sessionStorage.getItem("LastSearch"));
                     if (temp.apartmentID !== searchParams.apartmentID) {

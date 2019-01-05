@@ -53,8 +53,12 @@ namespace Apartrent_Try2.Controllers
             user.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             if (String.IsNullOrEmpty(user.UserName))
                 return false;
-            return DB.UsersDB.UpdateProfilePicture(user);
+            user.ProfileImageByte = ImageValidation.Base64Vadilation(user.ProfileImage,null)[0];
+            if (user.ProfileImageByte == null)
+                return false;
+                return DB.UsersDB.UpdateProfilePicture(user);
         }
+
 
         [HttpDelete]
         [Authorize]
@@ -70,7 +74,8 @@ namespace Apartrent_Try2.Controllers
         [HttpPost]
         public bool SignUp([FromBody]Users user)
         {
-            
+            user.ProfileImageByte = ImageValidation.Base64Vadilation(user.ProfileImage, null)[0];
+
             PasswordHash hash = new PasswordHash();
             user.Password = hash.Hash(user.Password);
             return DB.UsersDB.SignUp(user);

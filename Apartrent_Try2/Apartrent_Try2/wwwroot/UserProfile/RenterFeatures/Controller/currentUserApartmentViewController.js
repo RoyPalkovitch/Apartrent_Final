@@ -3,6 +3,13 @@
 currentUserApartmentViewController.controller('currentUserApartmentViewController', function ($scope, $rootScope, currentApartment, $http, userProfile) {
     if ($rootScope.showNav === undefined)
         $rootScope.showNav = true;
+    $scope.index = 0;
+
+    $scope.changePicture = function (index) {
+        $scope.index = index;
+    };
+
+
     $rootScope.userDetails.currentApartment = currentApartment;
     $scope.$on('$destroy', function () {
         $rootScope.showNav = false;

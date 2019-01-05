@@ -46,6 +46,7 @@ namespace Apartrent_Try2.Controllers
             bool changeRenterStatus = false;
             if (role == 0)
                 changeRenterStatus = true;
+            apartment.ApartmentImageByte = ImageValidation.Base64Vadilation(null,apartment.ApartmentImage);
             return DB.ApartmentDB.AddApartment(apartment, userName, changeRenterStatus);
         }
 
@@ -69,6 +70,19 @@ namespace Apartrent_Try2.Controllers
             if (String.IsNullOrEmpty(userName) || role != 1)
                 return false;
             return DB.ApartmentDB.EditApartment(apartment, editFeature, userName);
+        }
+
+        [HttpPut("UpdateApartmentImages")]
+        [Authorize]
+        public bool UpdateApartmentImages([FromBody]Apartment apartment)
+        {
+            apartment.RenterUserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            if (role != 1 || String.IsNullOrEmpty(apartment.RenterUserName))
+                return false;
+            apartment.ApartmentImageByte = ImageValidation.Base64Vadilation(null,apartment.ApartmentImage);
+
+            return DB.ApartmentDB.UpdateApartmentPictures(apartment);
         }
     }
 }

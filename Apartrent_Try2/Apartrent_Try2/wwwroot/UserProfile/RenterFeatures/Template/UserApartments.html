@@ -1,15 +1,21 @@
 ﻿<div class="w3-container w3-animate-bottom" style="margin-top:60px;width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center" ng-repeat="apartment in userDetails.renterApartments track by $index">
     <div style="width:60%" class="w3-card-2 w3-content">
-        <div style="cursor:pointer" class="w3-hover-text-purple" ui-sref="ProfileParent.CurrentUserApartmentView({userName:userDetails.userName,apartmentID:apartment.apartmentID})">
-            <p>Country: {{countries[apartment.countryID-1].countryName}}</p>
-            <p>Address: {{apartment.address}}</p>
-            <p>Apartment type: {{apartment.apartmentType}}</p>
-            <p>Availabe from date: {{apartment.fromDate}}</p>
-            <p>Available to date: {{apartment.toDate}}</p>
-            <p>Price per day: {{apartment.pricePerDay}}</p>
+        <div class="w3-half">
+            <br />
+            <img style="width:100%;height:100%;max-width:250px;max-height:400px;" class="w3-mobile" src="{{apartment.apartmentImage[0]}}" />
         </div>
-        <a class="w3-button w3-mobile w3-purple w3-round w3-hover-blue" ui-sref="ProfileParent.EditApartment({userName:userDetails.userName,apartmentIndex:$index})">Edit Apartment</a>
-        <button class="w3-button w3-mobile w3-red w3-round w3-hover-red" ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
+        <div class="w3-half ">
+            <div style="cursor:pointer" class="w3-hover-text-purple" ui-sref="ProfileParent.CurrentUserApartmentView({userName:userDetails.userName,apartmentID:apartment.apartmentID})">
+                <p>Country: {{countries[apartment.countryID-1].countryName}}</p>
+                <p>Address: {{apartment.address}}</p>
+                <p>Apartment type: {{apartment.apartmentType}}</p>
+                <p>Availabe from date: {{apartment.fromDate}}</p>
+                <p>Available to date: {{apartment.toDate}}</p>
+                <p>Price per day: {{apartment.pricePerDay}}</p>
+            </div>
+                <a class="w3-button w3-mobile w3-purple w3-round w3-hover-blue" ui-sref="ProfileParent.EditApartment({userName:userDetails.userName,apartmentIndex:$index})">Edit Apartment</a>
+                <button class="w3-button w3-mobile w3-red w3-round w3-hover-red" ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>
+        </div>
     </div>
     <br />
     <br />

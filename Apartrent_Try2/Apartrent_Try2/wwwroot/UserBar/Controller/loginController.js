@@ -1,6 +1,6 @@
 ﻿var loginController = angular.module('loginController', []);
 
-loginController.controller('loginController', function ($scope, $rootScope, $window,$location, $http,userProfile) {
+loginController.controller('loginController', function ($scope, $rootScope, $window, $location, $http, userProfile, imageHandlerFactory) {
 
     if ($window.sessionStorage.getItem("userToken"))
         $location.url("index");
@@ -12,13 +12,19 @@ loginController.controller('loginController', function ($scope, $rootScope, $win
         $http.get('api/users/login?userName=' + $scope.loginUserName + '&password=' + $scope.loginPassword).then(function (response) {
             $rootScope.reload = true;
             if (response.data) {
-                if (response.data.role === 1 && response.data.pendingOrders !== null)
+                if (response.data.role === 1 && response.data.pendingOrders !== null) {
                     response.data.pendingNotification = response.data.pendingOrders.length;
+
+                    for (var i = 0; i < response.data.renterApartments.length; i++) {
+                        response.data.renterApartments[i].apartmentImage = imageHandlerFactory.constructImage(response.data.renterApartments[i].apartmentImageType, response.data.renterApartments[i].apartmentImage);
+                    }
+                }
                 $scope.loginUserName = "";
                 $scope.loginPassword = "";
                 userProfile.setToken(response.data.token);
                 response.data.token = null;
-                response.data.profileImage = "data:" + response.data.profileImage;
+                response.data.profileImage = imageHandlerFactory.constructImage(response.data.profileImageType, response.data.profileImage);
+                
                 userProfile.setData(response.data); //save data in factory
                 $scope.errorLoginDisplay = false;
                 $rootScope.role = response.data.role;

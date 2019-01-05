@@ -4,7 +4,11 @@ viewApartment.controller('viewApartmentController', function ($scope, $rootScope
 
     if ($scope.currentApartmentData === undefined)
         $scope.currentApartmentData = apartmentData;
+    $scope.changePicture = function (index) {
+        $scope.index = index;
 
+    };
+    $scope.index = 0;
     $rootScope.noEditReview = true;
     if ($rootScope.userDetails !== "" && $rootScope.userDetails !== undefined) {
 

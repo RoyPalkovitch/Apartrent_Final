@@ -1,11 +1,20 @@
 ﻿var addApartmentController = angular.module('addApartmentController', []);
 
-addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location) {
+addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location, imageHandlerFactory) {
 
+    $scope.newApartmentPicture = ["/ApartrentPhotos/default-profile-image.png", null, null, null];
+    $scope.changePicture = function (index) {
+        $scope.index = index;
+        if ($scope.newApartmentPicture[index] === null)
+            $scope.newApartmentPicture[index] = "/ApartrentPhotos/default-profile-image.png";
+
+    };
+    $scope.index = 0;
     if ($rootScope.showNav === undefined)
         $rootScope.showNav = true;
     $scope.closeTopBar();
     $scope.addApartment = function (notRenterYet) {
+        $scope.imagesData = imageHandlerFactory.sendImage($scope.newApartmentPicture);
         $scope.newApartment = {// add new apartment object
             categoryID: $scope.categoryID,
             countryID: $scope.countryID,
@@ -30,7 +39,9 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             doubleBed: $scope.doubleBed ? $scope.doubleBed : 0,
             singleBed: $scope.singleBed ? $scope.singleBed : 0,
             sofaBed: $scope.sofaBed ? $scope.sofaBed : 0,
-            bedsDescription: $scope.bedsDescription
+            bedsDescription: $scope.bedsDescription,
+            apartmentImage: $scope.imagesData.apartmentImage,
+            apartmentImageType: $scope.imagesData.apartmentImageType
         };
 
         $http.post("api/apartment", $scope.newApartment, userProfile.config).then(function (response) {
@@ -44,9 +55,9 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
                     $rootScope.userDetails.renterApartments = [];
                     $scope.newApartment.apartmentID = response.data.apartmentID;
                 } else {
-
                     $scope.newApartment.apartmentID = response.data;
                 }
+                $scope.newApartment.apartmentType = $scope.categories[$scope.categoryID].apartmentType;
                 $rootScope.userDetails.renterApartments.push($scope.newApartment);
                 userProfile.setData($rootScope.userDetails);
                 return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);

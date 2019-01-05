@@ -10,6 +10,12 @@ namespace Apartrent_Try2
         public int ApartmentID { get; set; }
         public string RenterUserName { get; set; }
 
+        public List<byte[]> ApartmentImageByte { get; set; }
+        public string[] ApartmentImage { get; set; }
+        public string[] ApartmentImageType { get; set; }
+        public byte[] PrimeImage { get; set; }
+        public string PrimeImageType { get; set; }
+
         public string FirstName { get; set; }
         public string LastName { get; set; }
 

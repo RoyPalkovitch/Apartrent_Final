@@ -1,6 +1,6 @@
 ﻿var editController = angular.module('editAccountController', []);
 
-editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile) {
+editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile, imageHandlerFactory) {
 
     $scope.closeTopBar();
 
@@ -39,10 +39,9 @@ editController.controller('editAccountController', function ($scope, $http, $roo
         });
     };
     $scope.editProfileImage = function () {
-        $scope.newImage = { profileImage: $scope.newProfilePic.split("data:")[1] };
+        $scope.newImage = imageHandlerFactory.sendImage($scope.newProfilePic);
         $http.put("api/users/UpdateProfileImage", $scope.newImage, userProfile.config).then(function (successCallback, errorCallback) {
             $rootScope.reload = true;
-
             if (successCallback) {
                 $rootScope.reload = false;
                 $rootScope.userDetails.profileImage = $scope.newProfilePic;
