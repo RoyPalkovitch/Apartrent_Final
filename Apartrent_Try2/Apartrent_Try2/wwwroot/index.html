@@ -10,6 +10,7 @@
     <script src="Angular_Dependencies/angular_ui_route.js"></script>
     <link href="Angular_Dependencies/W3_CSS.css" rel="stylesheet" />
     <link href="SearchResult/Template/StyleSheet.css" rel="stylesheet" />
+
     <!--App config Controllers-->
     <script src="apartrentConfiguration.js"></script>
     <script src="indexController.js"></script>
@@ -31,6 +32,8 @@
     <script src="Factories and Services/categoriesFactory.js"></script>
     <script src="Factories and Services/startupResolveFactory.js"></script>
     <script src="Factories and Services/apartmentsFactory.js"></script>
+    <script src="Factories and Services/dateHandlerFactory.js"></script>
+
     <!--Orders/Reviews Controllers-->
     <script src="SearchResult/Controller/searchedApartmentReviewsController.js"></script>
     <script src="SearchResult/Controller/placeOrderController.js"></script>
@@ -96,9 +99,9 @@
 
             </div>
         </div>
+       <img  ng-show="reload" class="w3-center" style="position:absolute;top:0;" src="ApartrentPhotos/loader.gif" />
         <ui-view style="width:100%">
         </ui-view>
-            <img  ng-show="reload" style="position:page;width:90%" src="ApartrentPhotos/loader.gif" />
         <footer class="w3-container w3-tea" style="position:fixed">
             footer
         </footer>

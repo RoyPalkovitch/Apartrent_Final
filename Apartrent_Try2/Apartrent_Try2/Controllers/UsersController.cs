@@ -31,11 +31,7 @@ namespace Apartrent_Try2.Controllers
             return AuthService.GetToken(userName,role).ToString();
 
         }
-        [HttpGet("UserProfile")]
-        public Users GetUserProfile([FromQuery] string userName)
-        {
-            return DB.UsersDB.GetUserProfile(userName);
-        }
+
 
         [HttpPut]
         [Authorize]
@@ -46,6 +42,8 @@ namespace Apartrent_Try2.Controllers
                 return false;
               return DB.UsersDB.EditUser(users);
         }
+
+
         [HttpPut("UpdateProfileImage")]
         [Authorize]
         public bool UpdateProfileImage([FromBody]Users user)

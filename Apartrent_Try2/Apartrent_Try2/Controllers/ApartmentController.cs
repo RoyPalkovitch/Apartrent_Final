@@ -36,12 +36,12 @@ namespace Apartrent_Try2.Controllers
 
         [HttpPost]
         [Authorize]
-        public int AddApartment([FromBody]Apartment apartment)
+        public Apartment AddApartment([FromBody]Apartment apartment)
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
             if (String.IsNullOrEmpty(userName))
-                return -1;
+                return null;
 
             bool changeRenterStatus = false;
             if (role == 0)

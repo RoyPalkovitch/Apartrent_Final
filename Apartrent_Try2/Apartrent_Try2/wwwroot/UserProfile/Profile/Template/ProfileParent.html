@@ -15,7 +15,8 @@
 
 
     <div class="w3-sidebar w3-bar-block w3-purple w3-animate-left w3-hide-small w3-hide-medium">
-      <img style="width:100%;height:100%;max-width:200px;max-height:200px"  src="{{userDetails.profileImage}}" class="w3-circle" />
+        <img style="width:100%;height:100%;max-width:200px;max-height:200px" ng-if="userDetails.profileImage" src="{{userDetails.profileImage}}" class="w3-circle" />
+        <img style="width:100%;height:100%;max-width:200px;max-height:200px" ng-if="!userDetails.profileImage" src="/ApartrentPhotos/index.jpg" class="w3-circle" />
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</a>
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding-16" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>

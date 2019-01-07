@@ -1,8 +1,8 @@
 ﻿var addApartmentController = angular.module('addApartmentController', []);
 
-addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location, imageHandlerFactory) {
+addApartmentController.controller('addApartmentController', function ($scope, $http, userProfile, $rootScope, $location, imageHandlerFactory,dateHandlerFactory) {
 
-    $scope.newApartmentPicture = ["/ApartrentPhotos/default-profile-image.png", null, null, null];
+    $scope.newApartmentPicture = ["/ApartrentPhotos/default-profile-image.png", null, null, null, null];
     $scope.changePicture = function (index) {
         $scope.index = index;
         if ($scope.newApartmentPicture[index] === null)
@@ -48,7 +48,8 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             $rootScope.reload = true;
             if (response.data) {
                 $rootScope.reload = false;
-
+                response.data.fromDate = dateHandlerFactory.dateConverter(response.data.fromDate);
+                response.data.toDate = dateHandlerFactory.dateConverter(response.data.toDate);
                 if (notRenterYet) {// add new apartment if the user wasnt renter before 
                     userProfile.setToken(response.data.token);
                     $rootScope.role = 1;

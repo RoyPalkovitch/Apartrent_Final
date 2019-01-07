@@ -1,5 +1,5 @@
 ﻿var searchResultController = angular.module("searchResultController", []);
-searchResultController.controller('searchResultController', function ($scope, $rootScope, apartmentsFactory, apartmentsData, $location) {
+searchResultController.controller('searchResultController', function ($scope, $rootScope, apartmentsFactory, apartmentsData, $location,$window) {
     if (!apartmentsData)
         apartmentsData = null;
     $scope.searchResult = apartmentsData;

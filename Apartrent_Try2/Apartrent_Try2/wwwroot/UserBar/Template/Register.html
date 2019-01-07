@@ -23,10 +23,10 @@
         <h6>Address:</h6><input class="w3-input w3-mobile" required maxlength="30" style="width:100%;max-width:244.391px;" type="text" ng-model="$parent.newAddress" /><br />
         <h6>Phone Number:</h6><input class="w3-input w3-mobile" required maxlength="15" style="width:100%;max-width:244.391px;" type="tel" ng-model="$parent.newPhoneNumber" /><br />
         <br />
-        <button class="w3-button w3-purple w3-round w3-hover-blue" ng-click="signUp()">Register</button>
+        <button ng-disabled="regBtn" class="w3-button w3-purple w3-round w3-hover-blue" ng-click="signUp()">Register</button>
         <div ng-show="errorMessage" class="w3-panel w3-red">
             <span class="w3-right w3-button w3-hover-none" ng-click="errorMessage = false">&times;</span>
             <h3>Error as occure in the middle of your regiser please try again and check if the values matches the criterion</h3>
-        </div>-->
+        </div>
     </form>
 </center>

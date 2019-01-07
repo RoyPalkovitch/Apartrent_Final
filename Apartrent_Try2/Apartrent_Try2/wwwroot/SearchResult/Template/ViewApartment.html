@@ -12,8 +12,8 @@
         <p class="w3-bar-item">Check Out: </p>
         <p class="w3-bar-item w3-border-bottom">{{currentApartmentData.toDate}}</p>
         <div class="w3-bar-item" ng-controller="placeOrdersController">
-            <button class="w3-button w3-win8-green w3-round w3-hover-blue" ng-click="newOrder(currentApartmentData)">Order Now</button>
-            <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
+            <button ng-disabled="purchBtn" class="w3-button w3-win8-green w3-round w3-hover-blue" ng-click="newOrder(currentApartmentData)">Order Now</button>
+            <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">here</a><button ng-click="successPurches=False">OK</button></div>
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@
     <div style="width:100%;max-width:500px" class="w3-content">
         <img style="width:100%;max-width:450px ;max-height:200px" class="" src="{{currentApartmentData.apartmentImage[index]}}" />
         <div class="w3-row-padding w3-section">
-            <div class="w3-col s4"  ng-repeat="image in currentApartmentData.apartmentImage track by $index">
+            <div class="w3-col s4" ng-repeat="image in currentApartmentData.apartmentImage track by $index">
                 <img ng-if="image !== null " class=" w3-opacity w3-hover-opacity-off" src="{{image}}" style="width:100%;cursor:pointer;max-width:100px;max-height:50px" ng-click="changePicture($index)">
             </div>
         </div>
@@ -214,8 +214,8 @@
 
         </div>
 
-        <div ng-if="userDetails" class="w3-hide-large w3-mobile w3-metro-dark-red">
-            <h3>Pay here</h3>
+        <h3 class="w3-hide-large">Pay here</h3>
+        <div class="w3-hide-large w3-mobile w3-metro-dark-red">
             <p class="">Price for staying:</p>
             <p class="">{{currentApartmentData.priceForStaying}}</p>
             <p class="">Price Per Day:{{currentApartmentData.pricePerDay}}</p>
@@ -226,24 +226,28 @@
                 {{currentApartmentData.fromDate}}
                 {{currentApartmentData.toDate}}
             </p>
-            <div ng-controller="placeOrdersController">
+            <div ng-if="userDetails" ng-controller="placeOrdersController">
                 <button class="w3-button w3-mobile w3-round w3-metro-light-purple" ng-click="newOrder(currentApartmentData)">Order Now</button>
-                <div ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
+                <div ng-disabled="purchBtn" ng-show="successPurches">Your order as been send please wait for confirm you can always check it <a>here</a><button ng-click="successPurches=False">OK</button></div>
+            </div>
+            <div ng-if="!userDetails">
+                <p>Login to order the apartment</p>
             </div>
 
         </div>
 
 
-        <div ng-if="noEditReview === true" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center" class="w3-mobile">
+        <h3>Write a review here:</h3>
+        <div ng-controller="searchedApartmentReviewsController" ng-if="noEditReview === true" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center" class="w3-mobile">
             <div class="w3-mobile">
-                <h3>Write a review here:</h3>
-                <textarea style="height:100%;width:100%;max-width:300px;max-height:70px;resize:none" maxlength="70" ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
+                <textarea ng-disabled="!userDetails" style="height:100%;width:100%;max-width:300px;max-height:70px;resize:none" maxlength="70" ng-model="$parent.reviewDescription" placeholder="Type your review here"></textarea>
                 <p ng-if="$parent.reviewDescription">words left:{{70-$parent.reviewDescription.length}}</p>
                 <p ng-if="!$parent.reviewDescription">words left:70</p>
                 <input style="width:170px" class="w3-input" type="range" min="1" max="5" ng-model="$parent.reviewRating" />
                 <p>Rate:{{$parent.reviewRating}}</p>
                 <br />
                 <button class="w3-button w3-round w3-purple" ng-click="newReview(currentApartmentData.apartmentID)">Send Review</button>
+                <span ng-show="errorMessage">Sorry something went wrong please try again if you have rent the apartment<a ng-click="errorMessage = false">&times;</a></span>
             </div>
         </div>
     </div>

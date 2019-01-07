@@ -84,9 +84,14 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
             templateUrl: "UserProfile/Profile/Template/UserOrders.html",
             controller: "userOrdersController",
             resolve: {
-                orders: function ($http, userProfile) {
+                orders: function ($http, userProfile, dateHandlerFactory) {
                     return $http.get("api/orders/UserOrders", userProfile.config).then(function (response) {
                         if (response.data) {
+                            for (var i = 0; i < response.data.length; i++) {
+                                response.data[i].fromDate = dateHandlerFactory.dateConverter(response.data[i].fromDate);
+                                response.data[i].toDate = dateHandlerFactory.dateConverter(response.data[i].toDate);
+                                response.data[i].orderDate = dateHandlerFactory.dateConverter(response.data[i].orderDate);
+                            }
                             return response.data;
                         }
                     });

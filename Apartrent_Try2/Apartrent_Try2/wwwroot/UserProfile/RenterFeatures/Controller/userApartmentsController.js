@@ -4,8 +4,6 @@ userApartmentsController.controller('userApartmentsController', function ($scope
 
     
     $scope.deleteApartment = function (apartmentIndex, apartmentID) {
-        //if (apartmentID !== Number)
-        //    return;
         $scope.closeTopBar();
         $http.delete("api/apartment?apartmentId=" + apartmentID, userProfile.config).then(function (response) {
             $rootScope.reload = true;

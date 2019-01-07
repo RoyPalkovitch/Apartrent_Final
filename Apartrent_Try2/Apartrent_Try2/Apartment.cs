@@ -26,8 +26,11 @@ namespace Apartrent_Try2
 
         public string Address { get; set; }
         public double PricePerDay { get; set; }
+
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
+
+
         public string Description { get; set; }
 
         public int NumberOfGuests { get; set; }
@@ -49,7 +52,7 @@ namespace Apartrent_Try2
         public string BedsDescription { get; set; }
 
         public List<Reviews> Reviews { get; set; }
-
+        public int AvgRate { get; set; }
 
         public double PriceForStaying { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿var apartrentApp = angular.module('apartrentApp');
 
-apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location, $rootScope, imageHandlerFactory) {
+apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $location, $rootScope, imageHandlerFactory, dateHandlerFactory) {
     var apartments = {};
     var countries = JSON.parse($window.sessionStorage.getItem("countriesData"));
     apartments.getApartments = function (searchParams) {
@@ -11,8 +11,8 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
 
                 if (response.data) {
                     for (var i = 0; i < response.data.length; i++) {
-
                         response.data[i].apartmentImage = imageHandlerFactory.constructImage(response.data[i].apartmentImageType[0], response.data[i].apartmentImage[0]);
+                        
                     }
                     return response.data;
                 } else {
@@ -49,8 +49,8 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
                     var temp = JSON.parse($window.sessionStorage.getItem("LastSearch"));
                     if (temp.apartmentID !== searchParams.apartmentID) {
                         temp.apartmentID = searchParams.apartmentID;
-                        response.data.fromDate = apartments.fromDate;
-                        response.data.toDate = apartments.toDate;
+                        response.data.fromDate = dateHandlerFactory.dateConverter(apartments.fromDate);
+                        response.data.toDate = dateHandlerFactory.dateConverter(apartments.toDate);
                         response.data.numberOfGuests = apartments.numberOfGuests;
                         response.data.pricePerGuest = apartments.pricePerGuest;
                         response.data.priceForStaying = apartments.priceForStaying;
@@ -63,6 +63,9 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
                         response.data.pricePerGuest = temp.pricePerGuest;
                         response.data.priceForStaying = temp.priceForStaying;
                     }
+                } else {
+                    response.data.fromDate = dateHandlerFactory.dateConverter(response.data.fromDate);
+                    response.data.toDate = dateHandlerFactory.dateConverter(response.data.toDate);
                 }
                 $rootScope.reload = false;
 
