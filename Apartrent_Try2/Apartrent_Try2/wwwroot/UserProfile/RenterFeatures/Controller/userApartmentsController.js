@@ -3,8 +3,8 @@
 userApartmentsController.controller('userApartmentsController', function ($scope, $rootScope, $http, userProfile) {
 
     
-    $scope.deleteApartment = function (apartmentIndex, apartmentID) {
         $scope.closeTopBar();
+    $scope.deleteApartment = function (apartmentIndex, apartmentID) {
         $http.delete("api/apartment?apartmentId=" + apartmentID, userProfile.config).then(function (response) {
             $rootScope.reload = true;
             if (response.data) {

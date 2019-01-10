@@ -86,8 +86,6 @@ namespace Apartrent_Try2
 
             public static bool DeleteUser(string user)
             {
-                if (String.IsNullOrEmpty(user))
-                    return false;
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
@@ -114,8 +112,6 @@ namespace Apartrent_Try2
                         cmd.Add("@Email", user.Email);
                         cmd.Add("@FirstName", user.FirstName);
                         cmd.Add("@LastName", user.LastName);
-                        cmd.Add("@LastLogin", user.LastLogin);
-                        cmd.Add("@LastOrder", user.LastOrder);
                         cmd.Add("@CountryID", user.CountryID);
                         return cmd.ExecuteNonQuery() == 1;
                     }
@@ -836,8 +832,14 @@ namespace Apartrent_Try2
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    double totalDays = (order.ToDate - order.FromDate).TotalDays > 0 ? (order.ToDate - order.FromDate).TotalDays : 1;
-                    using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS(SELECT Orders.OrderID FROM Orders WHERE ((Orders.FromDate BETWEEN @FromDate AND @ToDate) OR (Orders.ToDate BETWEEN @FromDate AND @ToDate)) AND Orders.UserName = @UserName AND Orders.ApartmentID = @ApartmentID) INSERT INTO Orders(ApartmentID,RenterUserName,UserName,Price,OrderDate,FromDate,ToDate)VALUES(@ApartmentID,@RenterUserName,@UserName,(SELECT Apartment.PricePerDay * @TotalDays FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID),@OrderDate,@FromDate,@ToDate )", conn))
+                    double totalDays = (order.ToDate - order.FromDate).TotalDays > 0 ? (order.ToDate - order.FromDate).TotalDays : 1; // caculate total days of staying
+                    using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS(SELECT Orders.OrderID FROM Orders WHERE ((Orders.FromDate BETWEEN @FromDate AND @ToDate)" + // check if the user has alredy order apartment in the same dates
+                        " OR (Orders.ToDate BETWEEN @FromDate AND @ToDate))" +
+                        " AND Orders.UserName = @UserName)" +
+                        " INSERT INTO Orders(ApartmentID,RenterUserName,UserName,Price,OrderDate,FromDate,ToDate)" +
+                        "VALUES(@ApartmentID,(SELECT Apartment.RenterUserName FROM Apartment WHERE ApartmentID = @ApartmentID)" + //selecting the renter user name from his apartment data
+                        ",@UserName,(SELECT Apartment.PricePerDay * @TotalDays FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID)" + // caculate the total price for staying
+                        ",@OrderDate,@FromDate,@ToDate )", conn))
                     {
                         cmd.Add("@UserName", order.UserName);
                         cmd.Add("@RenterUserName", order.RenterUserName);
@@ -957,6 +959,20 @@ namespace Apartrent_Try2
                 }
             }
 
+            public static bool DeleteOrder(int orderID, string userName)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = new SqlCommand("DELETE FROM Orders WHERE OrderID = @OrderID and UserName = @UserName", conn))
+                    {
+                        cmd.Add("@UserName", userName);
+                        cmd.Add("@OrderID", orderID);
+                        return cmd.ExecuteNonQuery() == 1;
+                    }
+                }
+            }
+
             public static object UpdateOrderStatus(Orders orders)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
@@ -969,12 +985,12 @@ namespace Apartrent_Try2
                         cmd.Add("@OrderID", orders.OrderID);
                         cmd.Add("@ApartmentID", orders.ApartmentID);
                         cmd.Connection = conn;
-                        if ((bool)orders.Approved)
+                        if ((bool)orders.Approved) //approved = true
                         {
-                            cmd.CommandText = "UPDATE Orders SET Approved = 1 " + //update order status to 1
-                                "WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID " +
+                            cmd.CommandText = "UPDATE Orders SET Approved = 1 " + //update order status to occupied.. Approved = 1
+                                "WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID " + 
                                 "UPDATE Orders SET Approved = 0 WHERE Orders.OrderID = (SELECT Orders.OrderID FROM Orders " + // set approved to 0 where orders of the same apartment are between the dates of the approved order
-                                "JOIN (SELECT Orders.FromDate,Orders.ToDate,OrderID,ApartmentID FROM Orders WHERE Orders.OrderID = @OrderID) AS Step1 ON Step1.ApartmentID = Orders.ApartmentID" + // add the order the as been approved for comparison 
+                                "JOIN (SELECT Orders.FromDate,Orders.ToDate,OrderID,ApartmentID FROM Orders WHERE Orders.OrderID = @OrderID) AS Step1 ON Step1.ApartmentID = Orders.ApartmentID" + // add the order that as been approved for comparison 
                                 " WHERE (Orders.Approved IS NULL OR Orders.Approved = 0) AND Orders.FromDate BETWEEN Step1.FromDate AND Step1.ToDate OR Orders.ToDate BETWEEN Step1.FromDate AND Step1.ToDate AND NOT Orders.OrderID = Step1.OrderID)";
                             if (cmd.ExecuteNonQuery() > 0)
                             {
@@ -982,7 +998,7 @@ namespace Apartrent_Try2
                             }
 
                         }
-                        else if (!(bool)orders.Approved)
+                        else if (!(bool)orders.Approved) // approved = false, decline the order
                         {
                             cmd.CommandText = "UPDATE Orders SET Approved = @Approved WHERE Orders.ApartmentID = @ApartmentID AND Orders.OrderID = @OrderID";
                             return cmd.ExecuteNonQuery() == 1;

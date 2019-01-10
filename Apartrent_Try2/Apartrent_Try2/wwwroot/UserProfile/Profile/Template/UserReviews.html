@@ -1,14 +1,14 @@
 ﻿<div class="w3-animate-bottom" style="margin-top:20px;width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
-    <div class="w3-card-2 w3-round-large" style="width:40%;" ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
+    <div class="w3-card-2 w3-round-large" style="width:100%;max-width:340px" ng-if="userDetails.reviews.length > 0" ng-repeat="review in userDetails.reviews">
         <div ng-show="currentReview != $index">
 
           
             <p>{{$index+1}}. Description:{{review.description}}</p>
             <p>Rate:{{review.rating}}</p>
-            <div>
-                <button class="w3-button w3-round w3-mobile w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
-                <button class="w3-button w3-round w3-red w3-mobile"  ng-click="deleteReview(review,$index)">Delete Review</button>
-            </div>
+
+                <button style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
+                <button style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-red"  ng-click="deleteReview(review,$index)">Delete Review</button>
+            
         </div>
         <div ng-show="currentReview == $index">
             <textarea style="width:100%;max-width:244.391px;resize:none"  class="w3-input" placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>

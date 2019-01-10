@@ -17,6 +17,9 @@ namespace Apartrent_Try2.Controllers
         [HttpPost]
         public int NewReview([FromBody]Reviews reviews)
         {
+            if (reviews.Rating > 5 || reviews.Rating < 1 || reviews.ApartmentID < 1 || String.IsNullOrEmpty(reviews.Description) ||
+                reviews.Description.Length > 70 || reviews.Description.Length < 3)
+                return -1;
             reviews.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             if (String.IsNullOrEmpty(reviews.UserName))
                 return -1;
@@ -27,7 +30,8 @@ namespace Apartrent_Try2.Controllers
         public bool DeleteReview([FromBody]Reviews reviews)
         {
             reviews.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(reviews.UserName))
+
+            if (reviews.ApartmentID < 1 || reviews.ReviewID < 1)
                 return false;
             return DB.ReviewsDB.DeleteReview(reviews);
         }
@@ -36,7 +40,8 @@ namespace Apartrent_Try2.Controllers
         public bool EditReview([FromBody]Reviews reviews)
         {
             reviews.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(reviews.UserName))
+            if (reviews.ReviewID <1 || reviews.ApartmentID < 1 || reviews.Rating < 1 || reviews.Rating > 1 ||
+                reviews.Rating > 5 ||String.IsNullOrEmpty(reviews.Description) || reviews.Description.Length < 3 || reviews.Description.Length > 70)
                 return false;
             return DB.ReviewsDB.EditReview(reviews);
         }
@@ -45,8 +50,6 @@ namespace Apartrent_Try2.Controllers
         public List<Reviews> GetUserReviews()
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(userName))
-                return null;
             return DB.ReviewsDB.GetUserReviews(userName);
         }
     }

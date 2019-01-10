@@ -15,14 +15,13 @@ namespace Apartrent_Try2.Controllers
     [Authorize]
     public class OrdersController : ControllerBase
     {
-        
+        long presentTime = DateTime.Now.Ticks;
 
         [HttpGet("UserOrders")]
         public List<Orders> GetUserOrders()
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(userName))
-                return null;
+
             return DB.OrdersDB.GetUserOrders(userName);
         }
 
@@ -31,7 +30,7 @@ namespace Apartrent_Try2.Controllers
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
-            if (String.IsNullOrEmpty(userName) || role != 1)
+            if ( role != 1)
                 return null;
             return DB.OrdersDB.GetPendingOrders(userName, null);
         }
@@ -41,7 +40,7 @@ namespace Apartrent_Try2.Controllers
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
-            if (String.IsNullOrEmpty(userName) || role != 1)
+            if (String.IsNullOrEmpty(userName) || role != 1 || apartmentID < 1)
                 return null;
             return DB.OrdersDB.GetApartmentOrders(userName, apartmentID);
         }
@@ -51,7 +50,7 @@ namespace Apartrent_Try2.Controllers
         {
             orders.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
-            if (String.IsNullOrEmpty(orders.UserName) || role != 1)
+            if (String.IsNullOrEmpty(orders.UserName) || role != 1 || orders.OrderID < 1 || orders.ApartmentID < 1 )
                 return null;
             return DB.OrdersDB.UpdateOrderStatus(orders);
         }
@@ -60,9 +59,19 @@ namespace Apartrent_Try2.Controllers
         public bool NewOrder([FromBody]Orders order)
         {
             order.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(order.UserName))
+            if (String.IsNullOrEmpty(order.UserName) || String.IsNullOrEmpty(order.UserName)
+                 || order.FromDate.Ticks > order.ToDate.Ticks || presentTime > order.FromDate.Ticks || presentTime > order.ToDate.Ticks)
                 return false;
             return DB.OrdersDB.NewOrder(order);
+        }
+
+        [HttpDelete]
+        public bool DeleteOrders([FromQuery] int orderID)
+        {
+            if (orderID < 1)
+                return false;
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            return DB.OrdersDB.DeleteOrder(orderID, userName);
         }
     }
 }

@@ -25,9 +25,9 @@ currentUserApartmentViewController.controller('currentUserApartmentViewControlle
             if (response.data) {
                 $rootScope.reload = false;
                 for (var i = 0; i < response.data.length; i++) {
-                    response.data[i].fromDate = dateHandlerFactory.dateConvertor(response.data[i].fromDate);
-                    response.data[i].toDate = dateHandlerFactory.dateConvertor(response.data[i].toDate);
-                    response.data[i].orderDate = dateHandlerFactory.dateConvertor(response.data[i].orderDate);
+                    response.data[i].fromDate = dateHandlerFactory.dateConverter(response.data[i].fromDate);
+                    response.data[i].toDate = dateHandlerFactory.dateConverter(response.data[i].toDate);
+                    response.data[i].orderDate = dateHandlerFactory.dateConverter(response.data[i].orderDate);
                 }
                 return $scope.userDetails.currentApartment.orders = response.data;
 

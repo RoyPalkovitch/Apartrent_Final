@@ -1,9 +1,8 @@
 ﻿<center class="w3-animate-bottom" style="width:100%;display:flex;flex-direction:column;flex-wrap:wrap;justify-content:center;align-items:center">
-    <div class="w3-cell" id="status">
-        <div style="width:100%" ng-if="userDetails.orders.length > 0">
+        <div style="width:55%;max-width:640px" ng-if="userDetails.orders.length > 0">
             <h3>Your Purches:</h3>
-            <div class="w3-border" ng-repeat="orders in userDetails.orders track by $index">
-                <a>
+            <div style="width:100%" class="w3-border" ng-repeat="orders in userDetails.orders track by $index">
+                <div style="width:100%">
                     <p class="w3-border-bottom">Renter Name: {{orders.renterUserName}}</p>
                     <p class="w3-border-bottom">Check-In: {{orders.fromDate}}</p>
                     <p class="w3-border-bottom">Check-Out: {{orders.toDate}}</p>
@@ -16,11 +15,12 @@
                         <span class="w3-green w3-mobile w3-border-bottom" ng-switch-when="true">Approved!</span>
                         <span class="w3-red w3-mobile w3-border-bottom" ng-switch-when="false">Declined</span>
                     </span>
-                </a>
+                </div>
+                    <button ng-disabled="deleteBtn" ng-click="deleteOrder(orders.orderID,$index)" class="w3-button w3-mobile w3-red w3-right" style="width:100%">Cancel order &times;</button><br />
             </div>
         </div>
         <div ng-if="userDetails.orders.length === 0 || userDetails.orders.length === undefined">
             <a ui-sref="index"><h6>It seems like you havent purches any thing click here and start to travel</h6></a>
         </div>
-    </div>
+
 </center>
