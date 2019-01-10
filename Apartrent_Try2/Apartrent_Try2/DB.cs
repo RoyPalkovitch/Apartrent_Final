@@ -19,14 +19,14 @@ namespace Apartrent_Try2
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-
-                    if (ValidateUser(user.UserName, user.Password, conn))
+                    
+                    if (ValidateUser(user.UserName, user.Password, conn))//check if the user is valide and if the password matches to the stored one
                     {
-                        UpdateUserLastLogin(conn, user.UserName);
-                        return GetYourUserProfile(user.UserName, conn);
+                        UpdateUserLastLogin(conn, user.UserName);//update user last login
+                        return GetYourUserProfile(user.UserName, conn); //return an object of the user that include all the user data
                     }
 
-                    return null;
+                    return null;//if the validation is false the user object is null
                 }
             }
 
@@ -36,16 +36,16 @@ namespace Apartrent_Try2
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    using (SqlCommand cmd = new SqlCommand("SELECT UserName From Users WHERE UserName=@UserName", conn))
+                    using (SqlCommand cmd = new SqlCommand("SELECT UserName From Users WHERE UserName=@UserName", conn)) // check if user name is already exists
                     {
-                        lock ("now")
+                        lock ("now") // locking the thread so the there would not be a situation that user get change on multithread enviorment
                         {
-                            cmd.Add("@UserName", user.UserName);
+                            cmd.Add("@UserName", user.UserName); // add the user userName to the property @UserName
                             using (SqlDataReader dr = cmd.ExecuteReader())
                             {
                                 if (dr.Read())
                                 {
-                                    return false;
+                                    return false;//user is already exist
                                 }
                             }
                             cmd.CommandText = "INSERT INTO Users(UserName,Password,Gender,[Address],PhoneNumber,Email,FirstName,LastName,LastLogin,LastOrder,CountryID,Role,UsersProfileImage.UserName) VALUES(@UserName,@Password,@Gender,@Address,@PhoneNumber,@Email,@FirstName,@LastName,@LastLogin,@LastOrder,@CountryID,@Role)";
@@ -60,7 +60,7 @@ namespace Apartrent_Try2
                             cmd.Add("@LastOrder", user.LastOrder);
                             cmd.Add("@CountryID", user.CountryID);
                             cmd.Add("@Role", 0);
-                            if (cmd.ExecuteNonQuery() == 1)
+                            if (cmd.ExecuteNonQuery() == 1) // if the user as been register succesfully he can procced to image storing (if any image as been uploaded)
                             {
 
                                 if (user.ProfileImage != null)
@@ -84,7 +84,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteUser(string user)
+            public static bool DeleteUser(string user)//deleteing the user data
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -97,7 +97,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool EditUser(Users user)
+            public static bool EditUser(Users user)//edit the user without the image
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -121,7 +121,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool UpdateProfilePicture(Users user)
+            public static bool UpdateProfilePicture(Users user)//edit the user profile image
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -138,8 +138,8 @@ namespace Apartrent_Try2
 
             public static bool ValidateUser(string userName, string password, SqlConnection conn)
             {
-                string storedHashPassword = null;
-                PasswordHash hash = new PasswordHash();
+                string storedHashPassword = null;//stored hash variable
+                PasswordHash hash = new PasswordHash();//new hash class instence
                 using (SqlCommand cmd = new SqlCommand("SELECT Password FROM Users WHERE UserName=@UserName", conn))
                 {
                     cmd.Add("@UserName", userName);
@@ -147,20 +147,19 @@ namespace Apartrent_Try2
                     {
                         if (dr.Read())
                         {
-                            storedHashPassword = dr.GetString(0);
+                            storedHashPassword = dr.GetString(0);//adding the stored password the the object
                         }
 
                     }
-                    bool result = false;
                     if (storedHashPassword != null)
-                        result = hash.Verify(password, storedHashPassword);
-                    return result;
+                        return hash.Verify(password, storedHashPassword); //verify if the hash is correct
+                    return false;
 
                 }
             }
 
 
-            public static void UpdateUserLastLogin(SqlConnection conn, string userName)
+            public static void UpdateUserLastLogin(SqlConnection conn, string userName)//updating user last login
             {
                 using (SqlCommand cmd = new SqlCommand("UPDATE Users SET LastLogin=@LastLogin WHERE UserName=@UserName", conn))
                 {
@@ -170,7 +169,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static Users GetYourUserProfile(string userName, SqlConnection conn)
+            public static Users GetYourUserProfile(string userName, SqlConnection conn)//get user profile details
             {
 
                 using (SqlCommand cmd = new SqlCommand("SELECT Gender,[Address], PhoneNumber, Email, FirstName, LastName, Users.CountryID AS CountryID, CountryName, Role, UsersProfileImage.Image AS Image,UsersProfileImage.ImageType as ImageType FROM Users INNER JOIN Countries ON Users.CountryID = Countries.CountryID INNER JOIN UsersProfileImage ON UsersProfileImage.UserName = Users.UserName WHERE Users.UserName = @UserName", conn))
@@ -183,7 +182,6 @@ namespace Apartrent_Try2
                         userDetails = new Users()
                         {
                             UserName = userName,
-
                             Gender = dr.GetBoolean(0),
                             Address = dr.GetString(1),
                             PhoneNumber = dr.GetString(2),
@@ -193,18 +191,19 @@ namespace Apartrent_Try2
                             CountryID = dr.GetInt32(6),
                             CountryName = dr.GetString(7),
                             Role = dr.GetInt32(8),
-                            ProfileImageByte = (dr.IsDBNull(9) ? null : (byte[])dr.GetValue(9)),//will need to change it to the currect way of reading bytes
+                            ProfileImageByte = (dr.IsDBNull(9) ? null : (byte[])dr.GetValue(9)),
                             ProfileImageType = (dr.IsDBNull(10) ? null : dr.GetString(10))
                         };
 
                     }
-                    userDetails.ProfileImage = ImageValidation.BytesToBase64(userDetails.ProfileImageByte, null)[0];
-                    userDetails.Token = (string)AuthService.GetToken(userDetails.UserName, userDetails.Role);
-                    if (userDetails.Role == 0)
+                    userDetails.ProfileImage = ImageValidation.BytesToBase64(userDetails.ProfileImageByte, null)[0];//converting the image if exists
+                    userDetails.ProfileImageByte = null;
+                    userDetails.Token = (string)AuthService.GetToken(userDetails.UserName, userDetails.Role);//creating new token for the user
+                    if (userDetails.Role == (int)Role.User)//if user is not a renter return the object else get user apartments
                         return userDetails;
-                    if (userDetails.Role == (int)Role.Renter)
+                    if (userDetails.Role == (int)Role.Renter) //if user is renter fetching all of his apartments data
                     {
-
+                        //asking for apartment details,Joining the next tables - ApartmentImages,ApartmentFeatures,ApartmentCategories
                         cmd.CommandText = "SELECT Apartment.ApartmentID AS ApartmentID,CountryID,Apartment.CategoryID as CategoryID,[Address]" +
                             ",PricePerDay,AvailableFromDate,AvailableToDate,[Description],NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets" +
                             ",NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription,ApartmentType," +
@@ -261,12 +260,12 @@ namespace Apartrent_Try2
                                 apartment.ApartmentImageType[4] = dr.IsDBNull(35) ? null : dr.GetString(35);
                                 apartment.ApartmentImage = ImageValidation.BytesToBase64(null, apartment.ApartmentImageByte);
                                 apartment.ApartmentImageByte = null;
-                                temp.Add(apartment);
+                                temp.Add(apartment);//adding the apartment to temporary list
                             }
                             userDetails.RenterApartments = temp;
 
                         }
-                        userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName, conn);
+                        userDetails.PendingOrders = OrdersDB.GetPendingOrders(userName, conn);//check if the user have any pending orders
                         userDetails.Password = null;
                         return userDetails;
                     }
@@ -283,7 +282,7 @@ namespace Apartrent_Try2
         public static class RenterDB
         {
 
-            public static bool BecomeRenter(string userName, SqlConnection conn)
+            public static bool BecomeRenter(string userName, SqlConnection conn)// changing your Role to be renter(== 1)
             {
 
                 using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Role=@Role WHERE UserName=@RenterUserName", conn))
@@ -295,9 +294,9 @@ namespace Apartrent_Try2
 
             }
 
-            public static bool DeleteRenterStatus(string userName)
+            public static bool DeleteRenterStatus(string userName)//Deleting the renter status and any apartment the account currently have
             {
-                using (SqlConnection conn = new SqlConnection(CONN_STRING)) //need to delete apartments too
+                using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand("UPDATE Users SET Role=@Role WHERE UserName=@RenterUserName", conn))
@@ -325,7 +324,7 @@ namespace Apartrent_Try2
 
         public static class ApartmentDB
         {
-            public static List<Apartment> GetApartmentsForLocation(int countryID, int numberOfGuests, DateTime fromDate, DateTime toDate) // view Outside Of Page (After the search before choosing the apartment)
+            public static List<Apartment> GetApartmentsForLocation(int countryID, int numberOfGuests, DateTime fromDate, DateTime toDate) //featching the user search data view Outside Of Page (After the search before choosing the apartment)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -368,10 +367,10 @@ namespace Apartrent_Try2
 
                                 apartment.NumberOfGuests = numberOfGuests;
                                 apartment.CountryID = countryID;
-                                apartment.PriceForStaying = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays * apartment.PricePerDay : apartment.PricePerDay;
-                                apartment.TotalNumberOfDays = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays : 1;
-                                apartment.PricePerGuest = apartment.PriceForStaying / apartment.TotalNumberOfDays / numberOfGuests;
-                                apartments.Add(apartment);
+                                apartment.PriceForStaying = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays * apartment.PricePerDay : apartment.PricePerDay;//caculate the price for staying
+                                apartment.TotalNumberOfDays = (toDate - fromDate).TotalDays > 0 ? (toDate - fromDate).TotalDays : 1;//caculate total number of days for the user stay
+                                apartment.PricePerGuest = apartment.PriceForStaying / apartment.TotalNumberOfDays / numberOfGuests;//price per guests
+                                apartments.Add(apartment);//adding the apartment for the list
                             }
                             return apartments;
 
@@ -380,12 +379,12 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static Apartment AddApartment(Apartment apartment, string userName, bool changeRenterStatus)
+            public static Apartment AddApartment(Apartment apartment, string userName, bool changeRenterStatus)//adding new apartment (the boolean here is to check if the user does need to change his status)
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (changeRenterStatus && !RenterDB.BecomeRenter(userName, conn))
+                    if (changeRenterStatus && !RenterDB.BecomeRenter(userName, conn))//if somthing has failed in the role change,terminating request
                         return null;
 
                     using (SqlCommand cmd = new SqlCommand("INSERT INTO Apartment(RenterUserName,CountryID,CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Apartment].Description)output INSERTED.ApartmentID VALUES(@RenterUserName,@CountryID,@CategoryID,@Address,@PricePerDay,@AvailableFromDate,@AvailableToDate,@Description)", conn))
@@ -399,7 +398,7 @@ namespace Apartrent_Try2
                         cmd.Add("@AvailableToDate", apartment.ToDate.Ticks);
                         cmd.Add("@Description", apartment.Description);
                         apartment.ApartmentID = (int)cmd.ExecuteScalar();
-                        if (AddApartmentFeature(apartment, conn))
+                        if (AddApartmentFeature(apartment, conn))//if apartmentFeature has add succesfully continute else the proccess is terminate and if the user tried to became a renter his role change back to user
                         {
 
                             StringBuilder inserter = new StringBuilder();
@@ -427,7 +426,7 @@ namespace Apartrent_Try2
                             cmd.Add("@ApartmentID", apartment.ApartmentID);
                             cmd.CommandText = inserter.ToString() + values.ToString();
 
-                            if (cmd.ExecuteNonQuery() == 1)
+                            if (cmd.ExecuteNonQuery() == 1)//if image as add success fully continue to add apatment else procces terminated
                             {
                                 Apartment tempApartment = new Apartment()
                                 {
@@ -452,7 +451,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool AddApartmentFeature(Apartment features, SqlConnection conn)
+            public static bool AddApartmentFeature(Apartment features, SqlConnection conn)//adding the apartment features
             {
                 using (SqlCommand cmd = new SqlCommand("INSERT INTO ApartmentFeatures(ApartmentID,NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets,NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription)VALUES(@ApartmentID,@NumberOfGuests,@Shower,@Bath,@WIFI,@TV,@Cables,@Satellite,@Pets,@NumberOfBedRooms,@LivingRoom,@BedRoomDescription,@LivingRoomDescription,@QueenSizeBed,@DoubleBed,@SingleBed,@SofaBed,@BedsDescription)", conn))
                 {
@@ -478,16 +477,16 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteApartment(int apartmentID, string userName, SqlConnection conn)
+            public static bool DeleteApartment(int apartmentID, string userName, SqlConnection conn)//delete apartment
             {
 
-                if (conn == null)
+                if (conn == null)//if the user choose to delete this apartment a new instance of the connection is required
                 {
                     conn = new SqlConnection(CONN_STRING);
                 }
                 using (conn)
                 {
-                    if (conn.State == System.Data.ConnectionState.Closed)
+                    if (conn.State == System.Data.ConnectionState.Closed)//checking current connection state
                     {
                         conn.Open();
 
@@ -500,7 +499,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool EditApartment(Apartment apartment, bool editFeature, string userName)
+            public static bool EditApartment(Apartment apartment, bool editFeature, string userName)//edit apartment (features editing is optional) without image
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -517,7 +516,7 @@ namespace Apartrent_Try2
                         cmd.Add("@AvailableToDate", apartment.ToDate.Ticks);
                         cmd.Add("@Description", apartment.Description);
                         cmd.Add("@ApartmentID", apartment.ApartmentID);
-                        if (editFeature)
+                        if (editFeature)//if edit feature is wanted
                         {
                             cmd.CommandText = "Update ApartmentFeatures SET NumberOfGuests=@NumberOfGuests,Shower=@Shower,Bath=@Bath,WIFI=@WIFI,TV=@TV,Cables=@Cables,Satellite=@Satellite,Pets=@Pets,NumberOfBedRooms=@NumberOfBedRooms,LivingRoom=@LivingRoom,BedRoomDescription=@BedRoomDescription,LivingRoomDescription=@LivingRoomDescription,QueenSizeBed=@QueenSizeBed,DoubleBed=@DoubleBed,SingleBed=@SingleBed,SofaBed=@SofaBed,BedsDescription=@BedsDescription WHERE ApartmentID=@ApartmentID";
                             cmd.Add("@NumberOfGuests", apartment.NumberOfGuests);
@@ -546,7 +545,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static Apartment GetApartment(int apartmentID)
+            public static Apartment GetApartment(int apartmentID)//get all of the apartment data after user as choose to view it
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -604,7 +603,7 @@ namespace Apartrent_Try2
                             }
 
                         }
-                        cmd.CommandText = "SELECT Rating,Description,UserName,ReviewID FROM Reviews WHERE ApartmentID = @ApartmentID";
+                        cmd.CommandText = "SELECT Rating,Description,UserName,ReviewID FROM Reviews WHERE ApartmentID = @ApartmentID";//check if the apartment have reviews
                         try
                         {
                             using (SqlDataReader reader = cmd.ExecuteReader())
@@ -638,8 +637,7 @@ namespace Apartrent_Try2
                 }
             }
 
-
-            public static bool UpdateApartmentPictures(Apartment apartment)
+            public static bool UpdateApartmentPictures(Apartment apartment)//update the picture for the apartment
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -673,8 +671,7 @@ namespace Apartrent_Try2
                 }
             }
 
-
-            public static List<ApartmentCategories> GetCategories()
+            public static List<ApartmentCategories> GetCategories()//get apartments categories
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -701,13 +698,11 @@ namespace Apartrent_Try2
                     }
                 }
             }
-
-
         }
 
         public static class CountriesDB
         {
-            public static List<Countries> GetCountries()
+            public static List<Countries> GetCountries()//Featching the countries from db
             {
                 List<Countries> countries = new List<Countries>();
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
@@ -738,7 +733,7 @@ namespace Apartrent_Try2
 
             public static int NewReview(Reviews reviews)
             {
-                using (SqlConnection conn = new SqlConnection(CONN_STRING)) //NEED FIX!
+                using (SqlConnection conn = new SqlConnection(CONN_STRING)) //adding new review where the user is not the owner
                 {
                     conn.Open();
                     using (SqlCommand cmd = new SqlCommand("IF NOT EXISTS (SELECT Apartment.RenterUserName FROM Apartment WHERE Apartment.ApartmentID = @ApartmentID AND Apartment.RenterUserName = @UserName) INSERT INTO Reviews(Rating,[Description],UserName,ApartmentID) output INSERTED.ReviewID VALUES (@Rating,@Description,@UserName,@ApartmentID)", conn))
@@ -759,7 +754,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteReview(Reviews reviews)
+            public static bool DeleteReview(Reviews reviews)//delete the review
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -774,7 +769,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool EditReview(Reviews reviews)
+            public static bool EditReview(Reviews reviews)//edit review
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -792,7 +787,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Reviews> GetUserReviews(string userName)
+            public static List<Reviews> GetUserReviews(string userName)//get all of your reviews
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -853,7 +848,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetUserOrders(string userName)
+            public static List<Orders> GetUserOrders(string userName)//get all the user past orders
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -887,7 +882,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetPendingOrders(string userName, SqlConnection conn)
+            public static List<Orders> GetPendingOrders(string userName, SqlConnection conn)//get pending orders
             {
                 if (conn == null)
                 {
@@ -927,7 +922,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static List<Orders> GetApartmentOrders(string userName, int apartmentID)
+            public static List<Orders> GetApartmentOrders(string userName, int apartmentID)//get orders for the current apartment
             {
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -959,7 +954,7 @@ namespace Apartrent_Try2
                 }
             }
 
-            public static bool DeleteOrder(int orderID, string userName)
+            public static bool DeleteOrder(int orderID, string userName) //delete order
             {
                 using(SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
@@ -1009,7 +1004,7 @@ namespace Apartrent_Try2
                     }
 
                 }
-            }
+            } //update the order status
 
 
         }
