@@ -1,12 +1,14 @@
 ﻿var editApartmentController = angular.module('editApartmentController', []);
 
 editApartmentController.controller('editApartmentController', function ($scope, $http, $transition$, $location, $rootScope, userProfile, imageHandlerFactory) {
+    $scope.editApartmentBtn = false;
 
     $rootScope.userDetails.currentApartment = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex];
     $scope.closeTopBar();
     $scope.editPicture = $rootScope.userDetails.currentApartment.apartmentImage;
     $scope.index = 0;
     $scope.editApartment = function () {
+        $scope.editApartmentBtn = true;
         $scope.editedApartment = {// add new apartment object
             apartmentID: $rootScope.userDetails.currentApartment.apartmentID,
             categoryID: $scope.editCategoryID ? $scope.editCategoryID : $rootScope.userDetails.currentApartment.categoryID,
@@ -34,6 +36,16 @@ editApartmentController.controller('editApartmentController', function ($scope, 
             sofaBed: $scope.editSofaBed ? $scope.editSofaBed : $rootScope.userDetails.currentApartment.sofaBed,
             bedsDescription: $scope.editBedsDescription ? $scope.editBedsDescription : $rootScope.userDetails.currentApartment.bedsDescription
         };
+        if ($scope.editedApartment.categoryID < 1 || $scope.editedApartment.categoryID > 2 || $scope.editedApartment.countryID < 1 || $scope.editedApartment.categoryID === undefined || $scope.editedApartment.countryID === undefined ||
+            $scope.editedApartment.countryID > 5 || $scope.editedApartment.address.length > 50 || $scope.editedApartment.address.length < 5 || $scope.editedApartment === undefined ||
+            $scope.editedApartment.description.length > 70 || $scope.editedApartment.description.length < 5 || $scope.editedApartment.numberOfGuests < 1 || $scope.editedApartment.numberOfGuests > 20 ||
+            $scope.editedApartment.numberOfBedRooms < 1 || $scope.editedApartment.livingRoomDescription.length > 70 || $scope.editedApartment.livingRoomDescription.length < 5 ||
+            $scope.editedApartment.bedsDescription.length > 70 || $scope.editedApartment.bedRoomDescription.length < 5 ||
+            $scope.editedApartment.queenSizeBed < 0 || $scope.editedApartment.doubleBed < 0 || $scope.editedApartment.singleBed < 0 ||
+            $scope.editedApartment.sofaBed < 0) {
+            $scope.editApartmentBtn = false;
+            return;
+        }
         if ($scope.showFeatures === undefined)
             $scope.showFeatures = false;
         $http.put("api/apartment?editFeature=" + $scope.showFeatures, $scope.editedApartment, userProfile.config)
@@ -44,10 +56,12 @@ editApartmentController.controller('editApartmentController', function ($scope, 
                     $rootScope.reload = false;
                     $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex] = $scope.editedApartment;
                     userProfile.setData($rootScope.userDetails);
-
+                    $scope.editApartmentBtn = false;
                     return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
 
                 }
+                $rootScope.reload = false;
+                $scope.editApartmentBtn = false;
             });
     };
 
@@ -58,9 +72,15 @@ editApartmentController.controller('editApartmentController', function ($scope, 
         
     };
     $scope.editApartmentPicture = function () {
-
+        $scope.editApartmentBtn = true;
         $scope.editImage = imageHandlerFactory.sendImage($scope.editPicture);
         $scope.editImage.apartmentID = $rootScope.userDetails.currentApartment.apartmentID;
+        if ($scope.editImage.apartmentImageType[0] === undefined || $scope.editImage.apartmentImage[0] === undefined ||
+            $scope.editImage.apartmentImage[0] === null || $scope.editImage.apartmentImageType[0] === null) {
+            $scope.editApartmentPictureBtn = false;
+            return;
+        }
+
         $http.put("api/apartment/updateApartmentImages", $scope.editImage, userProfile.config).then(function(response){
             $rootScope.reload = true;
 
@@ -68,8 +88,10 @@ editApartmentController.controller('editApartmentController', function ($scope, 
                 $rootScope.reload = false;
                 $rootScope.userDetails.renterApartment[$transition$.params().apartmentIndex].apartmentImage = $scope.editImage;
                 userProfile.setData($rootScope.userDetails);
+                $scope.editApartmentBtn = false;
             }
             $rootScope.reload = false;
+            $scope.editApartmentBtn = false;
 
         });
     };

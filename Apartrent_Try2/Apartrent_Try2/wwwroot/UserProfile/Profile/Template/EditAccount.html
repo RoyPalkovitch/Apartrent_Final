@@ -8,7 +8,7 @@
             </div>
                 <span ng-hide="newImage" class="w3-text-gray">If you will not add new picture the old one will be saved</span>
             <input autofocus type="file" class="w3-input w3-mobile" style="width:100%;max-width:244.391px;" ng-click="newImage =true" ng-file-select="onFileSelect($files)" ng-model="newProfilePic">
-            <button class="w3-button w3-mobile w3-round w3-green" ng-show="newImage" ng-click="editProfileImage()">Save Picture</button>
+            <button class="w3-button w3-mobile w3-round w3-green" ng-show="newImage" ng-disabled="editAccBtn" ng-click="editProfileImage()">Save Picture</button>
             <button class="w3-button w3-mobile w3-round w3-red" ng-show="newImage" ng-click="discardPicChange()">Discard</button>
         </div>
         <h6>First Name:</h6> <input  maxlength="10" class="w3-input w3-mobile" style="width:100%;max-width:244.391px;" type="text" ng-model="$parent.editFirstName" placeholder="{{userDetails.firstName}}" /><br />
@@ -23,7 +23,7 @@
         </select><br />
         <h6>Phone number:</h6> <input type="tel" maxlength="15" class="w3-input w3-mobile" style="width:100%;max-width:244.391px;" ng-model="$parent.editPhoneNumber" placeholder="{{userDetails.phoneNumber}}" /><br />
         <h6>Address:</h6> <input type="text" maxlength="30" ng-model="$parent.editAddress" class="w3-input w3-mobile" style="width:100%;max-width:244.391px;" placeholder="{{userDetails.address}}" /><br />
-        <button class="w3-button w3-mobile w3-hover-blue w3-purple w3-round" ng-click="editAccount()">Save</button>
+        <button ng-disabled="editAccBtn" class="w3-button w3-mobile w3-hover-blue w3-purple w3-round" ng-click="editAccount()">Save</button>
     </form>
 </center>
 

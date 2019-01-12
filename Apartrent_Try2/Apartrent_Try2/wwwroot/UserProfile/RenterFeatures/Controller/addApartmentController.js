@@ -43,11 +43,19 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             apartmentImage: $scope.imagesData.apartmentImage,
             apartmentImageType: $scope.imagesData.apartmentImageType
         };
-
+        if ($scope.newApartment.categoryID < 1 || $scope.newApartment.categoryID > 2 || $scope.newApartment.countryID < 1 || $scope.newApartment.categoryID === undefined || $scope.newApartment.countryID === undefined ||
+            $scope.newApartment.countryID > 5 || $scope.newApartment.address.length > 50 || $scope.newApartment.address.length < 5 || $scope.newApartment === undefined ||
+            $scope.newApartment.description.length > 70 || $scope.newApartment.description.length < 5 || $scope.newApartment.numberOfGuests < 1 || $scope.newApartment.numberOfGuests > 20 ||
+            $scope.newApartment.numberOfBedRooms < 1 || $scope.newApartment.livingRoomDescription.length > 70 || $scope.newApartment.livingRoomDescription.length < 5 ||
+            $scope.newApartment.bedsDescription.length > 70 || $scope.newApartment.bedRoomDescription.length < 5 || $scope.newApartment.apartmentImage[0] === null ||
+            $scope.newApartment.apartmentImageType[0] === null || $scope.newApartment.queenSizeBed < 0 || $scope.newApartment.doubleBed < 0 || $scope.newApartment.singleBed < 0 ||
+            $scope.newApartment.sofaBed < 0) {
+            $scope.addApartmentBtn = false;
+            return;
+        }
         $http.post("api/apartment", $scope.newApartment, userProfile.config).then(function (response) {
             $rootScope.reload = true;
             if (response.data) {
-                $rootScope.reload = false;
                 response.data.fromDate = dateHandlerFactory.dateConverter(response.data.fromDate);
                 response.data.toDate = dateHandlerFactory.dateConverter(response.data.toDate);
                 if (notRenterYet) {// add new apartment if the user wasnt renter before 
@@ -61,8 +69,11 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
                 $scope.newApartment.apartmentType = $scope.categories[$scope.categoryID].apartmentType;
                 $rootScope.userDetails.renterApartments.push($scope.newApartment);
                 userProfile.setData($rootScope.userDetails);
+                $rootScope.reload = false;
+                $scope.addApartmentBtn = false;
                 return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
             } else {
+                $scope.addApartmentBtn = false;
                 $rootScope.reload = false;
 
                 return false; // need to make an error message

@@ -208,8 +208,8 @@ namespace Apartrent_Try2
                             ",PricePerDay,AvailableFromDate,AvailableToDate,[Description],NumberOfGuests,Shower,Bath,WIFI,TV,Cables,Satellite,Pets" +
                             ",NumberOfBedRooms,LivingRoom,BedRoomDescription,LivingRoomDescription,QueenSizeBed,DoubleBed,SingleBed,SofaBed,BedsDescription,ApartmentType," +
                             "ApartmentImages.PrimeImage,ApartmentImages.Image1,ApartmentImages.Image2,ApartmentImages.Image3,ApartmentImages.Image4," +
-                            "ApartmentImages.PrimeImageType,ApartmentImages.ImageType1,ApartmentImages.ImageType2,ApartmentImages.ImageType3,ApartmentImages.ImageType4" +
-                            " FROM Apartment INNER JOIN ApartmentImages ON Apartment.ApartmentID = ApartmentImages.ApartmentID INNER JOIN ApartmentFeatures ON" +
+                            "ApartmentImages.PrimeImageType,ApartmentImages.ImageType1,ApartmentImages.ImageType2,ApartmentImages.ImageType3,ApartmentImages.ImageType4," +
+                            "(SELECT AVG(Reviews.Rating) FROM Reviews WHERE Apartment.ApartmentID = Reviews.ApartmentID) AS AvgRating FROM Apartment INNER JOIN ApartmentImages ON Apartment.ApartmentID = ApartmentImages.ApartmentID INNER JOIN ApartmentFeatures ON" +
                             " Apartment.ApartmentID = ApartmentFeatures.ApartmentID INNER JOIN ApartmentCategories ON Apartment.CategoryID = ApartmentCategories.CategoryID " +
                             "WHERE Apartment.RenterUserName = @UserName";
                         using (SqlDataReader dr = cmd.ExecuteReader())
@@ -244,8 +244,8 @@ namespace Apartrent_Try2
                                     SingleBed = dr.GetInt32(22),
                                     SofaBed = dr.GetInt32(23),
                                     BedsDescription = dr.GetString(24),
-                                    ApartmentType = dr.GetString(25)
-
+                                    ApartmentType = dr.GetString(25),
+                                    AvgRate = dr.IsDBNull(26)? 0 : dr.GetInt32(26)
                                 };
                                 apartment.ApartmentImageByte = new List<byte[]> { dr.IsDBNull(26) ? null : ((byte[])dr.GetValue(26)) };
                                 apartment.ApartmentImageByte.Add(dr.IsDBNull(27) ? null : ((byte[])dr.GetValue(27)));

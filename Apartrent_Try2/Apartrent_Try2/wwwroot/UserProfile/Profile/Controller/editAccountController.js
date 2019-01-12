@@ -1,6 +1,7 @@
 ﻿var editController = angular.module('editAccountController', []);
 
 editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile, imageHandlerFactory) {
+    $scope.editAccBtn = false;
 
     $scope.closeTopBar();
 
@@ -9,6 +10,8 @@ editController.controller('editAccountController', function ($scope, $http, $roo
     $scope.editedCountryID = $rootScope.userDetails.countryID;
 
     $scope.editAccount = function () {
+        $scope.editAccBtn = true;
+        
         $scope.userEditedDetails = { // edited user object... 
             firstName: $scope.editFirstName ? $scope.editFirstName : $rootScope.userDetails.firstName, //checking if there is a value if no then the detail stay the same
             lastName: $scope.editLastName ? $scope.editLastName : $rootScope.userDetails.lastName,
@@ -16,8 +19,17 @@ editController.controller('editAccountController', function ($scope, $http, $roo
             email: $scope.editEmail ? $scope.editEmail : $rootScope.userDetails.email,
             address: $scope.editedAddress ? $scope.editAddress : $rootScope.userDetails.address,
             countryID: $scope.editedCountryID ? $scope.editedCountryID : $rootScope.userDetails.countryID,
-            phoneNumber: $scope.editedPhoneNumber ? $scope.editedPhoneNumber : $rootScope.userDetails.phoneNumber,
+            phoneNumber: $scope.editedPhoneNumber ? $scope.editedPhoneNumber : $rootScope.userDetails.phoneNumber
         };
+        if ($scope.userEditedDetails.countryID > 5 || $scope.userEditedDetails.countryID < 1 || $scope.userEditedDetails.address.length > 50 ||
+            $scope.userEditedDetails.address.length < 3 || $scope.userEditedDetails.phoneNumber.length > 15 || $scope.userEditedDetails.phoneNumber.length < 5 || $scope.userEditedDetails.userName.length > 10 ||
+            $scope.userEditedDetails.userName.length < 4 || $scope.userEditedDetails.password.length > 10 || $scope.userEditedDetails.password.length < 6 || $scope.userEditedDetails.email.length > 30 ||
+            $scope.userEditedDetails.email.length < 7 || $scope.userEditedDetails.firstName.length > 11 || $scope.userEditedDetails.lastName.length > 11 ||
+            !$scope.userEditedDetails.email.includes(".com") || !$scope.userEditedDetails.email.includes("@")) {
+            $scope.editAccBtn = false;
+            return;
+        }
+
 
         $http.put("api/users", $scope.userEditedDetails, userProfile.config).then(function (successCallback, errorCallback) {
             $rootScope.reload = true;
@@ -31,6 +43,8 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 $rootScope.userDetails.countryID = $scope.userEditedDetails.countryID;
                 $rootScope.userDetails.phoneNumber = $scope.userEditedDetails.phoneNumber;
                 userProfile.setData($rootScope.userDetails);
+                $scope.editAccBtn = false;
+                $rootScope.reload = false;
                 window.history.back();
                 return;
             }
@@ -39,6 +53,7 @@ editController.controller('editAccountController', function ($scope, $http, $roo
         });
     };
     $scope.editProfileImage = function () {
+        $scope.editAccBtn = true;
         $scope.newImage = imageHandlerFactory.sendImage($scope.newProfilePic);
         $http.put("api/users/UpdateProfileImage", $scope.newImage, userProfile.config).then(function (successCallback, errorCallback) {
             $rootScope.reload = true;
@@ -47,7 +62,7 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 $rootScope.userDetails.profileImage = $scope.newProfilePic;
                 userProfile.setData($rootScope.userDetails);
                 $scope.newImage = false;
-
+                $scope.editAccBtn = false;
             }
             $rootScope.reload = false;
         });

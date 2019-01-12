@@ -6,16 +6,16 @@
             <p>{{$index+1}}. Description:{{review.description}}</p>
             <p>Rate:{{review.rating}}</p>
 
-                <button style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
-                <button style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-red"  ng-click="deleteReview(review,$index)">Delete Review</button>
+                <button ng-disabled="editRevbtn" style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-green" ng-click="editReviewHandler($index)">Edit Review</button>
+                <button ng-disabled="editRevbtn" style="width:100%;max-width:340px" class="w3-button w3-mobile w3-round w3-red"  ng-click="deleteReview(review,$index)">Delete Review</button>
             
         </div>
         <div ng-show="currentReview == $index">
             <textarea style="width:100%;max-width:244.391px;resize:none"  class="w3-input" placeholder="{{review.description}}" ng-model="$parent.$parent.editDescription"></textarea>
             <h6>Current Rating:  {{$parent.editRating}}</h6><input type="range" min="1" max="5" ng-model="$parent.editRating" />
             <div>
-                <button class="w3-button w3-round w3-mobile w3-green" ng-click="editReview(review,$index)">Send Review</button>
-                <button class="w3-button w3-round w3-mobile w3-red" ng-click="editReviewHandler(-1)">Close edit</button>
+                <button ng-disabled="editRevbtn" class="w3-button w3-round w3-mobile w3-green" ng-click="editReview(review,$index)">Send Review</button>
+                <button ng-disabled="editRevbtn" class="w3-button w3-round w3-mobile w3-red" ng-click="editReviewHandler(-1)">Close edit</button>
             </div>
         </div>
     </div>

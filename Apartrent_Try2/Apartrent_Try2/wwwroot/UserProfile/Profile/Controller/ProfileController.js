@@ -2,7 +2,7 @@
 
 profileController.controller('profileController', function ($scope, $window, $rootScope, $location, userProfile) {
     if (!userProfile.data)
-        $location.url("/Pagenotfound");
+        $location.url("/index");
     if (userProfile.data) {
         // $rootScope.userDetails = JSON.parse($window.sessionStorage.getItem("userProfile"));
         $rootScope.userDetails = userProfile.data;

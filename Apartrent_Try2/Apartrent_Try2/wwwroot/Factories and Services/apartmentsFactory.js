@@ -4,7 +4,9 @@ apartrentApp.factory("apartmentsFactory", function ($http, $q, $window, $locatio
     var apartments = {};
     var countries = JSON.parse($window.sessionStorage.getItem("countriesData"));
     apartments.getApartments = function (searchParams) {
-        if (searchParams.countryID && searchParams.guests && searchParams.fromDate && searchParams.toDate) {
+        if (searchParams.countryID && searchParams.countryID < 6 && searchParams.countryID > 1 &&
+            searchParams.guests && searchParams.guests < 21 && searchParams.guests > 0
+            && searchParams.fromDate && searchParams.toDate) {
                 $rootScope.reload = true;
             return $http.get('api/apartment/ApartmentLocation?countryID=' + searchParams.countryID + '&numberOfGuests=' + searchParams.guests + '&fromDate=' + searchParams.fromDate + '&toDate=' + searchParams.toDate).then(function (response) {
                 $rootScope.reload = false;
