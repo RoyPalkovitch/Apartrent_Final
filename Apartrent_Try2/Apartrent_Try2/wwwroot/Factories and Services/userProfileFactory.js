@@ -16,7 +16,7 @@ apartrentApp.factory("userProfile", function ($rootScope, $window, $http, $timeo
 
     userProfile.setToken = function (token) {
         if (token) {
-            this.refreshToken("temp");
+            this.refreshToken(true);
             $window.sessionStorage.setItem("userToken", JSON.stringify(token));
             var config = {
                 headers: {

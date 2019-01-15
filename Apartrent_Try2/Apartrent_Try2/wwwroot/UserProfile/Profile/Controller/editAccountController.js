@@ -1,12 +1,13 @@
 ﻿var editController = angular.module('editAccountController', []);
 
-editController.controller('editAccountController', function ($scope, $http, $rootScope, userProfile, imageHandlerFactory) {
+editController.controller('editAccountController', function ($scope, $http, $rootScope,$location, userProfile, imageHandlerFactory) {
     $scope.editAccBtn = false;
 
     $scope.closeTopBar();
 
+    if (!$rootScope.userDetails.profileImage)
+        $rootScope.userDetails.profileImage = '/ApartrentPhotos/index.jpg';
     $scope.newProfilePic = $rootScope.userDetails.profileImage;
-
     $scope.editedCountryID = $rootScope.userDetails.countryID;
 
     $scope.editAccount = function () {
@@ -22,8 +23,8 @@ editController.controller('editAccountController', function ($scope, $http, $roo
             phoneNumber: $scope.editedPhoneNumber ? $scope.editedPhoneNumber : $rootScope.userDetails.phoneNumber
         };
         if ($scope.userEditedDetails.countryID > 5 || $scope.userEditedDetails.countryID < 1 || $scope.userEditedDetails.address.length > 50 ||
-            $scope.userEditedDetails.address.length < 3 || $scope.userEditedDetails.phoneNumber.length > 15 || $scope.userEditedDetails.phoneNumber.length < 5 || $scope.userEditedDetails.userName.length > 10 ||
-            $scope.userEditedDetails.userName.length < 4 || $scope.userEditedDetails.password.length > 10 || $scope.userEditedDetails.password.length < 6 || $scope.userEditedDetails.email.length > 30 ||
+            $scope.userEditedDetails.address.length < 3 || $scope.userEditedDetails.phoneNumber.length > 15 || $scope.userEditedDetails.phoneNumber.length < 5 || 
+           $scope.userEditedDetails.email.length > 30 ||
             $scope.userEditedDetails.email.length < 7 || $scope.userEditedDetails.firstName.length > 11 || $scope.userEditedDetails.lastName.length > 11 ||
             !$scope.userEditedDetails.email.includes(".com") || !$scope.userEditedDetails.email.includes("@")) {
             $scope.editAccBtn = false;
@@ -45,10 +46,11 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 userProfile.setData($rootScope.userDetails);
                 $scope.editAccBtn = false;
                 $rootScope.reload = false;
-                window.history.back();
+                $location.url("")
                 return;
             }
             $rootScope.reload = false;
+            $scope.editAccBtn = false;
 
         });
     };

@@ -15,16 +15,17 @@ loginController.controller('loginController', function ($scope, $rootScope, $win
             $rootScope.reload = true;
             if (response.data) {
                 $scope.loginBtn = false;
-                if (response.data.role === 1 && response.data.pendingOrders !== null) {
+                if (response.data.pendingOrders !== null) {
                     response.data.pendingNotification = response.data.pendingOrders.length;
                 }
+                if (response.data.role === 1) {
                     for (var i = 0; i < response.data.renterApartments.length; i++) {
                         response.data.renterApartments[i].apartmentImage = imageHandlerFactory.constructImage(response.data.renterApartments[i].apartmentImageType, response.data.renterApartments[i].apartmentImage);
                         response.data.renterApartments[i].fromDate = dateHandlerFactory.dateConverter(response.data.renterApartments[i].fromDate);
                         response.data.renterApartments[i].toDate = dateHandlerFactory.dateConverter(response.data.renterApartments[i].toDate);
 
                     }
-                
+                }
                 $scope.loginUserName = "";
                 $scope.loginPassword = "";
                 userProfile.setToken(response.data.token);

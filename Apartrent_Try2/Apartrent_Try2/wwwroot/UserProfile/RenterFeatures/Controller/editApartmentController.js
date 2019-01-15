@@ -54,10 +54,12 @@ editApartmentController.controller('editApartmentController', function ($scope, 
                 if (response.data) {
                     $rootScope.userDetails.currentApartment = '';
                     $rootScope.reload = false;
+                    $scope.editedApartment.apartmentImage = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex].apartmentImage;
+                    $scope.editedApartment.avgRate = $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex].avgRate;
                     $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex] = $scope.editedApartment;
                     userProfile.setData($rootScope.userDetails);
                     $scope.editApartmentBtn = false;
-                    return $location.url("/Profile/UserApartments/userName=" + $rootScope.userDetails.userName);
+                    return $location.url("/Profile/UserApartments/userName=:" + $rootScope.userDetails.userName);
 
                 }
                 $rootScope.reload = false;
@@ -86,13 +88,14 @@ editApartmentController.controller('editApartmentController', function ($scope, 
 
             if (response.data) {
                 $rootScope.reload = false;
-                $rootScope.userDetails.renterApartment[$transition$.params().apartmentIndex].apartmentImage = $scope.editImage;
+                $rootScope.userDetails.renterApartments[$transition$.params().apartmentIndex].apartmentImage = $scope.editPicture;
                 userProfile.setData($rootScope.userDetails);
                 $scope.editApartmentBtn = false;
+                return;
             }
             $rootScope.reload = false;
             $scope.editApartmentBtn = false;
-
+            return;
         });
     };
 });

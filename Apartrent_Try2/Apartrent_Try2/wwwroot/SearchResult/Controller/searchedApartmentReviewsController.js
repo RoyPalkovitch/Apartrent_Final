@@ -14,7 +14,7 @@ searchedApartmentReviewsController.controller('searchedApartmentReviewsControlle
                 rating: $scope.reviewRating,
                 apartmentID: apartmentID
             };
-            if ($scope.review.description.length > 70 || $scope.review.description.length < 5 ||
+            if ($scope.review.description.length > 70 || $scope.review.description.length < 3 ||
                 $scope.review.rating < 1 || $scope.review.rating > 5 || $scope.review.apartmentID === undefined) {
                 $scope.newRevBtn = false;
                 return $scope.errorMessage = true;

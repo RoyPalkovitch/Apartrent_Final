@@ -1,8 +1,9 @@
 ﻿<div style="width:100%">
 
     <div class="w3-hide-large w3-mobile w3-purple">
-        <div style="display:none;"id="mySidebar">
-            <div class="w3-mobile w3-button w3-hover-blue w3-purple"> <img  src="{{userDetails.profileImage}}" style="max-height:130px;max-width:270px;" class="w3-circle" /></div>
+        <div style="display:none;" id="mySidebar">
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple"> <img ng-if="userDetails.profileImage" src="{{userDetails.profileImage}}" style="max-height:130px;max-width:270px;" class="w3-circle" /></div>
+            <div class="w3-mobile w3-button w3-hover-blue w3-purple"> <img ng-if="!userDetails.profileImage" src="/ApartrentPhotos/index.jpg" style="max-height:130px;max-width:270px;" class="w3-circle" /></div>
             <div class=" w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.EditAccount({userName:userDetails.userName})">Edit account</div>
             <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</div>
             <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</div>

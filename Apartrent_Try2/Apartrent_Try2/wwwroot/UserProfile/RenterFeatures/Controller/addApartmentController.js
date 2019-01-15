@@ -57,7 +57,10 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
             $rootScope.reload = true;
             if (response.data) {
                 response.data.fromDate = dateHandlerFactory.dateConverter(response.data.fromDate);
-                response.data.toDate = dateHandlerFactory.dateConverter(response.data.toDate);
+                response.data.fromDate = dateHandlerFactory.dateConverter(response.data.toDate);
+                $scope.newApartment.fromDate = response.data.fromDate;
+                $scope.newApartment.toDate = response.data.toDate;
+                $scope.newApartment.apartmentImage = imageHandlerFactory.constructImage($scope.newApartment.apartmentImageType, $scope.newApartment.apartmentImage)
                 if (notRenterYet) {// add new apartment if the user wasnt renter before 
                     userProfile.setToken(response.data.token);
                     $rootScope.role = 1;
@@ -66,6 +69,7 @@ addApartmentController.controller('addApartmentController', function ($scope, $h
                 } else {
                     $scope.newApartment.apartmentID = response.data;
                 }
+                
                 $scope.newApartment.apartmentType = $scope.categories[$scope.categoryID].apartmentType;
                 $rootScope.userDetails.renterApartments.push($scope.newApartment);
                 userProfile.setData($rootScope.userDetails);

@@ -41,13 +41,13 @@ namespace Apartrent_Try2.Controllers
         public bool EditUser([FromBody]Users users)
         {
             users.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (String.IsNullOrEmpty(users.UserName) || String.IsNullOrEmpty(users.Password) || String.IsNullOrEmpty(users.PhoneNumber) ||
+            if ( String.IsNullOrEmpty(users.PhoneNumber) ||
                String.IsNullOrEmpty(users.Email) || String.IsNullOrEmpty(users.Address) || String.IsNullOrEmpty(users.FirstName) ||
                String.IsNullOrEmpty(users.LastName) || users.CountryID > 5 || users.CountryID < 1 || users.Address.Length > 50 ||
-               users.Address.Length < 3 || users.PhoneNumber.Length > 15 || users.PhoneNumber.Length < 5 || users.UserName.Length > 10 ||
-               users.UserName.Length < 4 || users.Password.Length > 10 || users.Password.Length < 6 || users.Email.Length > 30 ||
+               users.Address.Length < 3 || users.PhoneNumber.Length > 15 || users.PhoneNumber.Length < 5 ||
+               users.Email.Length > 30 ||
                users.Email.Length < 7 || users.FirstName.Length > 11 || users.LastName.Length > 11 ||
-               !users.Email.Contains(".com") || !users.Email.Contains("@") || String.IsNullOrEmpty(users.ProfileImageType) || users.ProfileImageType.Length > 50)
+               !users.Email.Contains(".com") || !users.Email.Contains("@"))
                 return false;
             return DB.UsersDB.EditUser(users);
         }
@@ -88,7 +88,7 @@ namespace Apartrent_Try2.Controllers
                 !user.Email.Contains(".com") || !user.Email.Contains("@")||String.IsNullOrEmpty(user.ProfileImageType)||user.ProfileImageType.Length > 50)
                 return false;
 
-            if(String.IsNullOrEmpty(user.ProfileImage))
+            if(!String.IsNullOrEmpty(user.ProfileImage))
                  user.ProfileImageByte = ImageValidation.Base64Vadilation(user.ProfileImage, null)[0];
 
             PasswordHash hash = new PasswordHash();

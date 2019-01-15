@@ -26,7 +26,7 @@ userReviewsController.controller('userReviewsController', function ($scope, $htt
             description: $scope.editDescription ? $scope.editDescription : review.description,
             rating: $scope.editRating ? $scope.editRating : review.rating
         };
-        if ($scope.editedReview.reviewID < 1 || $scope.editedReview.apartmentID < 1 || $scope.editedReview.rating < 1 || $scope.editedReview.rating > 1 ||
+        if ($scope.editedReview.reviewID < 1 || $scope.editedReview.apartmentID < 1 || $scope.editedReview.rating < 1 ||
             $scope.editedReview.rating > 5 || $scope.editedReview.description.length < 3 || $scope.editedReview.description.length > 70) {
             $scope.editRevbtn = false;
             return;

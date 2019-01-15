@@ -40,7 +40,7 @@ namespace Apartrent_Try2.Controllers
         public bool EditReview([FromBody]Reviews reviews)
         {
             reviews.UserName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
-            if (reviews.ReviewID <1 || reviews.ApartmentID < 1 || reviews.Rating < 1 || reviews.Rating > 1 ||
+            if (reviews.ReviewID <1 || reviews.ApartmentID < 1 || reviews.Rating < 1 || 
                 reviews.Rating > 5 ||String.IsNullOrEmpty(reviews.Description) || reviews.Description.Length < 3 || reviews.Description.Length > 70)
                 return false;
             return DB.ReviewsDB.EditReview(reviews);

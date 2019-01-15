@@ -48,7 +48,7 @@ namespace Apartrent_Try2
                                     return false;//user is already exist
                                 }
                             }
-                            cmd.CommandText = "INSERT INTO Users(UserName,Password,Gender,[Address],PhoneNumber,Email,FirstName,LastName,LastLogin,LastOrder,CountryID,Role,UsersProfileImage.UserName) VALUES(@UserName,@Password,@Gender,@Address,@PhoneNumber,@Email,@FirstName,@LastName,@LastLogin,@LastOrder,@CountryID,@Role)";
+                            cmd.CommandText = "INSERT INTO Users(UserName,Password,Gender,[Address],PhoneNumber,Email,FirstName,LastName,CountryID,Role) VALUES(@UserName,@Password,@Gender,@Address,@PhoneNumber,@Email,@FirstName,@LastName,@CountryID,@Role)";
                             cmd.Add("@Password", user.Password);
                             cmd.Add("@Gender", user.Gender);
                             cmd.Add("@Address", user.Address);
@@ -56,8 +56,6 @@ namespace Apartrent_Try2
                             cmd.Add("@Email", user.Email);
                             cmd.Add("@FirstName", user.FirstName);
                             cmd.Add("@LastName", user.LastName);
-                            cmd.Add("@LastLogin", user.LastLogin);
-                            cmd.Add("@LastOrder", user.LastOrder);
                             cmd.Add("@CountryID", user.CountryID);
                             cmd.Add("@Role", 0);
                             if (cmd.ExecuteNonQuery() == 1) // if the user as been register succesfully he can procced to image storing (if any image as been uploaded)
@@ -245,7 +243,7 @@ namespace Apartrent_Try2
                                     SofaBed = dr.GetInt32(23),
                                     BedsDescription = dr.GetString(24),
                                     ApartmentType = dr.GetString(25),
-                                    AvgRate = dr.IsDBNull(26)? 0 : dr.GetInt32(26)
+                                    AvgRate = dr.IsDBNull(36)? 0 : dr.GetInt32(36)
                                 };
                                 apartment.ApartmentImageByte = new List<byte[]> { dr.IsDBNull(26) ? null : ((byte[])dr.GetValue(26)) };
                                 apartment.ApartmentImageByte.Add(dr.IsDBNull(27) ? null : ((byte[])dr.GetValue(27)));
