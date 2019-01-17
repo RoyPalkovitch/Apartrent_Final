@@ -16,13 +16,18 @@ namespace Apartrent_Try2.Controllers
     {
 
         [HttpDelete]
-        public bool DeleteRenterStatus()
+        public string DeleteRenterStatus()
         {
             string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
             int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
             if (String.IsNullOrEmpty(userName) || role != 1)
-                return false;
-            return DB.RenterDB.DeleteRenterStatus(userName);
+                return null;
+            if (DB.RenterDB.DeleteRenterStatus(userName))
+            {
+                role = 0;
+                return AuthService.GetToken(userName, role).ToString();
+            }
+            return null;
         }
     }
 }

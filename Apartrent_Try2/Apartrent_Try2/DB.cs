@@ -313,7 +313,23 @@ namespace Apartrent_Try2
                 }
             }
 
-
+            public static bool VerifyRenter(string userName)
+            {
+                using(SqlConnection conn = new SqlConnection(CONN_STRING))
+                {
+                    conn.Open();
+                    using(SqlCommand cmd = new SqlCommand("SELECT Role FROM Users WHERE UserName=@UserName AND Role=1", conn))
+                    {
+                        cmd.Add("@UserName", userName);
+                        using(SqlDataReader dr = cmd.ExecuteReader())
+                        {
+                            if (dr.HasRows)
+                                return true;
+                            return false;
+                        }
+                    }
+                }
+            }
 
 
 
@@ -382,8 +398,11 @@ namespace Apartrent_Try2
                 using (SqlConnection conn = new SqlConnection(CONN_STRING))
                 {
                     conn.Open();
-                    if (changeRenterStatus && !RenterDB.BecomeRenter(userName, conn))//if somthing has failed in the role change,terminating request
+                    if (changeRenterStatus)
+                    {
+                    if (!RenterDB.BecomeRenter(userName, conn))//if somthing has failed in the role change,terminating request
                         return null;
+                    }
 
                     using (SqlCommand cmd = new SqlCommand("INSERT INTO Apartment(RenterUserName,CountryID,CategoryID,[Address],PricePerDay,AvailableFromDate,AvailableToDate,[Apartment].Description)output INSERTED.ApartmentID VALUES(@RenterUserName,@CountryID,@CategoryID,@Address,@PricePerDay,@AvailableFromDate,@AvailableToDate,@Description)", conn))
                     {

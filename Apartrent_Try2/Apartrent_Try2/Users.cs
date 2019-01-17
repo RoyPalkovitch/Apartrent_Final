@@ -9,14 +9,6 @@ namespace Apartrent_Try2
 {
     public class Users
     {
-        //private string userName;
-        //public string UserName { get { return userName; }
-        //    set {
-        //        if (value.Length > 5)
-        //            return;
-        //        else
-        //            userName = value;
-        //    } }
         public byte[] ProfileImageByte { get; set; }
         public string ProfileImage { get; set; }
         public string ProfileImageType { get; set; }

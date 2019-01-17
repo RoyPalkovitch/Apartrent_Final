@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Apartrent_Try2.Controllers
 {
@@ -33,6 +32,22 @@ namespace Apartrent_Try2.Controllers
             int role =Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
             return AuthService.GetToken(userName,role).ToString();
             
+        }
+
+        [HttpGet("UpdateToken")]
+        [Authorize]
+        public string UpdateToken()
+        {
+            string userName = ((ClaimsIdentity)User.Identity).FindFirst("UserName").Value;
+            int role = Int32.Parse(((ClaimsIdentity)User.Identity).FindFirst("Role").Value);
+            if (role == 1)
+                return AuthService.GetToken(userName, role).ToString();
+            if (role == 0 && DB.RenterDB.VerifyRenter(userName))
+            {
+                role = 1;
+              return AuthService.GetToken(userName, role).ToString();
+            }
+            return null;
         }
 
 

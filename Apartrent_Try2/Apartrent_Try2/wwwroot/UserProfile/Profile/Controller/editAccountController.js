@@ -10,6 +10,24 @@ editController.controller('editAccountController', function ($scope, $http, $roo
     $scope.newProfilePic = $rootScope.userDetails.profileImage;
     $scope.editedCountryID = $rootScope.userDetails.countryID;
 
+    $scope.deleteUser = function () {
+        $http.delete("api/Users", userProfile.config).then(function (response) {
+            if (response) {
+                userProfile.resetData();
+                $location.url("/index");
+            }
+        });
+    };
+
+    $scope.deleteRenterStatus = function () {
+        $http.delete("api/Renter", userProfile.config).then(function (response) {
+            if (response) {
+                userProfile.setToken(response.data);
+                $rootScope.role = 0;
+            }
+        });
+    };
+
     $scope.editAccount = function () {
         $scope.editAccBtn = true;
         
@@ -46,7 +64,7 @@ editController.controller('editAccountController', function ($scope, $http, $roo
                 userProfile.setData($rootScope.userDetails);
                 $scope.editAccBtn = false;
                 $rootScope.reload = false;
-                $location.url("")
+                $location.url("/Profile/userName=rsor12");
                 return;
             }
             $rootScope.reload = false;

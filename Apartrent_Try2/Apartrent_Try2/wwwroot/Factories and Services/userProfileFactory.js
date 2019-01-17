@@ -41,6 +41,15 @@ apartrentApp.factory("userProfile", function ($rootScope, $window, $http, $timeo
         return this.getData();
     };
 
+    userProfile.updateToken = function () {
+        $http.get("api/Users/UpdateToken", userProfile.config).then(function (response) {
+            if (response.data) {
+                userProfile.setToken(response.data);
+            }
+        });
+    };
+
+
     userProfile.refreshToken = function (firstTime) {
         
         if (!firstTime) {

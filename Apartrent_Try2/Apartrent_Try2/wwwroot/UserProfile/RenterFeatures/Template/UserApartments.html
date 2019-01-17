@@ -12,7 +12,8 @@
                 <p>Availabe from date: {{apartment.fromDate}}</p>
                 <p>Available to date: {{apartment.toDate}}</p>
                 <p>Price per day: {{apartment.pricePerDay}}</p>
-                <p>Avrage rate :{{apartment.avgRate}}</p>
+                <p ng-if="apartment.avgRate">Avrage rate :{{apartment.avgRate}}</p>
+                <p ng-if="!apartment.avgRate">Avrage rate :0</p>
             </div>
                 <button style="width:100%" class="w3-button w3-mobile w3-purple w3-round w3-hover-blue" ui-sref="ProfileParent.EditApartment({userName:userDetails.userName,apartmentIndex:$index})">Edit Apartment</button>
                 <button style="width:100%" ng-disabled="deleteApartmentBtn" class="w3-button w3-mobile w3-red w3-round w3-hover-red" ng-click="deleteApartment($index , apartment.apartmentID)">Delete Apartment</button>

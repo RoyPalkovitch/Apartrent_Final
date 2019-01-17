@@ -8,8 +8,8 @@
             <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</div>
             <div class="w3-mobile w3-button w3-hover-blue w3-purple" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</div>
             <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</div>
-            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn">Delete User</div>
-            <div class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn&&role===1">Delete renter status</div>
+            <div ng-controller="editAccountController" class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn" ng-click="deleteUser()">Delete User</div>
+            <div ng-controller="editAccountController" ng-click="deleteRenterStatus()" class="w3-mobile w3-button w3-hover-blue w3-purple" ng-if="deleteoptOn&&role===1">Delete renter status</div>
             <button ng-click="closeTopBar()" class="w3-red w3-mobile w3-button w3-large">Close &times;</button>
         </div>
     </div>
@@ -22,8 +22,8 @@
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ui-sref="ProfileParent.UserReviews({userName:userDetails.userName})">My Reviews</a>
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ui-sref="ProfileParent.UserOrders({userName:userDetails.userName})">View purchses</a>
         <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ng-if="role === 1" ui-sref="ProfileParent.UserApartments({userName:userDetails.userName})">My apartments</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ng-if="deleteoptOn">Delete User</a>
-        <a class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ng-if="deleteoptOn&&role===1">Delete renter status</a>
+        <a ng-controller="editAccountController" class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ng-click="deleteUser()" ng-if="deleteoptOn">Delete User</a>
+        <a ng-controller="editAccountController" ng-click="deleteRenterStatus()" class="w3-bar-item w3-button w3-purple w3-cell w3-border-bottom w3-hover-blue w3-border-black w3-padding" ng-if="deleteoptOn&&role===1">Delete renter status</a>
     </div>
 
 
