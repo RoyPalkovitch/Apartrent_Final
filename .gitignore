@@ -259,3 +259,5 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+/Apartrent_Try2/Apartrent_Try2/Properties/PublishProfiles/Google.pubxml
+/Apartrent_Try2/Apartrent_Try2/Properties/PublishProfiles/folder.pubxml

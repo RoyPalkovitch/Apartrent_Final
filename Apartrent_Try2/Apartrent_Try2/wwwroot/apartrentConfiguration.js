@@ -15,6 +15,16 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
                         return startupResolve.getData();
                     }
                 }
+        })
+        .state("34.73.45.1",
+            {
+                url: "/index.html",
+                redirectTo: "index",
+                resolve: {
+                    promiseData: function (startupResolve) {
+                        return startupResolve.getData();
+                    }
+                }
             })
         .state("/index",
             {
@@ -163,14 +173,9 @@ apartrentApp.config(function ($stateProvider, $locationProvider, $urlRouterProvi
                     return apartmentsFactory.currentApartmentData($transition$.params());
                 }
             }
-        })
-
-        .state("PageNotFound", {
-            url: "/PageNotFound",
-            templateUrl: "PageNotFound.html"
         });
 
-    $urlRouterProvider.otherwise("Pagenotfound.html");
+    $urlRouterProvider.otherwise("/index.html");
     $locationProvider.html5Mode(true);
 
 });
