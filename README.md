@@ -1,6 +1,6 @@
 # Apartrent_Final
 
-Current URL: http://34.73.9.232/index,
+Current URL: http://35.231.180.18,
 
 Apartrent-Apartment renting application. Project for HackerU.
 
