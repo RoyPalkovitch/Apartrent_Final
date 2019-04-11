@@ -2,7 +2,7 @@
 
 Current URL: http://35.231.180.18,
 
-Apartrent-Apartment renting application. Project for HackerU.
+Apartrent-Apartment renting application.
 
 Using .Net core Web application for server side,
 
